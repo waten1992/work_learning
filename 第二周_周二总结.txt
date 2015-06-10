@@ -1,0 +1,74 @@
+# 第二周 周二总结
+
+标签： 总结
+
+---
+
+做的事情：
+    1-看linux程序设计 第二章中的shell编程，基本bash命令，比如：find 、 grep等等；
+    2-看海归的交易法则，什么是对冲、投机、帽客；
+        对冲者：消除汇率波动的价格风险；
+        投机者：卖空的人；
+        帽客：经营流动风险，是市商；
+    高收益，高风险，玩游戏需要勇气！！！
+        海归重要的法则之一：
+            1-不去预测市场的动向，而是去寻求某种特定的状态的指示信号；
+                    指示信号：1-稳定平静
+                              2-稳定波动
+                              3-平静的趋势
+                              4-波动趋势
+            2-要掌握人类非理性的特征，比如:认知偏差
+                    认知偏差：1-损失厌恶：不赔钱永远要比赚钱好；
+                              2-沉默成本效应：更重视已经发出去的钱，而不是未来要花的钱；
+                              3-处理效应：更早兑现利润；
+                              4-结果偏好：
+                              5-锚定效应:
+                              6-潮流效应：
+                              7-小数定律：
+
+接下来需要做的：
+    预习下面的内容：
+                  =Linux系统：
+                  ==系统安装
+                      multi-OS(Win+Linux)，磁盘分区(msdos/gpt),Grub2,BIOS legacy/efi
+
+
+                   ==常用bash命令
+                      man,ps,top,free,du,df,mount,rm,ls,ln,
+                      chown,chmod,find,grep,awk,rsync,tail/head,less,file,etc
+
+
+                   ==文件系统
+                      file system hierarchy
+
+                   ==软件包管理
+                      dpkg,apt,aptitude,synaptic
+
+                   ==常用软件列表(完全替换windows办公环境）
+                     libreoffice, firefox,thunderbird/mutt,evince, rxvt-unicode, google-pinyin(fcitx)
+
+                  =开发工具链
+                   GCC:常用编译/链接/调试选项,编译可执行文件，动态库;
+                   GDB:调试方法，常用技巧, .gdbinit配置
+                   nm: 查看符号表
+                   其他： objdump， readelf
+                   ar:打包静态库
+                   strip：删除符号sections
+                   core文件： 生成，调试
+
+                  =开发环境
+                   IDE/编辑器: vim/eclipse, etc演示和配置
+                   Makefile： 简单项目构建管理
+                   Git：代码版本管理
+
+                  =开发流程工具简介
+                    需求  rmtoo
+                    概要设计/详细设计 CUnit/gtest,etc 
+                    编码/单元测试  bugzilla
+                    集成测试
+                    系统测试
+                    发布
+                  ---------------
+                  桂贤补充内容：
+                  1. strace/ptrace/vmstat/gprof等基础开发工具
+                  2. 如何看core及X86架构下的函数调用栈的基础
