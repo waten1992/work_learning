@@ -1,0 +1,514 @@
+=Linux系统：
+==系统安装
+    multi-OS(Win+Linux)，磁盘分区(msdos/gpt),Grub2,BIOS legacy/efi
+
+    multi-OS(Win+Linux):NVIDIA® SLI 提供虚拟化系统，可以同时运行多个OS和密集型应用程序
+        安装指南：http://ubuntuguide.org/wiki/Multiple_OS_Installation
+    gpt:全局唯一标识分区表（GUID Partition Table，缩写：GPT）
+    UEFI：全称“统一的可扩展固件接口”(Unified Extensible Firmware Interface)
+    Grub2:用于选择操作系统分区上的不同内核
+
+ ==常用bash命令
+    man,ps,top,free,du,df,mount,rm,ls,ln,
+    chown,chmod,find,grep,awk,rsync,tail/head,less,file,etc
+    
+    man-寻求帮助文档 man ls
+
+    ps -查询处于running的进程 ，ps aux 查询所有的进程 ，通常和grep 结合用；
+        而linux的进程有5种状
+            1-运行(正在运行或在运行队列中等待) 
+        　　2.中断(休眠中, 受阻, 在等待某个条件的形成或接受到信号) 
+        　　3. 不可中断(收到信号不唤醒和不可运行, 进程必须等待直到有中断发生) 
+        　　4. 僵死(进程已终止, 但进程描述符存在, 直到父进程调用wait4()系统调用后释放) 
+        　　5. 停止(进程收到SIGSTOP, SIGSTP, SIGTIN, SIGTOU信号后停止运行运行)
+        
+        PS工具标识进程的5种状态码:
+            D 不可中断 uninterruptible sleep (usually IO) 
+        　　R 运行 runnable (on run queue) 
+        　　S 中断 sleeping 
+        　　T 停止 traced or stopped 
+        　　Z僵死 a defunct (”zombie”) process 
+
+    top-是一个提供动态实时的可视化系统，包括CPU、内存、缓存的利用率、总的任务数和现在的状态、负载情况等。
+    具体情况如下：
+    1- top - 09:28:42 up  1:41,  2 users,  load average: 0.10, 0.04, 0.05
+    2- Tasks: 169 total,   1 running, 168 sleeping,   0 stopped,   0 zombie
+    3- %Cpu(s):  0.2 us,  0.2 sy,  0.0 ni, 98.6 id,  1.0 wa,  0.0 hi,  0.0 si,  0.0 st
+    4- KiB Mem:   5088472 total,  1225680 used,  3862792 free,    91424 buffers
+    5- KiB Swap:        0 total,        0 used,        0 free.   520112 cached Mem
+
+      PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+     5105 pwd006    20   0   26232   2792   2420 R   6.1  0.1   0:00.01 top
+        1 root      20   0  323588   5040   3116 S   0.0  0.1   0:01.77 systemd
+        2 root      20   0       0      0      0 S   0.0  0.0   0:00.01 kthreadd
+  第1行：
+    09:28:42 -当前时间 ； 1:41-运行时间；2 users-2个使用者, 
+    load average: 0.10, 0.04, 0.05 - 1分钟、5分钟、15分钟的负载情况
+  第2行：不解释；
+  第3行：
+　   us — 用户空间占用CPU的百分比。
+　　 sy — 内核空间占用CPU的百分比。
+　　 ni — 改变过优先级的进程占用CPU的百分比
+　　 id — 空闲CPU百分比
+　　 wa — IO等待占用CPU的百分比
+　　 hi — 硬中断（Hardware IRQ）占用CPU的百分比
+　　 si — 软中断（Software Interrupts）占用CPU的百分比
+   
+   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+    
+    PID — 进程id
+　　USER — 进程所有者
+　　PR — 进程优先级
+　　NI — nice值。负值表示高优先级，正值表示低优先级
+　　VIRT — 进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RES
+　　RES — 进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATA
+　　SHR — 共享内存大小，单位kb
+　　S — 进程状态。D=不可中断的睡眠状态 R=运行 S=睡眠 T=跟踪/停止 Z=僵尸进程
+　　%CPU — 上次更新到现在的CPU时间占用百分比
+　　%MEM — 进程使用的物理内存百分比
+　　TIME+ — 进程使用的CPU时间总计，单位1/100秒
+　　COMMAND — 进程名称（命令名/命令行）
+  常用的命令：
+      d : 改变显示的更新速度，或是在交谈式指令列( interactive command)按 s
+      q : 没有任何延迟的显示速度，如果使用者是有 superuser 的权限，则 top 将会以最高的优先序执行
+      c : 切换显示模式，共有两种模式，一是只显示执行档的名称，另一种是显示完整的路径与名称S : 累积模式，会将己完成或消失的子行程 的 CPU time 累积起来
+      s : 安全模式，将交谈式指令取消, 避免潜在的危机
+      i : 不显示任何闲置 (idle) 或无用 (zombie) 的行程
+      n : 更新的次数，完成后将会退出 top
+      b : 批次档模式，搭配 "n" 参数一起使用，可以用来将 top 的结果输出到档案内
+  一些特殊用法
+    1.在多核CPU监控
+      在top基本视图中，按键盘数字“1”，可监控每个逻辑CPU的状况（不是物理CPU）
+    2.高亮显示当前运行进程敲击键盘“b”（打开/关闭加亮效果）
+  范例：
+    显示更新十次后退出 ;
+    top -n 10
+    使用者将不能利用交谈式指令来对行程下命令 :
+    top -s
+    将更新显示二次的结果输入到名称为 top.log 的档案里 :
+    top -n 2 -b < top.log
+  free -  查看当前的内存的是用情况 
+  常用的命令：
+      -b, k , m , g : B ,KB，MB,GB 
+      -h  , 更人性化的输出；推荐使用
+  du - 查看文件大小；
+    常用参数：
+      -a或-all 为每个指定文件显示磁盘使用情况，或者为目录中每个文件显示各自磁盘使用情况。
+      -b或-bytes 显示目录或文件大小时，以byte为单位。
+      -c或–total 除了显示目录或文件的大小外，同时也显示所有目录或文件的总和。
+      -D或–dereference-args 显示指定符号连接的源文件大小。
+      -h或–human-readable 以K，M，G为单位，提高信息的可读性。
+      -H或–si 与-h参数相同，但是K，M，G是以1000为换算单位,而不是以1024为换算单位。
+      -k或–kilobytes 以1024 bytes为单位。
+      -l或–count-links 重复计算硬件连接的文件。
+      -L<符号连接>或–dereference<符号连接> 显示选项中所指定符号连接的源文件大小。
+      -m或–megabytes 以1MB为单位。
+      -s或–summarize 仅显示总计，即当前目录的大小。
+      -S或–separate-dirs 显示每个目录的大小时，并不含其子目录的大小。
+      -x或–one-file-xystem 以一开始处理时的文件系统为准，若遇上其它不同的文件系统目录则略过。
+      -X<文件>或–exclude-from=<文件> 在<文件>指定目录或文件。
+      –exclude=<目录或文件> 略过指定的目录或文件。
+      –max-depth=<目录层数> 超过指定层数的目录后，予以忽略。
+      –help 显示帮助。
+      –version 显示版本信息。
+      -sh *显示当前目录内文件夹及文件的大小。
+  
+  df - 检查文件系统的磁盘空间占用情况
+      df -a：显示所有文件系统的磁盘使用情况，包括0块（block）的文件系统。
+      df -h：以容易理解的格式输出文件系统大小，例如124KB、345MB、46GB。
+      df -i：显示i节点信息，而不是磁盘块。
+      df -t：显示各指定类型的文件系统的磁盘空间使用情况。
+      df -x：列出不是某一指定类型文件系统的磁盘空间使用情况。
+      df -T：显示文件系统类型。
+      df 以512字节为单位
+      df –k 以1024字节为单位.
+ mount- 挂载文件系统
+    语法：mount -t type device dir
+ rm -删除文件和目录
+    常用命令： -rf filename 递归的删除目录 ，且没有提示
+              需要提示用 -i
+ ls - 列出当前的目录下的文件信息
+    常用命令：
+            -a 所有的文件，包括隐藏文件
+            -l 文件的元数据
+            -F 显示文件类型
+ ln - 两个文件之间的链接
+       ln [OPTION]... [-T] TARGET LINK_NAME   (1st form)
+       ln [OPTION]... TARGET                  (2nd form)
+       ln [OPTION]... TARGET... DIRECTORY     (3rd form)
+       ln [OPTION]... -t DIRECTORY TARGET...  (4th form)
+
+    -b或--backup 　删除，覆盖目标文件之前的备份。
+    -d或-F或--directory 　建立目录的硬连接。
+    -f或--force 　强行建立文件或目录的连接，不论文件或目录是否存在。
+    -i或--interactive 　覆盖既有文件之前先询问用户。
+    -n或--no-dereference 　把符号连接的目的目录视为一般文件。
+    -s或--symbolic 　对源文件建立符号连接，而非硬连接。
+    -S<字尾备份字符串>或--suffix=<字尾备份字符串> 　用"-b"参数备份目标文件后，备份文件的字尾会被加上一个备份字符串，预设的字尾备份字符串是符号"~"，您可通过"-S"参数来改变它。
+    -v或--verbose 　显示指令执行过程。
+    -V<备份方式>或--version-control=<备份方式> 　用"-b"参数备份目标文件后，备份文件的字尾会被加上一个备份字符串，这个字符串不仅可用"-S"参数变更，当使用"-V"参数<备份方式>指定不同备份方式时，也会产生不同字尾的备份字符串。
+ chown- 更改文件的所有者和组
+         chown [OPTION]... [OWNER][:[GROUP]] FILE...
+         常用的命令：
+            -c : 若该档案拥有者确实已经更改，才显示其更改动作
+            -f : 若该档案拥有者无法被更改也不要显示错误讯息
+            -h : 只对于连结(link)进行变更，而非该 link 真正指向的档案
+            -v : 显示拥有者变更的详细资料
+            -R : 对目前目录下的所有档案与子目录进行相同的拥有者变更(即以递回的方式逐个变更)
+ chmod- 更改改变文件的读写许可设置
+        chmod 755 filename 
+        4 2 1 读 写 执行
+
+ find- 找文件 find ./ -name test  -print 
+ grep- 正则表达式  grep [option] pattern path
+
+ awk-  语法： awk ' pattern {action} '
+    推荐学习链接：http://coolshell.cn/articles/9070.html
+    内建变量：
+      $0  当前记录（这个变量中存放着整个行的内容）
+      $1~$n 当前记录的第n个字段，字段间由FS分隔
+      FS  输入字段分隔符 默认是空格或Tab
+      NF  当前记录中的字段个数，就是有多少列
+      NR  已经读出的记录数，就是行号，从1开始，如果有多个文件话，这个值也是不断累加中。
+      FNR 当前记录数，与NR不同的是，这个值会是各个文件自己的行号
+      RS  输入的记录分隔符， 默认为换行符
+      OFS 输出字段分隔符， 默认也是空格
+      ORS 输出的记录分隔符，默认为换行符
+      FILENAME  当前输入文件的名字
+
+ rsync- 镜像备份
+       Local:  rsync [OPTION...] SRC... [DEST]
+
+       Access via remote shell:
+         Pull: rsync [OPTION...] [USER@]HOST:SRC... [DEST]
+         Push: rsync [OPTION...] SRC... [USER@]HOST:DEST
+
+       Access via rsync daemon:
+         Pull: rsync [OPTION...] [USER@]HOST::SRC... [DEST]
+               rsync [OPTION...] rsync://[USER@]HOST[:PORT]/SRC... [DEST]
+         Push: rsync [OPTION...] SRC... [USER@]HOST::DEST
+               rsync [OPTION...] SRC... rsync://[USER@]HOST[:PORT]/DEST
+      -v, --verbose 详细模式输出
+      -q, --quiet 精简输出模式
+      -c, --checksum 打开校验开关，强制对文件传输进行校验
+      -a, --archive 归档模式，表示以递归方式传输文件，并保持所有文件属性，等于-rlptgoD
+      -r, --recursive 对子目录以递归模式处理
+      -R, --relative 使用相对路径信息
+      -b, --backup 创建备份，也就是对于目的已经存在有同样的文件名时，将老的文件重新命名为~filename。可以使用--suffix选项来指定不同的备份文件前缀。
+      --backup-dir 将备份文件(如~filename)存放在在目录下。
+      -suffix=SUFFIX 定义备份文件前缀
+      -u, --update 仅仅进行更新，也就是跳过所有已经存在于DST，并且文件时间晚于要备份的文件。(不覆盖更新的文件)
+      -l, --links 保留软链结
+      -L, --copy-links 想对待常规文件一样处理软链结
+      --copy-unsafe-links 仅仅拷贝指向SRC路径目录树以外的链结
+      --safe-links 忽略指向SRC路径目录树以外的链结
+      -H, --hard-links 保留硬链结
+      -p, --perms 保持文件权限
+      -o, --owner 保持文件属主信息
+      -g, --group 保持文件属组信息
+      -D, --devices 保持设备文件信息
+      -t, --times 保持文件时间信息
+      -S, --sparse 对稀疏文件进行特殊处理以节省DST的空间
+      -n, --dry-run现实哪些文件将被传输
+      -W, --whole-file 拷贝文件，不进行增量检测
+      -x, --one-file-system 不要跨越文件系统边界
+      -B, --block-size=SIZE 检验算法使用的块尺寸，默认是700字节
+      -e, --rsh=COMMAND 指定使用rsh、ssh方式进行数据同步
+      --rsync-path=PATH 指定远程服务器上的rsync命令所在路径信息
+      -C, --cvs-exclude 使用和CVS一样的方法自动忽略文件，用来排除那些不希望传输的文件
+      --existing 仅仅更新那些已经存在于DST的文件，而不备份那些新创建的文件
+      --delete 删除那些DST中SRC没有的文件
+      --delete-excluded 同样删除接收端那些被该选项指定排除的文件
+      --delete-after 传输结束以后再删除
+      --ignore-errors 及时出现IO错误也进行删除
+      --max-delete=NUM 最多删除NUM个文件
+      --partial 保留那些因故没有完全传输的文件，以是加快随后的再次传输
+      --force 强制删除目录，即使不为空
+      --numeric-ids 不将数字的用户和组ID匹配为用户名和组名
+      --timeout=TIME IP超时时间，单位为秒
+      -I, --ignore-times 不跳过那些有同样的时间和长度的文件
+      --size-only 当决定是否要备份文件时，仅仅察看文件大小而不考虑文件时间
+      --modify-window=NUM 决定文件是否时间相同时使用的时间戳窗口，默认为0
+      -T --temp-dir=DIR 在DIR中创建临时文件
+      --compare-dest=DIR 同样比较DIR中的文件来决定是否需要备份
+      -P 等同于 --partial
+      --progress 显示备份过程
+      -z, --compress 对备份的文件在传输时进行压缩处理
+      --exclude=PATTERN 指定排除不需要传输的文件模式
+      --include=PATTERN 指定不排除而需要传输的文件模式
+      --exclude-from=FILE 排除FILE中指定模式的文件
+      --include-from=FILE 不排除FILE指定模式匹配的文件
+      --version 打印版本信息
+      --address 绑定到特定的地址
+      --config=FILE 指定其他的配置文件，不使用默认的rsyncd.conf文件
+      --port=PORT 指定其他的rsync服务端口
+      --blocking-io 对远程shell使用阻塞IO
+      -stats 给出某些文件的传输状态
+      --progress 在传输时现实传输过程
+      --log-format=formAT 指定日志文件格式
+      --password-file=FILE 从FILE中得到密码
+      --bwlimit=KBPS 限制I/O带宽，KBytes per second
+
+ 
+ tail/head-显示前面行数 和后面的行数 ，结合 n 使用
+ less- 以每一页作为显示 
+ file-查看文件的类型
+
+ ==文件系统
+    file system hierarchy
+
+ ==软件包管理
+    dpkg,apt,aptitude,synaptic
+
+    apt-cache search package 搜索软件包
+    apt-cache show package  获取包的相关信息，如说明、大小、版本等
+    sudo apt-get install package 安装包
+    sudo apt-get install package --reinstall   重新安装包
+    sudo apt-get -f install   修复安装
+    sudo apt-get remove package 删除包
+    sudo apt-get remove package --purge 删除包，包括配置文件等
+    sudo apt-get update  更新源
+    sudo apt-get upgrade 更新已安装的包
+    sudo apt-get dist-upgrade 升级系统
+    apt-cache depends package 了解使用该包依赖那些包
+    apt-cache rdepends package 查看该包被哪些包依赖
+    sudo apt-get build-dep package 安装相关的编译环境
+    apt-get source package  下载该包的源代码
+    sudo apt-get clean && sudo apt-get autoclean 清理无用的包
+    sudo apt-get check 检查是否有损坏的依赖
+
+ ==常用软件列表(完全替换windows办公环境）
+   libreoffice, firefox,thunderbird/mutt,evince, rxvt-unicode, google-pinyin(fcitx)
+
+=开发工具链
+ GCC:常用编译/链接/调试选项,编译可执行文件，动态库;
+     -o my_obj 目标文件
+     -g  GDB调式工具
+     -c 编译汇编不链接
+     -o1 o2 o3 是编译器优化的程度
+     -pg 使用gprog 来查看代码的性能 ，会产生gmon.out的剖析程序
+     -p 针对prof
+     -fno-common 在遇到多重定义的全局符号时，输出一条警告信息 ： 符号解析规则参考CSAPP 7.6节
+
+
+     源文件->    预处理       ->   编译器   -> 汇编器             ->链接
+       .c  -> ASCII中间文件.i -> 汇编代码.s -> 可重定位目标文件.o ->可执行文件
+              cpp             ->    cc1     ->     as             -> ld 
+
+ GDB:调试方法，常用技巧, .gdbinit配置
+      info frame 当前栈帧信息
+      info registers 所有寄存器的值
+      disas 反汇编当前的函数
+      disas current_function 反汇编current_function
+      finish 运行直到当前函数返回
+      continue 继续
+      next  下一个函数
+      break sum_function 在sum_function 设置断点
+      break row_num 在行号设置断点
+      delete 1 删除断点1
+      disable 禁用设置命令
+
+
+
+ nm: 查看符号表
+    具体使用参考man nm 
+ 
+ readelf：显示elf文件格式中的一些信息，elf（Executable and Linkable Format）
+    具体使用参考man readlf 
+ 
+ objdump：获取目标文件或者可执行文件的中的信息，比如反汇编、符号表等等。
+
+      objdump -x obj 以某种分类信息的形式把目标文件的数据组织（被分为几大块）输出 <可查到该文件的所有动态库>   
+      objdump -t obj 输出目标文件的符号表()
+      objdump -h obj 输出目标文件的所有段概括()
+      objdump -S obj C语言与汇编语言同时显示
+      objdump -d obj  查看可执行文件的反汇编代码
+
+      Display information from object <file(s)>.
+       At least one of the following switches must be given:
+        -a, --archive-headers    Display archive header information
+        -f, --file-headers       Display the contents of the overall file header
+        -p, --private-headers    Display object format specific file header contents
+        -P, --private=OPT,OPT... Display object format specific contents
+        -h, --[section-]headers  Display the contents of the section headers
+        -x, --all-headers        Display the contents of all headers
+        -d, --disassemble        Display assembler contents of executable sections
+        -D, --disassemble-all    Display assembler contents of all sections
+        -S, --source             Intermix source code with disassembly
+        -s, --full-contents      Display the full contents of all sections requested
+        -g, --debugging          Display debug information in object file
+        -e, --debugging-tags     Display debug information using ctags style
+        -G, --stabs              Display (in raw form) any STABS info in the file
+        -W[lLiaprmfFsoRt] or
+        --dwarf[=rawline,=decodedline,=info,=abbrev,=pubnames,=aranges,=macro,=frames,
+                =frames-interp,=str,=loc,=Ranges,=pubtypes,
+                =gdb_index,=trace_info,=trace_abbrev,=trace_aranges,
+                =addr,=cu_index]
+                                 Display DWARF info in the file
+        -t, --syms               Display the contents of the symbol table(s)
+        -T, --dynamic-syms       Display the contents of the dynamic symbol table
+        -r, --reloc              Display the relocation entries in the file
+        -R, --dynamic-reloc      Display the dynamic relocation entries in the file
+        @<file>                  Read options from <file>
+        -v, --version            Display this program's version number
+        -i, --info               List object formats and architectures supported
+        -H, --help               Display this information
+
+
+ ar:打包静态库
+    例子：ar rcs libvector.a addvect.o multvec.o
+        生成libvector.a静态库 库中包含addvect.o multvec.o 两个目标文件
+        静态库的链接顺序很重要，需要依赖的文件必须放在前面，否则会出现 undefined reference //具体原理参考CSAPP 7.6.3
+    常用的命令：
+        {dmpqrtx}中的操作选项在命令中只能并且必须使用其中一个，含义如下：
+
+        d：从库中删除模块。按模块原来的文件名指定要删除的模块。如果使用了任选项v则列出被删除的每个模块。
+        m：该操作是在一个库中移动成员。当库中如果有若干模块有相同的符号定义(如函数定义)，则成员的位置顺序很重要。如果没有指定任选项，任何指定的成员将移到库的最后。也可以使用'a'，'b'，或'i'任选项移动到指定的位置。
+        p：显示库中指定的成员到标准输出。如果指定任选项v，则在输出成员的内容前，将显示成员的名字。如果没有指定成员的名字，所有库中的文件将显示出来。
+        q：快速追加。增加新模块到库的结尾处。并不检查是否需要替换。'a'，'b'，或'i'任选项对此操作没有影响，模块总是追加的库的结尾处。如果使用了任选项v则列出每个模块。 这时，库的符号表没有更新，可以用'ar s'或ranlib来更新库的符号表索引。
+        r：在库中插入模块(替换)。当插入的模块名已经在库中存在，则替换同名的模块。如果若干模块中有一个模块在库中不存在，ar显示一个错误消息，并不替换其他同名模块。默认的情况下，新的成员增加在库的结尾处，可以使用其他任选项来改变增加的位置。
+        t：显示库的模块表清单。一般只显示模块名。
+        x：从库中提取一个成员。如果不指定要提取的模块，则提取库中所有的模块。
+    可选操作：
+        c：创建一个库。不管库是否存在，都将创建。
+        s：写入一个目标文件索引到库中，或者更新一个存在的目标文件索引。甚至对于没有任何变化的库也作该动作。对一个库做ar。s等同于对该库做ranlib。
+
+ strip：删除目标文件中的一些符号；
+
+ core文件： 生成，调试
+
+    1.core文件的生成开关和大小限制
+       1）使用ulimit -c命令可查看core文件的生成开关。若结果为0，则表示关闭了此功能，不会生成core文件。
+       2）使用ulimit -c filesize命令，可以限制core文件的大小（filesize的单位为kbyte）。若ulimit -c unlimited，则表示core文件的大小不受限制。如果生成的信息超过此大小，将会被裁剪，最终生成一个不完整的core文件。在调试此core文件的时候，gdb会提示错误。
+
+
+    2.core文件的名称和生成路径
+      core文件生成路径:
+      输入可执行文件运行命令的同一路径下。
+      若系统生成的core文件不带其它任何扩展名称，则全部命名为core。新的core文件生成将覆盖原来的core文件。
+
+      1）/proc/sys/kernel/core_uses_pid可以控制core文件的文件名中是否添加pid作为扩展。文件内容为1，表示添加pid作为扩展名，生成的core文件格式为core.xxxx；为0则表示生成的core文件同一命名为core。
+      可通过以下命令修改此文件：
+      echo "1" > /proc/sys/kernel/core_uses_pid
+
+      2）proc/sys/kernel/core_pattern可以控制core文件保存位置和文件名格式。
+      可通过以下命令修改此文件：
+      echo "/corefile/core-%e-%p-%t" > core_pattern，可以将core文件统一生成到/corefile目录下，产生的文件名为core-命令名-pid-时间戳
+      以下是参数列表:
+          %p - insert pid into filename 添加pid
+          %u - insert current uid into filename 添加当前uid
+          %g - insert current gid into filename 添加当前gid
+          %s - insert signal that caused the coredump into the filename 添加导致产生core的信号
+          %t - insert UNIX time that the coredump occurred into filename 添加core文件生成时的unix时间
+          %h - insert hostname where the coredump happened into filename 添加主机名
+          %e - insert coredumping executable name into filename 添加命令名
+      
+
+    3.core文件的查看
+       core文件需要使用gdb来查看。
+       gdb ./a.out
+       core-file core.xxxx
+       使用bt命令即可看到程序出错的地方。 
+      以下两种命令方式具有相同的效果，但是在有些环境下不生效，所以推荐使用上面的命令。 
+      1）gdb -core=core.xxxx
+          file ./a.out
+          bt 
+      2）gdb -c core.xxxx
+          file ./a.out
+          bt
+      /*************************************************************************/    
+         A  single  %  at the end of the template is dropped from the core file‐
+         name, as is the combination of a % followed by any character other than
+         those listed above.  All other characters in the template become a lit‐
+         eral part of the core filename.  The template may include  '/'  charac‐
+         ters,  which  are  interpreted  as delimiters for directory names.  The
+         maximum size of the resulting core filename is 128 bytes (64  bytes  in
+         kernels before 2.6.19).  The default value in this file is "core".  For
+         backward  compatibility,  if  /proc/sys/kernel/core_pattern  does   not
+         include "%p" and /proc/sys/kernel/core_uses_pid (see below) is nonzero,
+         then .PID will be appended to the core filename.
+      /*************************************************************************/
+      若直接用VI修改，则会报错。如果是用echo "1" > /proc/sys/kernel/core_uses_pid
+          /proc/sys/kernel/core_uses_pid"
+          WARNING: The file has been changed since reading it!!!
+          Do you really want to write to it (y/n)?y
+          "/proc/sys/kernel/core_uses_pid" E667: Fsync failed
+          Press ENTER or type command to continue
+
+=开发环境
+ IDE/编辑器: vim/eclipse, etc演示和配置
+ Makefile： 简单项目构建管理
+      make -k  让make 命令在发现错误时，仍然继续执行；
+           -n  作用是让make命令输出执行操作步骤
+ Git：代码版本管理
+
+=开发流程工具简介
+  需求  rmtoo
+  概要设计/详细设计 CUnit/gtest,etc 
+  编码/单元测试  bugzilla
+  集成测试
+  系统测试
+  发布
+---------------
+桂贤补充内容：
+1. strace/ptrace/vmstat/gprof等基础开发工具
+    gprof 剖析程序
+      1-在编译和链接时，需要加入-pg 参数；
+      2-然后正常的运行程序./obj_file,生成gmon.out
+      3-调用gprof obj_file 
+
+    strace: 跟跟踪系统调用和信号
+        常用参数：
+              -c　　统计每种系统调用执行的时间、调用次数、出错次数，程序退出时给出报告
+              -p pid　　跟踪指定的进程，可以使用多个-p同时跟踪多个进程
+              -o filename　　strace默认输出到stdout，-o可以将输出写入到指定的文件
+              -f　　跟踪由fork产生的子进程的系统调用
+              -ff　　常与-o选项一起使用，不同进程(子进程)产生的系统调用输出到各个filename.pid文件中
+              -F　　尝试跟踪vfork子进程系统调用，注意：与-f同时使用时, vfork不被跟踪
+              -e expr　　输出过滤表达式，可以过滤掉不想输出的strace结果
+              -e trace=set　　指定跟踪set中的系统调用
+              -e trace=network　　跟踪与网络有关的所有系统调用
+              -e strace=signal　　跟踪所有与系统信号有关的系统调用
+              -e trace=ipc　　跟踪所有与进程通讯有关的系统调用
+              -e signal=set　　指定跟踪set中的信号
+              -e read=set　　输出从指定文件中读出的数据，例如-e read=3,5
+              -e write=set　　输出写入到指定文件中的数据，例如-e write=1
+              -r　　打印每一个系统调用的相对时间
+              -t　　在输出中的每一行前加上时间信息
+              -tt　　在输出中的每一行前加上时间信息，时间精确到微秒级
+              -ttt　　在输出中的每一行前加上时间信息，输出为相对时间
+              -s　　指定每一行输出字符串的长度（默认为32）
+    vmstat : 虚拟内存的统计
+            r 表示运行队列(就是说多少个进程真的分配到CPU)，当这个值超过了CPU数目，就会出现CPU瓶颈了。这个也和top的负载有关系，一般负载超过了3就比较高，超过了5就高，超过了10就不正常了，服务器的状态很危险。top的负载类似每秒的运行队列。如果运行队列过大，表示你的CPU很繁忙，一般会造成CPU使用率很高。
+
+            b 表示阻塞的进程。
+
+            swpd 虚拟内存已使用的大小，如果大于0，表示你的机器物理内存不足了，如果不是程序内存泄露的原因，那么你该升级内存了或者把耗内存的任务迁移到其他机器。
+
+            free   空闲的物理内存的大小。
+
+            buff   Linux/Unix系统是用来存储，目录里面有什么内容，权限等的缓存，
+
+            cache cache直接用来记忆我们打开的文件,给文件做缓冲，
+
+            si  每秒从磁盘读入虚拟内存的大小，如果这个值大于0，表示物理内存不够用或者内存泄露了，要查找耗内存进程解决掉。
+
+            so  每秒虚拟内存写入磁盘的大小，如果这个值大于0。
+
+            bi  块设备每秒接收的块数量，这里的块设备是指系统上所有的磁盘和其他块设备，默认块大小是1024byte
+
+            bo 块设备每秒发送的块数量，例如我们读取文件，bo就要大于0。bi和bo一般都要接近0，不然就是IO过于频繁，需要调整。
+
+            in 每秒CPU的中断次数，包括时间中断
+
+            cs 每秒上下文切换次数，例如我们调用系统函数，就要进行上下文切换，线程的切换，也要进程上下文切换，这个值要越小越好，太大了，要考虑调低线程或者进程的数目,例如在apache和nginx这种web服务器中，我们一般做性能测试时会进行几千并发甚至几万并发的测试，选择web服务器的进程可以由进程或者线程的峰值一直下调，压测，直到cs到一个比较小的值，这个进程和线程数就是比较合适的值了。系统调用也是，每次调用系统函数，我们的代码就会进入内核空间，导致上下文切换，这个是很耗资源，也要尽量避免频繁调用系统函数。上下文切换次数过多表示你的CPU大部分浪费在上下文切换，导致CPU干正经事的时间少了，CPU没有充分利用，是不可取的。
+
+            us 用户CPU时间。
+
+            sy 系统CPU时间，如果太高，表示系统调用时间长，例如是IO操作频繁。
+
+            id  空闲 CPU时间，一般来说，id + us + sy = 100,一般我认为id是空闲CPU使用率，us是用户CPU使用率，sy是系统CPU使用率。
+
+            wt 等待IO CPU时间。
+
+2. 如何看core及X86架构下的函数调用栈的基础
