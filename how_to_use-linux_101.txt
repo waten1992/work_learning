@@ -438,7 +438,8 @@
 =开发环境
  IDE/编辑器: vim/eclipse, etc演示和配置
  Makefile： 简单项目构建管理
-      
+      make -k  让make 命令在发现错误时，仍然继续执行；
+           -n  作用是让make命令输出执行操作步骤
  Git：代码版本管理
 
 =开发流程工具简介
