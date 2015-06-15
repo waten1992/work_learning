@@ -1,0 +1,11 @@
+﻿上周工作：
+		1-读linux程序设计的前三章，学习基本的linux知识和shell编程，并总结成思维导图；
+		2-完成鑫鑫和桂贤布置how to use linux 101 大纲的预备知识；
+		3-学习makefile的编写；
+
+	学习笔记在：\\192.168.1.6\share\he_wen_guan\学习总结文档；
+
+本周计划：
+		1-继续熟悉和学习linux环境开发的工具链， 如：GDB 、GCC 、makefile的编写 ；
+		2-学习linux 程序设计中的进程和信号、POSIX线程、同步章节；
+		
