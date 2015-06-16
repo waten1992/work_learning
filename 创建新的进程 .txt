@@ -1,0 +1,245 @@
+创建新的进程 system
+	头文件：#include <stdlib.h>
+	原型：int system (const char *string)
+	作用：把字符串参数的形式传递给 shell ，然后执行。
+	错误处理：
+		1- shell 无法完成 return 127
+		2- 其他错误， return -1 
+		3- 否则， return 传递的shell 命令
+注释：system 的效率不高，推荐用exec（）系列函数；
+
+	头文件：#include <unistd.h>
+	原型：
+	参数可变,并以一个空指针结束；
+	int execl(const char *path ,const char *arg0 ,--- (char *) 0 );
+	int execlp(const char *file ,const char *arg0 ,--- (char *) 0 );
+	int execle(const char *path ,const char *arg0 ,--- (char *) 0 , char *const envp[] );
+	参数固定：
+	int execv(const char *path ,const char *arg[] );
+	int execvp(const char *file ,const char *arg[]);
+	int execve(const char *path ,const char *arg[], char *const envp[] );
+	*arg[] *envp[] 都是以NULL结尾；
+	作用：接收参数，然后在新进程中执行。
+	错误处理： exec一般不会返回，发生错误时，返回-1 ，并且设置错误变量errno 
+	继承原进程的很多特性:比如：在原进程打开的文件描述符；
+
+	头文件：#include <unistd.h>
+			#include <sys/types.h>
+	原型：
+		pid_t fork(void) ;
+	作用：生成新的子进程 ，调用一次返回2次；
+		  父进程的返回是子进程的PID,子进程返回的是0。
+	父子进程的区别：
+		1-并发执行，两个都是独立的进程没有先后顺序；
+		2-相同但是是独立的地址空间；
+			相同：用户栈、本地变量、堆、全局变量、相同的代码、文本、打开文件表述符；
+		3-共享文件；
+			比如：文件表述符；
+	错误处理：发生错误时，返回-1 ;
+		1-父进程所拥有的子进程数目超过规定的限制(CHILD_MAX),errno 被置为 EAGAIN  
+		2-进程表中没有足够的空间创建新进程或者是虚拟内存不足，errno 被置为ENOMEM
+
+	继承原进程的很多特性:比如：在原进程打开的文件描述符；
+	fork 在内核中调用是do_fork() ;
+		执行的步骤：
+					1、建立进程控制结构并赋初值，使其成为进程映像。这个过程完成以下内容。
+						在内存中分配一个 task_struct 数据结构，以代表即将产生的新进程。
+						把父进程 PCB 的内容复制到新进程的 PCB 中。
+						为新进程分配一个唯一的进程标识号 PID 和 user_struct 结构。然后检查用户具有执行一个新进程所必须具有的资源。
+						重新设置 task_struct 结构中那些与父进程值不同的数据成员。
+						设置进程管理信息，根据所提供的 clone_flags 参数值，决定是否对父进程 task_struct 中的指针 fs 、files 指针等所选择的部分进行拷贝，如果 clone_flags 参数指明的是共享而不是拷贝，则将其计数器 count 的值加 1 ，否则就拷贝新进程所需要的相关信息内容 PCB 。这个地方是区分 sys_fork() 还是 sys_clone() 。
+
+					2、必须为新进程的执行设置跟踪进程执行情况的相关内核数据结构。包括 任务数组、自由时间列表 tarray_freelist 以及 pidhash[] 数组。
+					这部分完成如下内容：
+						把新进程加入到进程链表中。
+						把新进程加入到 pidhash 散列表中，并增加任务计数值。
+						通过拷贝父进程的上、下文来初始化硬件的上下文（TSS段、LDT以及 GDT）。
+
+					3、启动调度程序，使子进程获得运行的机会。
+						这部分完成以下动作：
+						设置新的就绪队列状态 TASK_RUNING , 并将新进程挂到就绪队列中，并重新启动调度程序使其运行。
+						向父进程返回子进程的 PID，设置子进程从 do_fork() 返回 0 值。
+	
+
+
+	头文件：
+			#include <sys/types.h>
+			#include <sys/wait.h>
+	原型： pid_t wait(int *stat_loc) ;
+	等价于：waitpid(-1, &status ,0) ;
+
+	作用：父进程等待子进程的结束；
+	错误处理： 成功， return 子进程的pid 
+			   失败， return -1 
+
+	宏：
+		WIFEXITED(stat_val) 	子进程调用exit() return 正常终止，返回真（非0值）；
+		WEXITSTATUS(stat_val) 	在WIFEXITED 为真时，才会正常返回子进程退出码；
+		
+		WIFSIGNALED(stat_val) 	子进程因为一个未捕获的信号而终止，返回为真；
+		WTERMSIG(stat_val)		在WIFSIGNALED 为真 ，返回一个信号的数量；
+
+		WIFSTOPPED(stat_val)	子进程当前被停止，返回真；
+		WSTOPSIG(stat_val)		在WIFSTOPPED 为真 ，返回一个信号的数量；
+
+	getpid()  returns the process ID of the calling process.  (This is often used
+       by routines that generate unique temporary filenames.)
+
+    getppid() returns the process ID of the parent of the calling process.
+
+	孤儿进程：子进程的父进程exit()，他的儿子还活着，就成了孤儿进程，由init进程收养；
+	僵尸进程：子进程exit（）,父进程没有用wait /waitpid回收，子进程的文件描述符还在内存中；
+
+
+
+
+
+
+安装google-pinyin遇到问题：
+(WARN-9858 /tmp/buildd/fcitx-4.2.8.5/src/module/dbus/dbusstuff.c:195) Connection Error (Did not receive a reply. Possible causes include: the remote application did not send a reply, the message bus security policy blocked the reply, the reply timeout expired, or the network connection was broken.)
+	
+
+	头文件：
+			#include <sys/types.h>
+			#include <sys/wait.h>
+
+	原型： pid_t waitpid(pid_t pid ,int *stat_loc , int options) ;
+	
+	作用：父进程等待子进程的结束；
+	错误处理： 成功， return 子进程的pid 
+			   失败， return -1 
+
+
+	进程：相互协作、相互发送消息（IPC）、中断(上下文切换)、共享内存
+	信号：由于某些错误的条件而生成的：内存段的冲突、浮点处理器错误、或者非法指令；
+	信号可以被产生、捕获、响应、忽略；
+
+	SIGCHLD		子进程已经停止或退出
+	SIGCONT		继续执行暂停进程
+	SIGSTOP		停止执行（不能被捕获和忽略）
+	SIGTSTP		终端挂起
+	SIGTTIN		后台进程尝试读
+	SIGTTOU		后台进程尝试写操作
+
+
+	每个信号的类型都有一个预定义的默认行为:
+		1-进程终止
+		2-进程终止且 dump core
+		3-进程停止直到被SIGCONT信号重启
+		4-忽略该信号
+	进程可以通过使用signal函数修改和信号相关的默认行为，除了SIGSTOP SIGKILL.
+	#include<signal.h>
+	
+		typedef void (*sighandler_t)(int);
+		sighandler_t signal(int signum, sighandler_t handler);
+			Returns: ptr to previous handler if OK, SIG_ERR on error (does not set errno)
+	返回：若成功，则指向前次处理程序的指针，若出错，则为SIG_ERR 
+
+	void (*signal(int sig , void (*func)(int)))(int);
+
+	捕获或者忽略的信号由参数sig 给出，接受指定的信号后调用的参数==函数由func给出
+
+	signal 有三中方式改变和信号signum相关联的行为；
+		1-如果headler 是 SIG_IGN ,忽略掉类型为signum 信号；
+		2-如果headler 是 SIG_DFL ,恢复类型为signum 信号；
+		3-handler是用户自定义的函数地址，称为信号处理程序；
+			处理的这个函数叫做:installing the handler 调用的信号处理函数称为捕获信号。
+
+	例子：
+
+	   #include "a.h"
+  
+	   void handler (int sig)
+	   {
+	           printf("it is canot kill this process ! \n");
+	           signal(SIGINT,SIG_DFL); //恢复处理函数
+	   }
+	   
+	   int main ()
+	   {
+	         if(signal(SIGINT ,handler) == SIG_ERR )  //设置信号处理函数
+	                 printf("error happen !\n");
+	         while(1)
+	          {
+	                  printf("hello indian mi fans! \n");
+	                  sleep(1);
+	          }
+	 	exit(0);
+	 	}
+
+	 	结果是：
+	 	pwd006@Debain:~/test/process$ ./ctrl 
+		hello indian mi fans! 
+		hello indian mi fans! 
+		hello indian mi fans! 
+		hello indian mi fans! 
+		hello indian mi fans! 
+		^Cit is canot kill this process !  //第一次SIGINT 被转移到了信号处理函数
+		hello indian mi fans! 
+		hello indian mi fans! 
+		hello indian mi fans! 
+		^C // SIGINT 被在信号处理函数中恢复了
+		pwd006@Debain:~/test/process$ vi ctrl.c
+
+		据说在信号处理程序中调用printf() 函数不安全
+
+	#include<signal.h>
+	int  sigaction(int sig m const struct sigaction *act , struct sigaction *oact)
+	更健壮的信号编程接口；
+		void (*) (int) sa_handler // function SIG_DFL OR SIG_IGN 
+		sigset_t sa_mask		  // signals to block in sa_handler 
+		int sa_flags 			  // signal action modifiers 
+		
+		返回： 成功， 0 
+			   失败， -1
+
+
+		作用：
+			1-信号不会排队
+			2-被中断的系统调用自动重启；
+			3-一旦设置了信号的处理程序，它就一直保持，直到signal带有的handler 参数为SIG_EFL 或者 SIG_IGN调用
+			4-只有这个处理程序当前正在处理的信号类型才能被阻塞；
+
+
+	信号处理问题：
+		1-待处理的信号被阻塞；
+		2-待处理的信号不会排队；
+		3-
+	关于errno 
+	   The <errno.h> header file defines the integer variable errno, which is set by
+       system calls and some library functions in the event of an error to  indicate
+       what  went wrong.  Its value is significant only when the return value of the
+       call indicated an error (i.e., -1 from most system calls;  -1  or  NULL  from
+       most library functions); a function that succeeds is allowed to change errno.
+
+       errno具体数值表示什么意思在：/usr/include/asm-generic/errno.h 查看
+
+    头文件：
+			#include <sys/types.h>
+			#include <signal.h>
+
+	原型： int kill(pid_t pid ,int sig) ;
+	
+	作用：杀死给定pid的进程；
+	错误处理： 成功， return 0 
+			   失败， return -1  ，并设置errno 变量
+			   		常见的原因：1-给定的信号无效：errno 设置为EINVAL
+			   					2-发送进程权限不够: errno 设置为EPERM
+			   					3-目标进程不存在：errno 设置为ESRCH
+	#include<unistd.h>
+
+	unsigned int alarm (unsigned int seconds)
+
+	作用：在seconds秒之后发送一个SIGALRM信号，由于处理的延时和时间的调度不确定性，实际的闹钟要比预先的安排的后一些。
+	seconds 设置为0将取消所有闹钟的请求，每个进程只能有一个闹钟的时间；
+	返回：成功，设置闹钟的剩余的时间；
+		  失败，-1
+
+	#include<unistd.h>
+
+	int pause (void)
+	作用：把程序挂起直到有信号出现为止；
+	返回:被中断时，将返回-1 ，并把errno 置为EINTR 
+
+		
+
