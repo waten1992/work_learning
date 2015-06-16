@@ -285,7 +285,7 @@
      -o my_obj 目标文件
      -g  GDB调式工具
      -c 编译汇编不链接
-     -o1 o2 o3 是编译器优化的程度
+     -O1 o2 o3 是编译器优化的程度
      -pg 使用gprog 来查看代码的性能 ，会产生gmon.out的剖析程序
      -p 针对prof
      -fno-common 在遇到多重定义的全局符号时，输出一条警告信息 ： 符号解析规则参考CSAPP 7.6节
@@ -440,8 +440,28 @@
  Makefile： 简单项目构建管理
       make -k  让make 命令在发现错误时，仍然继续执行；
            -n  作用是让make命令输出执行操作步骤
- Git：代码版本管理
+    example 1
 
+      .c .a :
+        $(cc) -c $(CFLAGS) $<
+        $(AR) $(ARFLAGS) $@ $* .O
+      1-想要从.c文件得到.a库文件
+      2-第一条规则告诉它必须编译源文件以生成目标文件
+      3-第二条规则告诉它用ar 命令将新的目标文件添加到库函数
+    
+    example 2
+      dest/%.txt: src/%.txt
+        @[ -d dest ] || mkdir dest
+        cp $< $@
+        上面代码将 src 目录下的 txt 文件，拷贝到 dest 目录下。首先判断 dest 目录是否存在，如果不存在就新建，然后，$< 指代前置文件（src/%.txt）， $@ 指代目标文件（dest/%.txt）。
+    
+      参见：https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html
+ 
+ Git：代码版本管理
+      git status 查看状态
+      git add file/dir 添加文件
+      git commit -m  "say something" 提交到本地的文件服务器
+      git push  把本地的文件到主分支
 =开发流程工具简介
   需求  rmtoo
   概要设计/详细设计 CUnit/gtest,etc 
