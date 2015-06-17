@@ -28,7 +28,29 @@
         　　S 中断 sleeping 
         　　T 停止 traced or stopped 
         　　Z僵死 a defunct (”zombie”) process 
-
+    --------------------------------------------------------------------------------
+    例子：
+        pwd006@Debain:~/test/process$ ./defunct2 //产生僵尸进程
+        alarm application starting 
+        waiting for alarm to go off 
+        the father pid= 5310^Z
+        [1]+  Stopped                 ./defunct2
+        pwd006@Debain:~/test/process$ ps -ef | grep defunct //显示僵尸进程
+        pwd006    5310  4620  0 09:27 pts/0    00:00:00 ./defunct2
+        pwd006    5311  5310  0 09:27 pts/0    00:00:00 [defunct2] <defunct>
+        pwd006    5316  4620  0 09:28 pts/0    00:00:00 grep defunct
+        pwd006@Debain:~/test/process$ ps -A -o stat,ppid,pid,cmd | grep -e '^[zZ]'|awk '{print $2}' | xargs kill -9 //杀死僵尸
+        [1]+  Killed                  ./defunct2 
+        pwd006@Debain:~/test/process$ ps -ef | grep defunct //查看僵尸，已经被杀掉了
+        pwd006    5342  4620  0 09:30 pts/0    00:00:00 grep defunct 
+        pwd006@Debain:~/t
+        est/process$ 
+        PS 的参数接受
+        -A 显示所有的进程 和 -e 是一样的；
+        -o 按格式显示参数，-o stat,ppid,pid,cmd 顺序不能变，stat 要在第一个位置，参数中间不能有空格；
+        grep -e 是启用扩展匹配 grep -e '^[Zz]' 搜寻 状态以z Z 开头的的僵尸进程
+        awk '{print $2}' ： 把awk的第二个参数打印出来，也就是父进程的PID ；通过xargs 传递给 kill -9 
+      --------------------------------------------------------------------------------------
     top-是一个提供动态实时的可视化系统，包括CPU、内存、缓存的利用率、总的任务数和现在的状态、负载情况等。
     具体情况如下：
     1- top - 09:28:42 up  1:41,  2 users,  load average: 0.10, 0.04, 0.05
@@ -253,7 +275,8 @@
  tail/head-显示前面行数 和后面的行数 ，结合 n 使用
  less- 以每一页作为显示 
  file-查看文件的类型
-
+ wc - 统计字节、行数、单词
+    wc -l 总计行数
  ==文件系统
     file system hierarchy
 
