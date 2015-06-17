@@ -42,8 +42,11 @@
 
 	#include <semaphore.h>
 		int sem_init(sem_t *sem, int pshared, unsigned int value); //pshared 为0 ，就是进程内部的信号量，否则可以在进程间共享信号量
-		int sem_wait(sem_t *s); /* P(s) */
+		int sem_wait(sem_t *s); /* P(s) */ //阻塞 
 		int sem_post(sem_t *s); /* V(s) */
+		int sem_destory(sem_t *s) ; //销毁信号量
 			Returns: 0 if OK, −1 on error
 
-	
+		int sem_trywait(sem_t *s ) ; //非阻塞方式 
+
+	strncmp(s,t,n)		same as strcmp but only in first n characters
