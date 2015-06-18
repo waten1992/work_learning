@@ -16,3 +16,4 @@ suppressed	被抑制的
 vague		模糊的
 expired		期满
 defunct		名存实亡，僵尸
+reentrant 	再进去，凹角
