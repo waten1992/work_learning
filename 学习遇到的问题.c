@@ -93,7 +93,18 @@
 
 	周三的问题：
 			1-编写一个shell ，杀掉所有的僵尸进程；在shell 里面 执行bash命令后输出的参数是什么形式的 字符串还是？
-
+				代码如下：
+				  1 #!/bin/sh
+				  2 if [ 0 -ne ` ps -e -o stat,ppid,pid,cmd | grep -e '^[Zz]'| wc -l ` ]  #  ` ` 使用把输出的字变成数字
+				  3 then
+				  4 {
+				  5         ps -e -o stat,ppid,pid,cmd | grep -e '^[Zz]' | awk '{print $2}' | xargs kill -9
+				  6 }
+				  7 else
+				  8         echo "You system did't find zombie "
+				  9 fi
+				 10 
+				 11 exit 0
 			2-线程问题？为什么是3次？
 				pwd006@Debain:~/work_learning/pthread$ ./3a 
 				Input some text. Enter 'end' to finish
@@ -143,20 +154,78 @@
 
 
 				/* strcpy: copy t to s; pointer version 2 */
-				void strcpy(char *s, char *t)
+				void strcpy(char *s, char *t) 
 				{
-				while ((*s++ = *t++) != '\0')  //默认是没有在后面添加'\0'
+				while ((*s++ = *t++) != '\0')  
 						;
 				}
 			
-				fgets 默认是在后面添加 '\0';
-				strcpy 默认是没有在后面添加'\0';
+				fgets 默认是在'\n'后面添加  '\0';
+				strcpy 是已经拷贝'\0' ;
+
+
 				而同步线程的语句是：
 				printf("You input %d characters\n", strlen(work_area) -1);
-				所以 strcpy 要比 fgets 少1 ；
+				strlen 遇到'\0' 就停下来，不包含'\0' 的长度；
+				FAST\n\0    5-1 = 4
+				hi\0ST\n\0  2-1 = 1
 
 			3-线程是也是并发的？
 				线程是并发的。
+				并没有像按顺序的那样输出而是随意的输出。
+				例子一：不能保证输出的是正确的参数！
+				pwd006@Debain:~/work_learning/pthread$ gcc -D_REENTRANT Concurrency_pthread.c -g -o conc -lpthread
+				pwd006@Debain:~/work_learning/pthread$ ./conc 
+				hello from thread 2  
+				hello from thread 3  
+				hello from thread 3  
+				hello from thread 0  
+				pwd006@Debain:~/work_learning/pthread$ ./conc 
+				hello from thread 3  
+				hello from thread 3  
+				hello from thread 2  
+				hello from thread 0  
+				pwd006@Debain:~/work_learning/pthread$ ./conc 
+				hello from thread 3  
+				hello from thread 3  
+				hello from thread 2  
+				hello from thread 0  
+				pwd006@Debain:~/work_learning/pthread$ ./conc 
+				hello from thread 2  
+				hello from thread 0  
+				hello from thread 0  
+				hello from thread 0  
+				pwd006@Debain:~/work_learning/pthread$ 
 
+				例子二： 能保证每一个参数能准确的传递，但是不能线程的顺序！！！！
+				pwd006@Debain:~/work_learning/pthread$ vi conc_correct.c 
+				pwd006@Debain:~/work_learning/pthread$ gcc -D_REENTRANT conc_correct.c -g -o conc_correct -lpthread
+				pwd006@Debain:~/work_learning/pthread$ ./conc_correct 
+				hello from thread 2  
+				hello from thread 1  
+				hello from thread 0  
+				hello from thread 3  
+				pwd006@Debain:~/work_learning/pthread$ ./conc_correct 
+				hello from thread 0  
+				hello from thread 2  
+				hello from thread 3  
+				hello from thread 1  
+				pwd006@Debain:~/work_learning/pthread$ ./conc_correct 
+				hello from thread 0  
+				hello from thread 3  
+				hello from thread 1  
+				hello from thread 2  
+				pwd006@Debain:~/work_learning/pthread$ ./conc_correct 
+				hello from thread 0  
+				hello from thread 3  
+				hello from thread 1  
+				hello from thread 2  
+				pwd006@Debain:~/work_learning/pthread$ ./conc_correct 
+
+-----------------------------------------------------------------------
+2015-6-18
+			1-线程的获取锁是怎么实现的？线程是轮询信号量，还是事件驱动？
+
+			2-改变调度策略？ 仍然不能实现先运行？
  
  
