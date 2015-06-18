@@ -92,7 +92,71 @@
 -----------------------------------------------------------------------------
 
 	周三的问题：
-			1-编写一个shell ，杀掉说有的僵尸进程；在shell 里面 执行bash命令后输出的参数是什么形式的 字符串还是？
+			1-编写一个shell ，杀掉所有的僵尸进程；在shell 里面 执行bash命令后输出的参数是什么形式的 字符串还是？
+
+			2-线程问题？为什么是3次？
+				pwd006@Debain:~/work_learning/pthread$ ./3a 
+				Input some text. Enter 'end' to finish
+				hey !
+				You input 5 characters
+				FAST
+				You input 1 characters
+				You input 1 characters
+				You input 1 characters
+				end
+
+				Waiting for thread to finish...
+				Thread joined
+				pwd006@Debain:~/work_learning/pthread$ 
+				-------------------------------------------------
+			解答：
+			 while(strncmp("end", work_area, 3) != 0) {
+	   32       if (strncmp(work_area, "FAST", 4) == 0) {
+	   33         sem_post(&bin_sem);
+	   34         strcpy(work_area, "hi");    FAST hi
+	   35       } else {
+	   36         fgets(work_area, WORK_SIZE, stdin);
+	   37       }
+	   38       sem_post(&bin_sem);
+	   39     }
+
+	   		在这个例子中主线程是优先的；
+	   		  第一次 增加是fgets 中的FAST  38行增加
+	   		  第二次 是FAST == 4 if 32行增加
+	   		  第三次 也是 38 行 
+
+	   		  为什么 hi 是2个字符却输出1个字符？ strcpy 、 strncmp 、fgets 是怎么实现？
+
+	   		  	/* fgets: get at most n chars from iop */
+				char *fgets(char *s, int n, FILE *iop)
+				{
+					register int c;
+					register char *cs;
+					cs = s;
+					while (--n > 0 && (c = getc(iop)) != EOF)
+						if ((*cs++ = c) == '\n')
+							break;
+					*cs = '\0'; //默认是在输入后添加 '\0'
+					
+					return (c == EOF && cs == s) ? NULL : s;
+				}
+
+
+				/* strcpy: copy t to s; pointer version 2 */
+				void strcpy(char *s, char *t)
+				{
+				while ((*s++ = *t++) != '\0')  //默认是没有在后面添加'\0'
+						;
+				}
+			
+				fgets 默认是在后面添加 '\0';
+				strcpy 默认是没有在后面添加'\0';
+				而同步线程的语句是：
+				printf("You input %d characters\n", strlen(work_area) -1);
+				所以 strcpy 要比 fgets 少1 ；
+
+			3-线程是也是并发的？
+				线程是并发的。
 
  
  
