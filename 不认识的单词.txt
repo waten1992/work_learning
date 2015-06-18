@@ -17,3 +17,11 @@ vague		模糊的
 expired		期满
 defunct		名存实亡，僵尸
 reentrant 	再进去，凹角
+utilities	公用事业
+implicit 	不言明
+incompatible  不相容; 矛盾
+clumsy 		笨拙的
+Synchronization 同步
+semaphores  信号
+slight 		小的
+drawback 	缺点
