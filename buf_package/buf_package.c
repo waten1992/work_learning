@@ -19,28 +19,38 @@ void *Calloc(size_t nmemb, size_t size) ;
 void Free(void *ptr) ;
 
 void look(sbuf_t *sp);
-
-
-    sbuf_t buf ;
+#define MAX_Size 1024
+/* global variable      */
+       sbuf_t buf ;
 static sem_t mutex;
 
 
 int main()
 {
     int input_sizes ;
-    char Input_type[10];
-    memset(Input_type,0,10);
     printf("Welcome to buff_pool !!!\n");
     printf("Pool NUM of sizes --->");
     scanf("%d",&input_sizes);
-    printf("Input_type --->");
-    scanf("%s",&Input_type);
-  
-    printf("%s , %d  \n",Input_type,input_sizes);
+    while(input_sizes >  MAX_Size || input_sizes <= 0)
+    {
+    	printf("Pool NUM of sizes --->");
+        scanf("%d",&input_sizes);
+    }
+    printf(" %d  \n",input_sizes);
   
     sbuf_init(&buf,input_sizes);
     look(&buf);
+    for (int i = 0 ,init =100  ; i < input_sizes  ;i++ ,init++ )
+   	 sbuf_insert(&buf,init);
+/* 
+    for(int i = 0 ; i < input_sizes  ;i++)
+    {	    
+	 int result;
+  	 result  = sbuf_remove(&buf);
+  	 printf("result: %d\n",result);
+    }
 
+*/
   return 0 ;
 }
 
@@ -53,7 +63,9 @@ void unix_error(char *msg) /* Unix-style error */
 
 void look(sbuf_t *sp)
 {
-    printf("sp->n %d\n",sp->n);
+   printf("sp->n: %d\n",sp->n);
+   
+   printf("sp->slots: %d\n",sp->slots);
 }   
 
 void sbuf_init(sbuf_t *sp, int n)
@@ -64,6 +76,7 @@ void sbuf_init(sbuf_t *sp, int n)
 	 Sem_init(&sp->mutex, 0, 1); /* Binary semaphore for locking */
 	 Sem_init(&sp->slots, 0, n); /* Initially, buf has n empty slots */
 	 Sem_init(&sp->items, 0, 0); /* Initially, buf has zero data items */
+
  }
 
  /* Clean up buffer sp */
