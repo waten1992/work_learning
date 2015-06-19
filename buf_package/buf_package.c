@@ -17,6 +17,7 @@ void P(sem_t *sem) ;
 void V(sem_t *sem) ;
 void *Calloc(size_t nmemb, size_t size) ;
 
+void look(sbuf_t *sp);
 
 int main()
 {
