@@ -8,6 +8,42 @@
 */
 #include "buf_package.h"
 
+void sbuf_init(sbuf_t *sp, int n);
+void sbuf_deinit(sbuf_t *sp);
+void sbuf_insert(sbuf_t *sp, int item);
+int sbuf_remove(sbuf_t *sp);
+void Sem_init(sem_t *sem, int pshared, unsigned int value) ;
+void P(sem_t *sem) ;
+void V(sem_t *sem) ;
+void *Calloc(size_t nmemb, size_t size) ;
+
+
+int main()
+{
+    int input_sizes ;
+    char Input_type[10];
+    memset(Input_type,0,10);
+    printf("Welcome to buff_pool !!!\n");
+    printf("Pool NUM of sizes --->");
+    scanf("%d",&input_sizes);
+    printf("Input_type --->");
+    scanf("%s",&Input_type);
+  
+    printf("%s , %d  \n",Input_type,input_sizes);
+  
+    sbuf_t *buf ;
+    sbuf_init(buf,input_sizes);
+    look(buf);
+
+  return 0 ;
+}
+
+
+void look(sbuf_t *sp)
+{
+    printf("sp->n %d\n",sp->n);
+}   
+
 void sbuf_init(sbuf_t *sp, int n)
 {
 	 sp->buf = Calloc(n, sizeof(int));
