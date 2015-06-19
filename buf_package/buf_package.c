@@ -20,6 +20,11 @@ void Free(void *ptr) ;
 
 void look(sbuf_t *sp);
 
+
+    sbuf_t buf ;
+static sem_t mutex;
+
+
 int main()
 {
     int input_sizes ;
@@ -33,13 +38,18 @@ int main()
   
     printf("%s , %d  \n",Input_type,input_sizes);
   
-    sbuf_t *buf ;
-    sbuf_init(buf,input_sizes);
-    look(buf);
+    sbuf_init(&buf,input_sizes);
+    look(&buf);
 
   return 0 ;
 }
 
+void unix_error(char *msg) /* Unix-style error */
+{
+	    fprintf(stderr, "%s: %s\n", msg, strerror(errno));
+	        exit(0);
+}
+/* $end unixerror */
 
 void look(sbuf_t *sp)
 {
@@ -111,11 +121,8 @@ void *Calloc(size_t nmemb, size_t size)
 	unix_error("Calloc error");
     return p;
 }
-<<<<<<< HEAD
 
 void Free(void *ptr) 
 {
     free(ptr);
 }
-=======
->>>>>>> origin/master
