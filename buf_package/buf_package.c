@@ -18,6 +18,7 @@ void V(sem_t *sem) ;
 void *Calloc(size_t nmemb, size_t size) ;
 void Free(void *ptr) ;
 
+void look(sbuf_t *sp);
 
 int main()
 {
@@ -110,8 +111,11 @@ void *Calloc(size_t nmemb, size_t size)
 	unix_error("Calloc error");
     return p;
 }
+<<<<<<< HEAD
 
 void Free(void *ptr) 
 {
     free(ptr);
 }
+=======
+>>>>>>> origin/master
