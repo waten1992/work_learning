@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <semaphore.h>
-
+#include<ctype.h>
 typedef int  int_type ;
 typedef struct 
 {

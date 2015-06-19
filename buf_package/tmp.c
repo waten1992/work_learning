@@ -17,13 +17,9 @@ void P(sem_t *sem) ;
 void V(sem_t *sem) ;
 void *Calloc(size_t nmemb, size_t size) ;
 void Free(void *ptr) ;
-char *Fgets(char *ptr, int n, FILE *stream) ;
 
 void look(sbuf_t *sp);
 #define MAX_Size 1024
-
-#define MAXLINE 10
-
 /* global variable      */
        sbuf_t buf ;
 static sem_t mutex;
@@ -31,32 +27,11 @@ static sem_t mutex;
 
 int main()
 {
-    int input_sizes ,index = 0;
-    char cmdline[MAXLINE];
+    int input_sizes ;
     printf("Welcome to buff_pool !!!\n");
     printf("Pool NUM of sizes --->");
-    
-    Fgets(cmdline, MAXLINE, stdin);
-    	//
-    while(cmdline[index] != '\n');
-    {
-    	if(!isdigit(cmdline[index]));
-    	{
-    		printf("wrong\n");
-    		return -1;
-    	}
-    	index++;
-    }
-
-    input_sizes = atoi(cmdline);
-    if(input_sizes >1024 || input_sizes <= 0)
-    {
-    	printf("wrong\n");
-    	return -1;
-    }
-
-    printf(" %d  \n",input_sizes);
-  
+    scanf("%d",&input_sizes);
+   	 printf(" %d  \n",input_sizes);
     sbuf_init(&buf,input_sizes);
     look(&buf);
     for (int i = 0 ,init =100  ; i < input_sizes  ;i++ ,init++ )
@@ -80,26 +55,16 @@ void unix_error(char *msg) /* Unix-style error */
 }
 /* $end unixerror */
 
-char *Fgets(char *ptr, int n, FILE *stream) 
-{
-    char *rptr;
-
-    if (((rptr = fgets(ptr, n, stream)) == NULL) && ferror(stream))
-	unix_error("Fgets error");
-
-    return rptr;
-}
-
 void look(sbuf_t *sp)
 {
-   printf("sp->n: %d\n",sp->n);
+   printf("total of number, sp->n: %d\n",sp->n);
    
    printf("sp->slots: %d\n",sp->slots);
 }   
 
 void sbuf_init(sbuf_t *sp, int n)
 {
-	 sp->buf = Calloc(n, sizeof(int));
+	 sp->buf = Calloc(n, sizeof(int_type));
 	 sp->n = n; /* Buffer holds max of n items */
 	 sp->front = sp->rear = 0; /* Empty buffer iff front == rear */
 	 Sem_init(&sp->mutex, 0, 1); /* Binary semaphore for locking */
