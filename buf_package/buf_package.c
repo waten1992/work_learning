@@ -17,9 +17,13 @@ void P(sem_t *sem) ;
 void V(sem_t *sem) ;
 void *Calloc(size_t nmemb, size_t size) ;
 void Free(void *ptr) ;
+char *Fgets(char *ptr, int n, FILE *stream) ;
 
 void look(sbuf_t *sp);
 #define MAX_Size 1024
+
+#define MAXLINE 10
+
 /* global variable      */
        sbuf_t buf ;
 static sem_t mutex;
@@ -27,15 +31,30 @@ static sem_t mutex;
 
 int main()
 {
-    int input_sizes ;
+    int input_sizes ,index = 0;
+    char cmdline[MAXLINE];
     printf("Welcome to buff_pool !!!\n");
     printf("Pool NUM of sizes --->");
-    scanf("%d",&input_sizes);
-    while(input_sizes >  MAX_Size || input_sizes <= 0)
+    
+    Fgets(cmdline, MAXLINE, stdin);
+    	//
+    while(cmdline[index] != '\0'):
     {
-    	printf("Pool NUM of sizes --->");
-        scanf("%d",&input_sizes);
+    	if(!isdigit(cmdline[index])):
+    	{
+    		printf("wrong\n");
+    		return -1;
+    	}
+    	index++;
     }
+
+    input_sizes = atoi(cmdline);
+    if(input_sizes >1024 || input_sizes <= 0)
+    {
+    	printf("wrong\n");
+    	return -1;
+    }
+
     printf(" %d  \n",input_sizes);
   
     sbuf_init(&buf,input_sizes);
@@ -60,6 +79,16 @@ void unix_error(char *msg) /* Unix-style error */
 	        exit(0);
 }
 /* $end unixerror */
+
+char *Fgets(char *ptr, int n, FILE *stream) 
+{
+    char *rptr;
+
+    if (((rptr = fgets(ptr, n, stream)) == NULL) && ferror(stream))
+	app_error("Fgets error");
+
+    return rptr;
+}
 
 void look(sbuf_t *sp)
 {
