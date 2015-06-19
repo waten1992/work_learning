@@ -16,6 +16,7 @@ void Sem_init(sem_t *sem, int pshared, unsigned int value) ;
 void P(sem_t *sem) ;
 void V(sem_t *sem) ;
 void *Calloc(size_t nmemb, size_t size) ;
+void Free(void *ptr) ;
 
 
 int main()
@@ -108,4 +109,9 @@ void *Calloc(size_t nmemb, size_t size)
     if ((p = calloc(nmemb, size)) == NULL)
 	unix_error("Calloc error");
     return p;
+}
+
+void Free(void *ptr) 
+{
+    free(ptr);
 }
