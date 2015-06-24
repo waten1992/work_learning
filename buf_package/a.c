@@ -114,8 +114,8 @@ int main()
 	look_up(&sp);
 */
     
-   // char my_struct[] = "hey !" ;
-	int res , input_slots = 1 ;
+  
+	int res ;
 	pthread_t tid[thread_num] ;
 	pthread_t master_tid[thread_num] ;
     int slots_contents[] = {11,12,13,14};
