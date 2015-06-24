@@ -227,5 +227,107 @@
 			1-线程的获取锁是怎么实现的？线程是轮询信号量，还是事件驱动？
 
 			2-改变调度策略？ 仍然不能实现先运行？
- 
- 
+
+---------------------------------------------------------------------------
+2015-6-19
+
+		1-在编译的时候出现了
+				/tmp/ccEZ69P1.o: In function `Pthread_create':
+				csapp.c:(.text+0x1019): undefined reference to `pthread_create'
+				/tmp/ccEZ69P1.o: In function `Pthread_cancel':
+				csapp.c:(.text+0x104b): undefined reference to `pthread_cancel'
+				/tmp/ccEZ69P1.o: In function `Pthread_join':
+				csapp.c:(.text+0x1088): undefined reference to `pthread_join'
+				/tmp/ccEZ69P1.o: In function `Pthread_detach':
+				csapp.c:(.text+0x10ba): undefined reference to `pthread_detach'
+				/tmp/ccEZ69P1.o: In function `Pthread_once':
+				csapp.c:(.text+0x111a): undefined reference to `pthread_once'
+				/tmp/ccEZ69P1.o: In function `Sem_init':
+				csapp.c:(.text+0x1142): undefined reference to `sem_init'
+				/tmp/ccEZ69P1.o: In function `P':
+				csapp.c:(.text+0x116a): undefined reference to `sem_wait'
+				/tmp/ccEZ69P1.o: In function `V':
+				csapp.c:(.text+0x1192): undefined reference to `sem_post'
+				collect2: error: ld returned 1 exit status
+
+			原因是没有加入 -lpthread 的参数 ，找不到定义的头文件；
+
+  		2-生产者和消费者模型
+  				全局变量：
+  						1- 互斥信号量    static sem_t mutex;  
+  						2- 槽位信号量    sbuf_t buf ;
+
+  				mutex---> 对正在生产或者消费的程序的互斥锁；
+				items---> 针对消费者说的；
+				slots---> 针对生产者所得；
+				关系： items + slots = mutex ;
+
+				找不到sem_t 结构的值，gdb 查看是这样的 
+				(gdb) p sp->slots
+				$2 = {__size = "\a\000\000\000\200", '\000' <repeats 26 times>, 
+				 __align = 549755813895}
+					？
+
+		不会的问题：
+		如何获取 system 函数的返回值？
+			The system() library function uses fork(2) to create a child process that exe‐cutes the shell command 
+			specified in command using execl(3) as follows:
+           		execl("/bin/sh", "sh", "-c", command, (char *) 0);
+
+       		system() returns after the command has been completed.
+       		During execution of the command, SIGCHLD  will  be  blocked,  and  SIGINT  and
+      		SIGQUIT  will  be  ignored,  in the process that calls system() (these signals
+       		will be handled according to their defaults inside the child process that exe‐
+       		cutes command).
+
+       		If  command is NULL, then system() returns a status indicating whether a shell
+       		is available on the system
+
+       	RETURN VALUE
+	       The return value of system() is one of the following:
+
+	       *  If command is NULL, then a nonzero value if a shell is available, or  0  if
+	          no shell is available.
+
+	       *  If  a  child  process  could  not  be  created,  or its status could not be
+	          retrieved, the return value is -1.
+
+	       *  If a shell could not be executed in the  child  process,  then  the  return
+	          value  is as though the child shell terminated by calling _exit(2) with the
+	          status 127.
+
+	       *  If all system calls succeed, then the return value is the termination  sta‐
+	          tus of the child shell used to execute command.  (The termination status of
+	          a shell is the termination status of the last command it executes.)
+
+	       In the last two cases, the return value is a "wait status" that can  be  exam‐
+	       ined  using  the macros described in waitpid(2).  (i.e., WIFEXITED() WEXITSTA‐
+	       TUS() and so on).
+
+	       system() does not affect the wait status of any other children.
+
+	       WEXITSTATUS(status)可以得到调用程序的返回值
+
+	    envp[] 的数据如何更改？
+			set 显示所有本地定义的Shell变量
+			env 显示当前用户的环境变量
+			export 设置新的环境变量
+
+			使用export 修改exec()中的envp[] 变量；
+			pwd006@Debain:~$ set | grep USERNAME
+			USERNAME=waten
+			pwd006@Debain:~$ export USERNAME="pwd006"
+			pwd006@Debain:~$ set | grep USERNAME
+			USERNAME=pwd006
+			_=USERNAME
+			pwd006@Debain:~$ 
+
+
+ ----------------------------------------------------------
+
+ 2015-6-23
+
+ 		1-忙等待，互斥锁，自旋锁；
+ 			对于互斥锁，如果资源已经被占用，资源申请者只能进入睡眠状态。
+ 			但是自旋锁不会引起调用者睡眠，如果自旋锁已经被别的执行单元保持，
+ 				调用者就一直循环在那里看是否该自旋锁的保持者已经释放了锁，"自旋"一词就是因此而得名。
