@@ -38,9 +38,9 @@ int main()
     
     Fgets(cmdline, MAXLINE, stdin);
     	//
-    while(cmdline[index] != '\n');
+    while(cmdline[index] != '\n'):
     {
-    	if(!isdigit(cmdline[index]));
+    	if(!isdigit(cmdline[index])):
     	{
     		printf("wrong\n");
     		return -1;
@@ -85,7 +85,7 @@ char *Fgets(char *ptr, int n, FILE *stream)
     char *rptr;
 
     if (((rptr = fgets(ptr, n, stream)) == NULL) && ferror(stream))
-	unix_error("Fgets error");
+	app_error("Fgets error");
 
     return rptr;
 }
