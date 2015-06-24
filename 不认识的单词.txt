@@ -25,3 +25,9 @@ Synchronization 同步
 semaphores  信号
 slight 		小的
 drawback 	缺点
+PHONY		假的
+analogous	相似的
+hierarchy	层次
+octal 		八进制
+ghastly		可怕的
+imposing	印象深刻的; 壮观的，威风的;
