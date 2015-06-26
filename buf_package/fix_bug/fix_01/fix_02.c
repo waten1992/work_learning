@@ -13,7 +13,7 @@
 #include<unistd.h>
 #include<pthread.h>
 
-#define  thread_num 4 
+#define  thread_num 1 
 #define  pool_num   8
 typedef struct
 {
@@ -22,9 +22,9 @@ typedef struct
     size_t 		front;
     size_t		rear;
 	size_t		size; //the  struct of slots size  
-    sem_t   mutex;
-    sem_t   slots;
-    sem_t   items;
+    sem_t   mutex;  // 
+    sem_t   slots; //available slots for producter
+    sem_t   items; //available items for customer
 }buf_pool;
 
 typedef struct 
@@ -115,19 +115,20 @@ int main()
     buf_pool *sp ;
 
     sp = buf_init(pool_num,sizeof(int));
-    int i = 4 ;
-	sp = add(sp,&i);
-	look_up(sp); 
-	int res , input_slots = 1 ;
-	pthread_t tid[thread_num] ;
+   	#if 0  //for test
+	int i = 4 ;
+	sp = add(sp,&i);  
+	look_up(sp);  
+	#endif 
+	int res  ; 
+	pthread_t tid[thread_num] ; //store to child pthread
 	pthread_t master_tid ;
 	int test_arry[] = {10,11,12,13};
 	master_thread_param *mtp;
-	mtp = (master_thread_param *)malloc(sizeof(master_thread_param));
-	mtp->master_sp = sp ;
-	mtp->param = test_arry;
-	mtp->num = sizeof(test_arry)/sizeof(test_arry[0]);	
-	//printf("%d\n",mtp->param[0]);
+	mtp = (master_thread_param *)malloc(sizeof(master_thread_param));//apply memery
+	mtp->master_sp = sp ; //point to buf_pool
+	mtp->param = test_arry; //address of a test_array
+	mtp->num = sizeof(test_arry)/sizeof(test_arry[0]);//array length	
 
 	res = pthread_create(&master_tid,NULL,master_thread_function,mtp);
 	if (res != 0)
@@ -136,11 +137,13 @@ int main()
 		exit(EXIT_FAILURE);	
     }
     pthread_join(master_tid,NULL); 
+#if 1 //for test 
 	look_up(sp);
-
-	for(int i = 0 ;i < thread_num ;i++)
+#endif
+	
+	for(int i = 0 ;i < thread_num ;i++) //the child thread 
 	{
-		res = pthread_create(&tid[i],NULL,thread_function,(void *)i);
+		res = pthread_create(&tid[i],NULL,thread_function,sp);
 		if (res != 0)
 		{
 			fprintf(stderr,"pthread was create error \n");
@@ -148,7 +151,7 @@ int main()
 		}
 	}
    
-	for(int i = 0 ;i < thread_num ;i++)
+	for(int i = 0 ;i < thread_num ;i++) //joinable thread 
    	{
 		res  = pthread_join(tid[i],NULL);
  		if(res != 0)
@@ -162,26 +165,33 @@ return 0;
 }
 void *thread_function(void *arg)
 {
-	printf("it is successfull :%d \n",arg);
-
+	printf("child thread , it is successfull \n");
+	buf_pool *tmp ;
+	tmp = (buf_pool *)arg ; 
+	printf("before !,the front---->%d \n",tmp->front);
+	int result = 0 ,res ;
+	void *result_tmp ;
+	result_tmp  = get(tmp,&result);
+	res = *(int *)result_tmp;
+	printf("the result---->%d ,after ,the front :%d \n",res,tmp->front);
+	sleep(1);
 	return NULL ;
 }
 
 void *master_thread_function(void *arg)
 {
-//	add(&sp,arg);	
 	master_thread_param *tmp ;
 	tmp = (master_thread_param *)arg;
 	for(int i = 0 ;i < tmp->num  ; i++)
 	{
-		void *i ;
-		//memcpy(i,(tmp->param+(i*tmp->master_sp->size)),tmp->master_sp->size);
-		memcpy(i,(tmp->param),tmp->master_sp->size);
-		printf("%d \n",*(int *)i); 
-	 tmp->master_sp	= add(tmp->master_sp,i);
+		void *index ; //temp variable
+		int cast_int = (int)(tmp->master_sp->size); //cast the void to int
+		int offset =i * cast_int;// count the offset  
+		memcpy(index,(tmp->param+offset),tmp->master_sp->size);
+		printf("%d \n",*(int *)index); 
+	 	tmp->master_sp	= add(tmp->master_sp,index); //call the add 
 	}
-	//tmp->master_sp	= add(tmp->master_sp,tmp->param[i]);
-	printf("form master thread num=%d \n",tmp->master_sp->n);
+	printf("form master thread num=%d \n",tmp->master_sp->rear);
 
 	return NULL;
 }
