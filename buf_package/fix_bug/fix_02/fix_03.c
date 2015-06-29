@@ -86,7 +86,6 @@ buf_pool * add(buf_pool *sp ,void * value)
 	printf("sp->size=%x , i=%d ,i*sp->size = %x \n",sp->size,i,i*(sp->size));
    	memcpy(((sp->buf)+(i*(sp->size))),value,sp->size);
     sp->rear++; 
-//	printf("add start address---->%x \n",&sp->buf[i]);
 	printf("address of ---> %x ,sp->buf = %x \n",(sp->buf+(i*(sp->size))),&sp->buf);
     v(&sp->mutex);
 
@@ -106,7 +105,7 @@ void * get(buf_pool *sp , void *value)
 	int i  = (sp->front)%(sp->n);
 	memcpy(value,(sp->buf+(i*(sp->size))),sp->size);
 	sp->front++;
-	printf("test of valuei address--->%x , i = %d \n",(sp->buf+(i*(sp->size))),i);
+	printf("----test of value address--->%x  \n",(sp->buf+(i*(sp->size))));
 	v(&sp->mutex);
 
 	v(&sp->slots);
@@ -163,8 +162,8 @@ int main()
 			exit(EXIT_FAILURE);	
 		}	
 	}
-//  release(sp); 
-//	free(mtp);
+    release(sp); 
+	free(mtp);
 return 0;
 }
 void *thread_function(void *arg)
