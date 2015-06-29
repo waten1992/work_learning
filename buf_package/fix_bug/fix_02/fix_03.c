@@ -13,7 +13,7 @@
 #include<unistd.h>
 #include<pthread.h>
 
-#define  thread_num 6 
+#define  thread_num 2 
 #define  pool_num   8
 typedef struct
 {
@@ -88,32 +88,35 @@ buf_pool * add(buf_pool *sp ,void * value)
     p(&sp->slots);
     
     p(&sp->mutex);
-    int i =  (sp->rear)%(sp->n);
-	printf("sp->size=%x , i=%d ,i*sp->size = %x \n",sp->size,i,i*(sp->size));
-   	memcpy(((sp->buf)+(i*(sp->size))),value,sp->size);
-    sp->rear++; 
-	printf("address of ---> %x ,sp->buf = %x \n",(sp->buf+(i*(sp->size))),&sp->buf);
+    	int i =  (sp->rear)%(sp->n);
+    	sp->rear++; 
     v(&sp->mutex);
 
-    v(&sp->items);
+	printf("sp->size=%x , i=%d ,i*sp->size = %x \n",sp->size,i,i*(sp->size));
+   	memcpy(((sp->buf)+(i*(sp->size))),value,sp->size);
+	printf("address of ---> %x ,sp->buf = %x \n",(sp->buf+(i*(sp->size))),&sp->buf);
+    
+	v(&sp->items);
 return  sp; 
 }
 
 void release(buf_pool *sp)
 {
-	free(&sp->buf);
+	free(sp->buf);
+	free(sp);
 }
 void * get(buf_pool *sp , void *value)
 {
 	p(&sp->items);
 	
 	p(&sp->mutex);
-	int i  = (sp->front)%(sp->n);
-	memcpy(value,(sp->buf+(i*(sp->size))),sp->size);
-	sp->front++;
-	printf("----test of value address--->%x  \n",(sp->buf+(i*(sp->size))));
+		int i  = (sp->front)%(sp->n);
+		sp->front++;
 	v(&sp->mutex);
 
+	memcpy(value,(sp->buf+(i*(sp->size))),sp->size);
+	printf("----test of value address--->%x  \n",(sp->buf+(i*(sp->size))));
+	
 	v(&sp->slots);
 
 return value ;
