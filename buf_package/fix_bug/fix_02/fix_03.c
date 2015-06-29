@@ -13,7 +13,7 @@
 #include<unistd.h>
 #include<pthread.h>
 
-#define  thread_num 4 
+#define  thread_num 6 
 #define  pool_num   8
 typedef struct
 {
@@ -33,6 +33,12 @@ typedef struct
 	buf_pool *master_sp; //sp *
 	size_t num ; //array length
 }master_thread_param;
+
+typedef struct
+{
+	buf_pool *child_sp ;
+	void *value ;
+}child_thread_param;
 
 void *thread_function(void *arg);
 void *master_thread_function(void *arg);
@@ -117,7 +123,7 @@ int main()
 {
     buf_pool *sp ;
 
-    sp = buf_init(pool_num,sizeof(int));
+    sp = buf_init(pool_num,sizeof(double));
    	#if 0  //for test
 	int i = 4 ;
 	sp = add(sp,&i);  
@@ -126,7 +132,13 @@ int main()
 	int res  ; 
 	pthread_t tid[thread_num] ; //store to child pthread
 	pthread_t master_tid ;
+	#if 0 //int 
 	int test_arry[] = {10,11,12,13};
+	#endif 
+	
+	#if 1
+	double test_arry[] = {10.0,11.0,12.0,13.0};
+	#endif
 	master_thread_param *mtp;
 	mtp = (master_thread_param *)malloc(sizeof(master_thread_param));//apply memery
 	mtp->master_sp = sp ; //point to buf_pool
@@ -143,6 +155,11 @@ int main()
 #if 1 //for test 
 	look_up(sp);
 #endif
+//	double double_test_array[thread_num] ;
+//	memset(double_test_array,0.0,thread_num); 
+//	child_thread_param *ctp ;
+//	ctp->child_sp = sp ;
+//	ctp->value = double_test_array; 
 	for(int i = 0 ;i < thread_num ;i++) //the child thread 
 	{
 		res = pthread_create(&tid[i],NULL,thread_function,sp);
@@ -171,13 +188,24 @@ void *thread_function(void *arg)
 	printf("child thread , it is successfull \n");
 	buf_pool *tmp ;
 	tmp = (buf_pool *)arg ; 
-	printf("before !,the front---->%d \n",tmp->front);
-	int result = -1 ,res=-1 ;
-	void *result_tmp ;
-	result_tmp  = get(tmp,&result);
+    void *result_tmp ;
+	//printf("before !,the front---->%d \n",tmp->front);
+	#if 1 //  for double test    
+	   double result = 0.0 , res ;
+       result_tmp  = get(tmp,&result);
+	   res =* (double *)result_tmp ;
+	   printf("the result -->%f \n",res);
+ 	#endif
+
+
+
+	#if 0 //for int test 
+	int res=-1 , result = 0;
+	result_tmp = get(tmp,&result);
 	res = *(int *)result_tmp;
 	printf("the result---->%d ,after ,the front :%d \n",res,tmp->front);
 //	sleep(1);
+	#endif 
 	pthread_exit(0);
 }
 
@@ -191,8 +219,10 @@ void *master_thread_function(void *arg)
 		int cast_int = (int)(tmp->master_sp->size); //cast the void to int
 		int offset =i * cast_int;// count the offset  
 		memcpy(index,(tmp->param+offset),tmp->master_sp->size);
+		#if 0
 		printf("master thread  inster--> %d \n",*(int *)index); 
-	 	tmp->master_sp	= add(tmp->master_sp,index); //call the add 
+		#endif 
+		tmp->master_sp	= add(tmp->master_sp,index); //call the add 
 	}
 	printf("form master thread num=%d \n",tmp->master_sp->rear);
 
