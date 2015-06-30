@@ -13,7 +13,7 @@
 #include<unistd.h>
 #include<pthread.h>
 
-#define  thread_num 2 
+#define  thread_num 6 
 #define  pool_num   8
 typedef struct
 {
