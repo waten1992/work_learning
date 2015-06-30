@@ -31,3 +31,5 @@ hierarchy	层次
 octal 		八进制
 ghastly		可怕的
 imposing	印象深刻的; 壮观的，威风的;
+parameter	参数
+rendezvous	约会
