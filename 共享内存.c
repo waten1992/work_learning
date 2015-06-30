@@ -154,7 +154,8 @@ socket :
 		#include <netdb.h>
 		struct hostent *gethostbyaddr(const void *addr, size_t len, int type);
 		struct hostent *gethostbyname(const char *name);
-		//
+			Returns: non-NULL pointer if OK, NULL pointer on error with h_errno set
+			//DNS查看域名和IP地址
 		struct hostent
 		 {
 			char *h_name; /* name of the host */
@@ -164,3 +165,10 @@ socket :
 			char **h_addr_list /* list of address (network order) */
 		};
 
+	
+		#include <arpa/inet.h>
+		int inet_aton(const char *cp, struct in_addr *inp);//点分十进制（cp）转成网络字节顺序IP地址
+			Returns: 1 if OK, 0 on error
+		char *inet_ntoa(struct in_addr in);//网络字节顺序IP地址转成点分十进制
+			Returns: pointer to a dotted-decimal string
+			
