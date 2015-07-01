@@ -41,3 +41,7 @@ literal		 原义
 decoupled    解耦合
 reusability  可重用的
 textual		 原文
+overhaul	 检修
+evolve		 演变
+deployment   部署
+tunable  	 可调的
