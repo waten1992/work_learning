@@ -33,3 +33,11 @@ ghastly		可怕的
 imposing	印象深刻的; 壮观的，威风的;
 parameter	参数
 rendezvous	约会
+suffices	满足--	
+trivial		平常的
+replication	 复制
+asynchronous 异步
+literal		 原义
+decoupled    解耦合
+reusability  可重用的
+textual		 原文
