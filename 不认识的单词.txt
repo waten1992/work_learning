@@ -51,4 +51,9 @@ decode		 解码
 splits		 分开
 semantic	 语义 
 instantly 	 实时的
-
+omitting	 遗漏
+retain   	 记住
+minimalistic 简约的
+annoying	讨厌的
+recipient	接受者
+analogous	 相识的
