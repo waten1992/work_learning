@@ -45,3 +45,10 @@ overhaul	 检修
 evolve		 演变
 deployment   部署
 tunable  	 可调的
+entrust		 委托
+encode		 编码
+decode		 解码
+splits		 分开
+semantic	 语义 
+instantly 	 实时的
+
