@@ -57,3 +57,10 @@ minimalistic 简约的
 annoying	讨厌的
 recipient	接受者
 analogous	 相识的
+explicit	明显的
+batches 	成批作业
+benchmark	参照
+scenario 	方案
+improper 	不合适
+Lexicographical 	词典编纂的
+penultimate 		倒数第二
