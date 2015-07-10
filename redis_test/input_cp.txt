@@ -1,0 +1,12 @@
+{
+    \"src\": \"cxwen_test\", 
+	\"type\": \"trading_msg\",
+    \"data\": 
+            {\"column\": 
+                    [\"contract\", \"item\", \"exchange\", \"last_price\", \"volume\", \"amount\", \"price_change\", \"open_interest\", \"open_interest_change\", \"open\", \"low\", \"high\"],
+            \"data\":
+                    [\"ag1507\", \"item\", \"A\", \"3417\", \"100\", \"7541145\", \"-168\", \"1926\", \"50\", \"3493\", \"3486\", \"3521\"],  
+            \"STATE\": \"OK\",
+            \"type\": \"trading_msg\"
+            }
+}
