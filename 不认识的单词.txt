@@ -64,3 +64,12 @@ scenario 	方案
 improper 	不合适
 Lexicographical 	词典编纂的
 penultimate 		倒数第二
+sentinel	哨兵，监视器
+explicitly	明确的 
+primitive	原始的
+semantics	语义的
+Variadic    变长
+retrieved	取回，检索
+preexisting	先前存在的
+corrupt 	堕落的，腐败的，漏洞
+expire 		失效
