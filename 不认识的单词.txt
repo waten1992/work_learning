@@ -73,3 +73,4 @@ retrieved	取回，检索
 preexisting	先前存在的
 corrupt 	堕落的，腐败的，漏洞
 expire 		失效
+deprecated  反对
