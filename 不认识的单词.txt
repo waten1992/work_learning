@@ -74,3 +74,7 @@ preexisting	先前存在的
 corrupt 	堕落的，腐败的，漏洞
 expire 		失效
 deprecated  反对
+curse		诅咒
+clashes		冲突
+deprecated	反对 
+legitimate  合法
