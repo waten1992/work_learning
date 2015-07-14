@@ -2,12 +2,14 @@
 1-export LD_LIBRARY_PATH="/your_so_file_path"
        多个路径可以用'：'分开;
 2-用root 在/etc/ld.so.conf/ 建立自己的xx.conf
-       在里面写上你的so绝对路径;
+       在里面写上你的so绝对路径; 
+       然后在运行ldconfig
 3-
 
 -L 指定连接时的链接库路径：
 -I 指定特定头文件路经；
 -R(-rpath) 指定运行时动态链接库；
+-lm 代表标准库目录（/usr/lib）中的libm.a函数库，如果有共享库，编译器会自动选择；
 
 
 链接搜索顺序
