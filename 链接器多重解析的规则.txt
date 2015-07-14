@@ -23,6 +23,8 @@
  x, y);
  return 0;
  }
+
+ ============================
  /* bar5.c */
  double x;
 
@@ -56,3 +58,9 @@ extremely hard to fix, especially because many programmers are not aware of
 how linkers work. When in doubt, invoke the linker with a flag such as the gcc
 -fno-common flag, which triggers an error if it encounters multiply defined global
 symbols.
+
+
+构造可执行文件：
+	1-符号的解析：把每一个符号引用和一个符号的定义联系起来；
+	2-重定位：对符号应用的修改，使得他们指向内存的地址，重定位这些节；
+目标文件：目标文件纯粹是字节块的集合；
