@@ -78,3 +78,9 @@ curse		诅咒
 clashes		冲突
 deprecated	反对 
 legitimate  合法
+radix		基数
+plethora	过多的
+occurrences	出现
+concatenated 联系起来
+Symmetric	对称
+redundant	多余的
