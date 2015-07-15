@@ -1,0 +1,49 @@
+cunit 的使用
+
+编译使用: gcc -o cun cunit_example.c -lcunit
+已经把.so加入到本地：/etc/ld.so.conf.d/cunit.conf
+
+例子如下：
+pwd006@Debain:~/trader/src/rss/rss_quote/librqb/test$ gcc -o cun cunit_example.c -lcunit
+pwd006@Debain:~/trader/src/rss/rss_quote/librqb/test$ ./cun
+./cun: error while loading shared libraries: libcunit.so.1: cannot open shared object file: No such file or directory
+pwd006@Debain:~/trader/src/rss/rss_quote/librqb/test$ vi /etc/ld
+ldap/         ld.so.conf    ld.so.conf.d/ 
+pwd006@Debain:~/trader/src/rss/rss_quote/librqb/test$ vi /etc/ld
+ldap/         ld.so.conf    ld.so.conf.d/ 
+pwd006@Debain:~/trader/src/rss/rss_quote/librqb/test$ vi /etc/ld.so.conf.d/
+pwd006@Debain:~/trader/src/rss/rss_quote/librqb/test$ su 
+Password: 
+root@Debain:/home/pwd006/trader/src/rss/rss_quote/librqb/test# vi /etc/ld.so.conf.d/cunit.conf
+root@Debain:/home/pwd006/trader/src/rss/rss_quote/librqb/test# su pwd006
+pwd006@Debain:~/trader/src/rss/rss_quote/librqb/test$ ./cun
+./cun: error while loading shared libraries: libcunit.so.1: cannot open shared object file: No such file or directory
+pwd006@Debain:~/trader/src/rss/rss_quote/librqb/test$ ldconfig
+bash: ldconfig: command not found
+pwd006@Debain:~/trader/src/rss/rss_quote/librqb/test$ su
+Password: 
+root@Debain:/home/pwd006/trader/src/rss/rss_quote/librqb/test# ldconfig
+root@Debain:/home/pwd006/trader/src/rss/rss_quote/librqb/test# su pwd006
+pwd006@Debain:~/trader/src/rss/rss_quote/librqb/test$ ./cun
+
+
+     CUnit - A unit testing framework for C - Version 2.1-3
+     http://cunit.sourceforge.net/
+
+
+Suite: Suite_1
+  Test: test of fprintf() ...passed
+  Test: test of fread() ...passed
+
+Run Summary:    Type  Total    Ran Passed Failed Inactive
+              suites      1      1    n/a      0        0
+               tests      2      2      2      0        0
+             asserts      5      5      5      0      n/a
+
+Elapsed time =    0.000 seconds
+
+
+
+pwd006@Debain:~/CUnit-2.1-3$ find ./ -name '*.so.*'
+./CUnit/Sources/.libs/libcunit.so.1
+./CUnit/Sources/.libs/libcunit.so.1.0.1

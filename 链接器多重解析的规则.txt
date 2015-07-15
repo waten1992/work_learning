@@ -1,0 +1,66 @@
+链接器多重解析的规则：
+	1-不允许有多个强符号；
+	2-如果有强符号和弱符号，选择强符号；
+	3-有多个弱符号，在弱符号中任选一个；
+
+强符号：函数，已初始化全局变量；
+弱符号：未初始化的全局变量；
+
+可以使用GCC -fno-common 检测多重定义的全局符号；
+
+多个弱弱符号会出现下面的情况：可以通过GCC  的选项 -fno-common
+ /* foo5.c */
+ #include <stdio.h>
+ void f(void);
+
+ int x = 15213;
+ int y = 15212;
+
+ int main()
+ {
+ f();
+ printf("x = 0x%x y = 0x%x \n",
+ x, y);
+ return 0;
+ }
+
+ ============================
+ /* bar5.c */
+ double x;
+
+ void f()
+ {
+ x = -0.0;
+ }
+
+On an IA32/Linux machine, doubles are 8 bytes and ints are 4 bytes. Thus,
+the assignment x = -0.0 in line 6 of bar5.c will overwrite the memory locations
+for x and y (lines 5 and 6 in foo5.c) with the double-precision floating-point
+representation of negative zero!
+
+linux> gcc -o foobar5 foo5.c bar5.c
+linux> ./foobar5
+x = 0x0 y = 0x80000000
+
+
+pwd006@Debain:~/test$ gcc -o foobar foo.c  bar.c  -fno-common
+/tmp/ccUqOaMV.o:(.bss+0x0): multiple definition of `x'
+/tmp/ccouPFrH.o:(.data+0x0): first defined here
+/usr/bin/ld: Warning: size of symbol `x' changed from 4 in /tmp/ccouPFrH.o to 8 in /tmp/ccUqOaMV.o
+collect2: error: ld returned 1 exit status
+
+
+This is a subtle and nasty bug, especially because it occurs silently, with no
+warning from the compilation system, and because it typically manifests itself
+much later in the execution of the program, far away from where the error
+occurred. In a large system with hundreds of modules, a bug of this kind is
+extremely hard to fix, especially because many programmers are not aware of
+how linkers work. When in doubt, invoke the linker with a flag such as the gcc
+-fno-common flag, which triggers an error if it encounters multiply defined global
+symbols.
+
+
+构造可执行文件：
+	1-符号的解析：把每一个符号引用和一个符号的定义联系起来；
+	2-重定位：对符号应用的修改，使得他们指向内存的地址，重定位这些节；
+目标文件：目标文件纯粹是字节块的集合；
