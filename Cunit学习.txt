@@ -1,0 +1,125 @@
+#Cunit学习：
+	
+	测试：
+		1-IPC互斥信号量；
+		2-多线程信号量互斥；
+		3-使用gcc的 __sync Built-in 原子锁；
+			使用文档参见 https://gcc.gnu.org/onlinedocs/gcc/_005f_005fsync-Builtins.html#_005f_005fsync-Builtins
+
+	性能比较：
+	参数设计:100 , 1000 , 10000, 100000,1000000,10000000 的时间比较；
+
+	100
+		：g_count:2000 , used: 6.000000
+		：g_count:2000 , used: 3.000000
+		：g_count:2000 , used: 3.000000 
+
+	1000
+		g_count:20000 , used: 13.000000
+		g_count:20000 , used: 6.000000
+		g_count:20000 , used: 4.000000
+
+	10000
+		g_count:200000 , used: 97.000000
+		g_count:200000 , used: 41.000000
+		g_count:200000 , used: 18.000000
+
+	100000
+		g_count:2000000 , used: 648.000000 
+		g_count:2000000 , used: 131.000000
+		g_count:2000000 , used: 72.000000
+
+	1000000
+		g_count:20000000 , used: 6410.000000 
+		g_count:20000000 , used: 952.000000 
+		g_count:20000000 , used: 422.000000
+
+The <sys/time.h> header defines the timeval structure that includes at least the following members:
+
+time_t         tv_sec      seconds
+suseconds_t    tv_usec     microseconds
+
+不知道怎么用cunit 做单元测试？
+
+解决方案：
+		1-拷贝一个新的文件修改main() 为 cunit_test_main(int loop_time)
+		在调用  CU_ASSERT(200 == cunit_test_main(100)) 测试；
+
+#include <stdio.h>
+#include <string.h>
+#include "CUnit/Basic.h"
+#include <pthread.h>
+
+int init_suite1(void)
+{
+      return 0;
+}
+
+/* The suite cleanup function.
+ *  * Closes the temporary file used by the tests.
+ *   * Returns zero on success, non-zero otherwise.
+ *    */
+int clean_suite1(void)
+{
+      return 0;
+}
+void testFREAD(void)
+{
+      CU_ASSERT(200 == cunit_test_main(100));
+      CU_ASSERT(2200 == cunit_test_main(1000));
+      CU_ASSERT(22200 == cunit_test_main(10000));
+}
+
+/* The main() function for setting up and running the tests.
+ *  * Returns a CUE_SUCCESS on successful running, another
+ *   * CUnit error code on failure.
+ *    */
+int main()
+{
+   CU_pSuite pSuite = NULL;
+
+   /* initialize the CUnit test registry */
+   if (CUE_SUCCESS != CU_initialize_registry())
+      return CU_get_error();
+
+   /* add a suite to the registry */
+   pSuite = CU_add_suite("Suite_1", init_suite1, clean_suite1);
+   if (NULL == pSuite) {
+      CU_cleanup_registry();
+      return CU_get_error();
+   }
+
+   /* add the tests to the suite */
+   /* NOTE - ORDER IS IMPORTANT - MUST TEST fread() AFTER fprintf() */
+   if ((NULL == CU_add_test(pSuite, "test of fread()", testFREAD)))
+   {
+      CU_cleanup_registry();
+      return CU_get_error();
+   }
+
+   /* Run all tests using the CUnit Basic interface */
+   CU_basic_set_mode(CU_BRM_VERBOSE);
+   CU_basic_run_tests();
+   CU_cleanup_registry();
+   return CU_get_error();
+}
+结果：
+pwd006@Debain:~/test/pthread$ ./cun 
+
+
+     CUnit - A unit testing framework for C - Version 2.1-3
+     http://cunit.sourceforge.net/
+
+
+Suite: Suite_1
+  Test: test of fread() ...g_count:200 , used: 0.000000 ms 
+g_count:2200 , used: 1.000000 ms 
+g_count:22200 , used: 9.000000 ms 
+passed
+
+Run Summary:    Type  Total    Ran Passed Failed Inactive
+              suites      1      1    n/a      0        0
+               tests      1      1      1      0        0
+             asserts      3      3      3      0      n/a
+
+Elapsed time =    0.022 seconds
