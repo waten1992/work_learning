@@ -84,3 +84,8 @@ occurrences	出现
 concatenated 联系起来
 Symmetric	对称
 redundant	多余的
+elapsed		过去
+legacy		遗产
+counterparts 与对方地位相当的人
+metacharacters	元字符	
+synthetic	合成的
