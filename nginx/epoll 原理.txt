@@ -1,0 +1,67 @@
+int epoll_create(int size)
+	size 是epoll处理大致事件数目；
+	返回句柄
+
+int epoll_ctl(int epfd, int op , struct epoll_event* event)
+epoll_ctl 可以向epoll 对象中添加、修改，删除事件；
+	返回 0 	成功；
+		 -1 失败；根据errno错误码判断错误类型；
+参数：
+epfd 	: epoll_create 返回的句柄；
+op : 	EPOLL_CTL_ADD  增加
+	 	EPOLL_CTL_MOD  修改
+	 	EPOLL_CTL_DEL  删除
+fd:		是待监测的链接套接字；
+event:	告诉epoll对什么样的事件感兴趣；
+	epoll 为每一个事件创建epitem结构体
+struct epoll_event
+{
+	_uint32_t 		events ;
+	epoll_data_t 	data ;
+} 
+
+events 取值;
+		EPOLLIN			表示对应的连接上可以读了；
+		EPOLLOUT		表示对应的连接上可以写入数据发送；
+		EPOLLRDHUP		表示TCP连接远端关闭或者半闭链接
+		EPOLLPRI		表示对应连接上有紧急的数据需要读
+		EPOLLERR		表示对应的链接发生错误
+		EPOLLHUP 		表示对应的链接被挂起
+		EPOLLET 		表示将触发方式设置为边缘触发（ET）,默认是水平触发（LT）
+		EPOLLONESHOT	表示对这个事件只处理一次，下次处理时需要重新加入epoll
+
+data成员是epoll_data 联合体；
+typedef union epoll_data
+{
+	void  		*ptr;
+	int   		fd ;
+	uint32_t 	u32;
+	uint64_t	u64;	
+}epoll_data_t ; 
+ngx_epoll_module 只使用联合 ptr成员， 作为指向ngx_connection_t 连接指针
+
+
+int epoll_wait (int efpd , struct epoll_event *events , int maxevent , int timeout)
+
+	搜集epoll已经发生监控的事件，如果没有发生一个事件发生，则最多等待timeout ms后返回；
+	返回： 0 表示本次调用没有事件发生；
+		  -1 表示错误，根据errno错误码判断错误类型；
+参数：
+epfd 	: 是epoll的描述符；
+events  ：分配好的epoll_event 结构体的数组；
+maxevents:表示本次可以返回最大的事件数目；
+timeout ：监测事件发生后最多的等待时间ms , 如果timeout 为 0 ，则表示epoll_wait 在rdllist 链表为空立刻返回；
+
+
+epoll 两种工作模式：
+	LT(水平触发) ：处理阻塞和非阻塞；
+	ET(边缘触发) ：处理非阻塞； 效率比LT高；
+	当一个新事件来临时 ，LT 可以通过epoll_wait 调用获得这个事件，
+	如果这个事件的套接字缓冲区处理完，在这个套接字没有新事件再次到来时，
+		ET是无法从epoll_wait 获取这个事件；
+		LT是可以获取这个事件的；
+	如果一个事件套接字缓冲区还有数据，就会导致缓冲区用户的请求的不到响应；
+
+
+定时器：
+	网络事件触发是由内核完成的；
