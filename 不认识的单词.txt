@@ -89,3 +89,5 @@ legacy		遗产
 counterparts 与对方地位相当的人
 metacharacters	元字符	
 synthetic	合成的
+presence 	出席
+sentinel	哨兵
