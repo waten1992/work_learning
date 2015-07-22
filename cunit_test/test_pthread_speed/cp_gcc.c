@@ -2,10 +2,11 @@
 #include<pthread.h>
 #include<stdlib.h>
 #include<sys/time.h>
+#include <bits/types.h>
+#include <unistd.h>
 #include<semaphore.h>
-
-#define		SYNC			4
-#define 	pthread_num 	20
+#define		SYNC			3
+#define 	pthread_num 	10
 int g_count = 0 ;
 static sem_t mutex ;
 pthread_spinlock_t lock;
@@ -31,10 +32,9 @@ void v(sem_t *s)
 void * my_thread( void * arg )
 {
 	int loop_time =* ((int *)arg); 
-#ifdef CAL_TIME
-	struct timeval t1 , t2 ;
-	gettimeofday(&t1,NULL);
-#endif
+	struct timespec   t1 , t2 ;
+//	printf("------start----- \n");
+	timespec_get(&t1, TIME_UTC);
 	for (int i = 0 ;i < loop_time ;i++)
 #if SYNC == 1
 {
@@ -60,15 +60,13 @@ void * my_thread( void * arg )
 	pthread_spin_unlock(&lock);
 }
 #else
-{
-		g_count++;
+{		g_count++;
+//		do_something();
 }
 #endif
-#ifdef CAL_TIME
-	gettimeofday(&t2,NULL);
-	double t = (t2.tv_sec -t1.tv_sec)*1000000 +(t2.tv_usec - t1.tv_usec);
-	printf("come from pthread g_count:%d , used: %f us \n",g_count , t);
-#endif
+	timespec_get(&t2, TIME_UTC);
+	double t = (t2.tv_sec -t1.tv_sec)*1000000000 +(t2.tv_nsec - t1.tv_nsec);
+	printf("come from pthread g_count:%d , used: %f ns \n",g_count , t);
 return NULL ;
 }
 
@@ -84,11 +82,14 @@ int cunit_test_main(int loop_time)
 	gettimeofday(&t1,NULL);
 	for(int i = 0 ; i< pthread_num ; i++)
 		pthread_create(&pid[i],NULL,my_thread,&loop_time);
+	
 	for(int i = 0 ; i< pthread_num ; i++)
 		pthread_join(pid[i],NULL);
+	
 	gettimeofday(&t2,NULL);
 	double t = (t2.tv_sec -t1.tv_sec)*1000000 +(t2.tv_usec - t1.tv_usec);
 	printf("g_count:%d , used: %f us \n",g_count , t);
+
 #if SYNC == 3
 	sem_destroy(&mutex);
 #elif SYNC == 4
@@ -97,3 +98,9 @@ int cunit_test_main(int loop_time)
 return g_count ;
 }
 
+void do_something()
+{
+	int  i = 10 ;
+	while(i--)
+		;
+}
