@@ -91,3 +91,8 @@ metacharacters	元字符
 synthetic	合成的
 presence 	出席
 sentinel	哨兵
+Wheezy		发出声音
+granularity 力度
+underlying  优先的
+obsolete	废弃的
+discarded	丢弃的

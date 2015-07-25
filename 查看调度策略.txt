@@ -1,0 +1,28 @@
+查看调度策略：
+	pwd006@Debain:~$ cat /sys/block/sda/queue/scheduler
+	noop deadline [cfq]
+	表示当前的策略是cfq(Completely Fair Scheduling) ,可选的策略是noop deadline
+	cfq:https://en.wikipedia.org/wiki/Completely_Fair_Scheduler
+	noop 和 deadline：http://tieba.baidu.com/p/2767146878#
+	noop：
+		1-I/O 不排队，机械硬盘可能会哭；
+		2-使用fifo;
+	deadline:读优先，也会照顾写通过write_expire writes_starved 来调度；
+		1-四个队列分两类，每一类都分读和写队列组成；
+			一类：按照扇区序号进行排队，用红黑树维持；
+			二类：按照请求生成时间进行排序，用链表组织；
+		参考：http://blog.csdn.net/vanbreaker/article/details/8287002
+
+修改调度策略：
+echo noop > /sys/block/sda/queue/scheduler 
+
+多核处理器：
+	正对就绪队列问题分为两组：
+				1-活跃队列组(active)
+				2-时间到期队列组（expired）
+				3-每个组在按照优先等级在分；最多140级
+
+其他的调度策略：
+
+多级反馈队列：按照不同的优先级分队列，每个队列分给相同的时间片，优先级高的任务先运行；
+
