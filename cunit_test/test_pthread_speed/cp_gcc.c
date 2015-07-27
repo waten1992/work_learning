@@ -5,8 +5,8 @@
 #include <bits/types.h>
 #include <unistd.h>
 #include<semaphore.h>
-#define		SYNC			3
-#define 	pthread_num 	10
+#define		SYNC			4
+#define 	pthread_num 	2
 int g_count = 0 ;
 static sem_t mutex ;
 pthread_spinlock_t lock;
@@ -66,7 +66,8 @@ void * my_thread( void * arg )
 #endif
 	timespec_get(&t2, TIME_UTC);
 	double t = (t2.tv_sec -t1.tv_sec)*1000000000 +(t2.tv_nsec - t1.tv_nsec);
-	printf("come from pthread g_count:%d , used: %f ns \n",g_count , t);
+//	printf("come from pthread g_count:%d , used: %f ns \n",g_count , t);
+	printf("%d , %f  \n",g_count , t);
 return NULL ;
 }
 
@@ -88,7 +89,8 @@ int cunit_test_main(int loop_time)
 	
 	gettimeofday(&t2,NULL);
 	double t = (t2.tv_sec -t1.tv_sec)*1000000 +(t2.tv_usec - t1.tv_usec);
-	printf("g_count:%d , used: %f us \n",g_count , t);
+//	printf("g_count:%d , used: %f us \n",g_count , t);
+	printf("%d ,  %f us \n",g_count , t);
 
 #if SYNC == 3
 	sem_destroy(&mutex);
