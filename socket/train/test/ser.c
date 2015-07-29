@@ -7,7 +7,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/time.h>
-#include <pthread.h>
+
 /*
  * 1. how about bugs or problems with this routines and fix them
  * 2. replace send/recv with sendmsg/recvmsg
@@ -48,9 +48,9 @@ int main(int argc, char *argv[])
     /* listen as server, syscall : listen */
     if (-1 == listen(fd_lst, 5)) /* "man 2 listen" for detail information about argument 2 (backlog). in linux kernel 3.x, it doesn't care the backlog */
         goto error;
-while(1);
+//while(1);
     while (1) {
-        tv.tv_sec  = 10;
+        tv.tv_sec  = 5;
         tv.tv_usec = 0;
 
         FD_ZERO(&rfds);
@@ -91,12 +91,8 @@ while(1);
                             goto error;
 
                         default:
-                         //   printf("recieve data from client : %s\n", buffer);
-                        //    close(fd_apt);
-			handle_func(buffer);		   
-                            close(fd_apt);
-                          //  fd_apt = -1;
-			 break;
+                            printf("recieve data from client : %s\n", buffer);
+                            break;
                     }
                 }
 
@@ -107,28 +103,11 @@ while(1);
     return 0;
     
   error:
-    printf("----%s\n", strerror(errno));
+    printf("%s\n", strerror(errno));
 
     fd_lst ? close(fd_lst) : 0;
     fd_apt ? close(fd_apt) : 0;
     
     return -1;
 }
-void * thread_handle(void *arg)
-{
-	pthread_detach(pthread_self());
-	char *buff ;
-	buff = (char *)arg ;
-	printf("%s\n",buff);		
-
-}
-
-int  handle_func(void * buff)
-{
-	pthread_t tid ;
-	pthread_create(&tid,NULL,thread_handle,buff);
-return 0 ;
-}
-
-
 
