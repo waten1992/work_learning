@@ -25,7 +25,7 @@ typedef struct
     fd_set read_set ; // all of ative fd 
     fd_set tmp_read_set ; //every reading  fd 
     int nready ; //number of ready fd form select 
-    int max_index ; //
+    int max_index ; // max index of read fd array
     int client_fd[FD_SETSIZE] ;//Set of active fd 
 }pool;
 
@@ -106,24 +106,35 @@ int main(int argc, char *argv[])
 
     /* create listen socket, syscall(net/socket.c) : sock_create */
     if (-1 == (listenfd = socket(AF_INET, SOCK_STREAM, 0))) /* /etc/protocols lists "protocol <-> number" */
-        return -1;
-    
+        {
+		printf("socket function is error , errno is : %d \n",errno);
+		return -1 ;
+	}
+#if 1    
     /*eliminates "address already in use " error form bind */
     if(-1==setsockopt(listenfd,SOL_SOCKET,SO_REUSEADDR,(const void *)&optval ,sizeof(int)))
-        return -1;
+        {
+		printf("setsockopt function is error , errno is : %d \n",errno);
+		return -1 ;
+	}
+#endif 
     /* bind, syscall : bind */
     if (-1 == bind(listenfd, (struct sockaddr *)&laddr, sizeof(struct sockaddr))) 
-        return -1;
-
+        {
+		printf("bind function is error , errno is : %d \n",errno);
+		return -1 ;
+	}
     /* listen as server, syscall : listen */
     if (-1 == listen(listenfd, 5)) /* "man 2 listen" for detail information about argument 2 (backlog). in linux kernel 3.x, it doesn't care the backlog */
-        return -1;
+        {
+		printf("listen function is error , errno is : %d \n",errno);
+		return -1 ;
+	}
 
     init(listenfd,&pool);
     
     while (1) 
     {
-        
         pool.tmp_read_set = pool.read_set ;
         pool.nready = select(pool.max_fd+1, &pool.tmp_read_set, NULL, NULL, NULL);
         
@@ -132,7 +143,10 @@ int main(int argc, char *argv[])
             printf("client connect\n");
                     /* finish 3-hand-shake, syscall : accept */
             if (-1 == (acceptfd = accept(listenfd, (struct sockaddr *)&raddr, &rlen)))
+            {
+		printf("accept function is error , errno is : %d \n",errno);
 		return -1 ;
+	    }
             handle_request(acceptfd,&pool);
         }
         check_clients(&pool);
@@ -140,8 +154,5 @@ int main(int argc, char *argv[])
     }
 
     return 0;
-  
-
-
 }
 
