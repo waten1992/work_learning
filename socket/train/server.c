@@ -7,6 +7,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/time.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 /*
  * 1. how about bugs or problems with this routines and fix them
@@ -68,21 +70,26 @@ void check_clients(pool *p)
 {
     for(int i = 0 ; (i <= p->max_index) && (p->nready > 0) ; i++)
     {
-        int tmp_fd  =  p->client_fd[i];
+        int tmp_fd  =  p->client_fd[i] ,recv_len  ;
 
         if ((tmp_fd > 0) && (FD_ISSET(tmp_fd,&p->tmp_read_set)))
         {
             p->nready--;
     	    char buff[4096] ;
             memset(buff,0,4096);
-            if(recv(tmp_fd, buff, sizeof(buff), 0))
+            if((recv_len = recv(tmp_fd, buff, sizeof(buff), 0)) > 0)
             	printf("recieve data from client : %s\n", buff);
+			else if(recv_len == -1)
+			{
+				if (errno == EWOULDBLOCK || errno == EAGAIN)
+					printf("under O_NONBLOCK mode data didn't prepare \n");
+			}
             else
             {
             	 close(tmp_fd);
             	 FD_CLR(tmp_fd , &p->read_set);
-           	 p->client_fd[i]  = -1 ;
-		 printf("googbye client ~~~ \n");
+           	 	 p->client_fd[i]  = -1 ;
+				 printf("googbye client ~~~ \n");
        	    }
         }
     }
@@ -106,30 +113,43 @@ int main(int argc, char *argv[])
 
     /* create listen socket, syscall(net/socket.c) : sock_create */
     if (-1 == (listenfd = socket(AF_INET, SOCK_STREAM, 0))) /* /etc/protocols lists "protocol <-> number" */
-        {
+    {
 		printf("socket function is error , errno is : %d \n",errno);
 		return -1 ;
-	}
+    }
 #if 1    
     /*eliminates "address already in use " error form bind */
     if(-1==setsockopt(listenfd,SOL_SOCKET,SO_REUSEADDR,(const void *)&optval ,sizeof(int)))
-        {
+    {
 		printf("setsockopt function is error , errno is : %d \n",errno);
 		return -1 ;
-	}
-#endif 
+    }
+#endif
+
     /* bind, syscall : bind */
     if (-1 == bind(listenfd, (struct sockaddr *)&laddr, sizeof(struct sockaddr))) 
-        {
+    {
 		printf("bind function is error , errno is : %d \n",errno);
 		return -1 ;
-	}
+    }
     /* listen as server, syscall : listen */
     if (-1 == listen(listenfd, 5)) /* "man 2 listen" for detail information about argument 2 (backlog). in linux kernel 3.x, it doesn't care the backlog */
-        {
+    {
 		printf("listen function is error , errno is : %d \n",errno);
 		return -1 ;
-	}
+    }
+	int val ;
+    if ((val = fcntl(listenfd , F_GETFL , 0)) == -1 )
+    {
+        printf("fcntl is failed ,errno %d\n",errno);
+        return -1;
+    }
+
+    if (fcntl(listenfd , F_SETFL , val|O_NONBLOCK) == -1 )
+    {
+         printf("fcntl1 is failed \n");
+         return -1;
+    }
 
     init(listenfd,&pool);
     

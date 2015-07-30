@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     struct timeval t_val ;
     struct sockaddr_in laddr, raddr;
 
-    char buffer[128] = "mycapital.socket.demo";
+    char buffer[2048] = "mycapital.socket.demo";
 
     if (-1 == (fd = socket(AF_INET, SOCK_STREAM, 0)))
     {
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     FD_ZERO(&r_set);
     FD_ZERO(&w_set);
 
-    int val ,con_result ;
+    int val ,con_result,send_re_len ;
     if ((val = fcntl(fd , F_GETFL , 0)) == -1 )
     {
         printf("fcntl is failed \n");
@@ -79,12 +79,14 @@ int main(int argc, char *argv[])
             printf("non-block connect is error \n");
             return -1 ;
         } 
+#ifdef DEBUG // for debug
 		else
 		{
 			printf("connect return is %d , errno is %d \n",con_result , errno);
 		}            
-       
-    }
+#endif  
+    
+	}
 	else 
     	goto connect_success ;
  
@@ -99,8 +101,13 @@ int main(int argc, char *argv[])
 		printf("can't not find readfd \n");
         return -1 ;
     }
-
-    if(FD_ISSET(fd,&r_set) || FD_ISSET(fd,&w_set))
+#ifdef   DEBUG
+	else
+            printf("select is happend , error is : %d \n", errno);
+	
+#endif 
+    
+	if(FD_ISSET(fd,&r_set) || FD_ISSET(fd,&w_set))
     {
         int len = sizeof(int) ;
         if (getsockopt(fd,SOL_SOCKET ,SO_ERROR,&optval,&len) == -1 )
@@ -110,22 +117,26 @@ int main(int argc, char *argv[])
         }
 		else
 		{
-			printf("getsockopt return val : %d \n",optval);
-		goto connect_success;
+		//	printf("getsockopt return val : %d \n",optval);
+			goto connect_success;
 		}
     
     }
     else
         printf("can't find data from select \n");  
+
 printf("something is error \n");    
 close(fd);
 return -1 ;
+
 connect_success:
 	
         printf("connect is success \n");
-		if (-1 == send(fd, buffer, sizeof(buffer), 0))
+		if (( send_re_len = send(fd, buffer, sizeof(buffer), MSG_DONTWAIT)) < 0)
       	{
-			printf("SEND IS ERROR \n");
+			printf("SEND O_NONBLOCK mode IS ERROR, errno number: %d\n",errno);
+			if (errno == EWOULDBLOCK)
+				goto connect_success;
 		}
         printf( "press any key to exit \n");
         getchar();
