@@ -84,6 +84,8 @@ int main(int argc, char *argv[])
 		else
 		{
 			printf("connect return is %d , errno is %d \n",con_result , errno);
+			  FD_SET(fd, &r_set); /* select for reading and writing */
+    FD_SET(fd, &w_set);
 		}            
 #endif  
     
@@ -91,8 +93,6 @@ int main(int argc, char *argv[])
 	if(con_result == 0) 
     	goto connect_success ;
 	
-    FD_SET(fd, &r_set); /* select for reading and writing */
-    FD_SET(fd, &w_set);
     t_val.tv_sec = 1 ;
     t_val.tv_usec = 0 ;
     if ( 0 == select(fd+1, &r_set ,&w_set,NULL,&t_val))
