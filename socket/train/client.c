@@ -7,7 +7,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <fcntl.h>
-
+#define DEBUG 1
 /*
  *  * 1. how about the problem(s) with this routines and fix it(them) 
  *   * 2. replace block with non-block
@@ -32,7 +32,8 @@ int main(int argc, char *argv[])
 
     if (-1 == (fd = socket(AF_INET, SOCK_STREAM, 0)))
     {
-		printf("socket is error  \n");
+		printf("socket is error ,errno is : %d \n",errno);
+		return -1;
 	}
 
     laddr.sin_family = AF_INET;
@@ -42,7 +43,7 @@ int main(int argc, char *argv[])
     raddr.sin_family = AF_INET;
     raddr.sin_addr.s_addr = inet_addr(ip_r);
     raddr.sin_port = htons(atoi(port_r));
-#if 0    
+#if 0   
     /*eliminates "address already in use " error form bind */
     if(-1==setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,(const void *)&optval ,sizeof(int)))
         {
@@ -59,20 +60,20 @@ int main(int argc, char *argv[])
     FD_ZERO(&r_set);
     FD_ZERO(&w_set);
 
-    int val ,con_result,send_re_len ;
+    int val ,con_result ,send_re_len ;
     if ((val = fcntl(fd , F_GETFL , 0)) == -1 )
     {
-        printf("fcntl is failed \n");
+        printf("fcntl is failed ,errno : %d \n",errno);
         return -1;
     }
     if (fcntl(fd , F_SETFL , val|O_NONBLOCK) == -1 )
     {
-         printf("fcntl is failed \n");
+         printf("fcntl is failed, errno : %d \n",errno);
          return -1;
     }
 
     /* how to use connect with non-block mode */
-    if ((con_result = connect(fd, (struct sockaddr *)&raddr, sizeof(struct sockaddr))) < 0 )
+    if ((con_result = connect(fd, (struct sockaddr *)&raddr, sizeof(struct sockaddr))) == -1 )
     {
         if(errno != EINPROGRESS)
         {
@@ -87,9 +88,9 @@ int main(int argc, char *argv[])
 #endif  
     
 	}
-	else 
+	if(con_result == 0) 
     	goto connect_success ;
- 
+	
     FD_SET(fd, &r_set); /* select for reading and writing */
     FD_SET(fd, &w_set);
     t_val.tv_sec = 1 ;
@@ -98,15 +99,10 @@ int main(int argc, char *argv[])
     {
         close(fd);
         errno = ETIMEDOUT ;
-		printf("can't not find readfd \n");
+		printf("can't not find readfd  , timeout !\n");
         return -1 ;
     }
-#ifdef   DEBUG
-	else
-            printf("select is happend , error is : %d \n", errno);
 	
-#endif 
-    
 	if(FD_ISSET(fd,&r_set) || FD_ISSET(fd,&w_set))
     {
         int len = sizeof(int) ;
@@ -117,21 +113,19 @@ int main(int argc, char *argv[])
         }
 		else
 		{
-		//	printf("getsockopt return val : %d \n",optval);
+			printf("getsockopt return val : %d \n",optval);
 			goto connect_success;
-		}
-    
+		} 
     }
     else
         printf("can't find data from select \n");  
+
 
 printf("something is error \n");    
 close(fd);
 return -1 ;
 
-connect_success:
-	
-        printf("connect is success \n");
+connect_success:	
 		if (( send_re_len = send(fd, buffer, sizeof(buffer), MSG_DONTWAIT)) < 0)
       	{
 			printf("SEND O_NONBLOCK mode IS ERROR, errno number: %d\n",errno);
