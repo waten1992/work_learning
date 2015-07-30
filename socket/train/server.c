@@ -163,10 +163,13 @@ int main(int argc, char *argv[])
             printf("client connect\n");
                     /* finish 3-hand-shake, syscall : accept */
             if (-1 == (acceptfd = accept(listenfd, (struct sockaddr *)&raddr, &rlen)))
-            {
-		printf("accept function is error , errno is : %d \n",errno);
-		return -1 ;
-	    }
+			{
+				if(errno != EWOULDBLOCK ||  errno != EAGAIN)
+                {
+                    printf("accept function is error , errno is : %d \n",errno);
+                    return -1 ;
+                }
+			}
             handle_request(acceptfd,&pool);
         }
         check_clients(&pool);
