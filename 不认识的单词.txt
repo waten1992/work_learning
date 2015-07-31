@@ -96,3 +96,6 @@ granularity 力度
 underlying  优先的
 obsolete	废弃的
 discarded	丢弃的
+infinite	无限的
+bound 		绑定
+lousy 		讨厌的

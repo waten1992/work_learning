@@ -2,7 +2,10 @@
 	pwd006@Debain:~$ cat /sys/block/sda/queue/scheduler
 	noop deadline [cfq]
 	表示当前的策略是cfq(Completely Fair Scheduling) ,可选的策略是noop deadline
-	cfq:https://en.wikipedia.org/wiki/Completely_Fair_Scheduler
+	cfq:
+		1-https://en.wikipedia.org/wiki/Completely_Fair_Scheduler
+		2-http://blog.csdn.net/vanbreaker/article/details/8299491
+	
 	noop 和 deadline：http://tieba.baidu.com/p/2767146878#
 	noop：
 		1-I/O 不排队，机械硬盘可能会哭；
