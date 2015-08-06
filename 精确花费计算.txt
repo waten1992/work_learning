@@ -1,0 +1,17 @@
+首先宏定义如下：
+# define HP_TIMING_NOW(Var) \
+ ({ unsigned long long _hi, _lo; \
+  asm volatile ("rdtsc" : "=a" (_lo), "=d" (_hi)); \
+  (Var) = _hi << 32 | _lo; })
+
+使用方法如下：
+unsigned long start, end;
+...
+
+HP_TIMING_NOW(start);
+Interrupt_handler (int irq, void *data);
+HP_TIMING_NOW(end);
+
+printf("\n the cost cycles are %ld\n", end - start);
+
+/* end - start 会告诉我们花费多少周期，然后用该数字除以CPU 频率(cat /proc/cpuinfo 会看到)，比如现在是2GHZ 那么 用 (end - start)/2 就会换算成纳秒 ，然后除以1000就是微秒*
