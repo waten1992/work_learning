@@ -17,14 +17,14 @@ void ouput_primes(const int NUM)
 	{
 	    bit_index = index / 32 ;
 		offset = index % 32 ;
-		if( !(flag[bit_index]&(offset << 1)) )
+		if( !(flag[bit_index]&(1 << offset)) )
 			target_primes[target_index++] = index ;
 	
 		for(int filter_index = 0 ;(filter_index < target_index) &&(index*target_primes[filter_index] < NUM)  ;filter_index++)
 		{
 	  		bit_index	= (index * target_primes[filter_index]) / 32  ;
 			offset = (index * target_primes[filter_index]) %32 ;
-			flag[bit_index] = ( flag[bit_index] | (offset<<1))  ;
+			flag[bit_index] = ( flag[bit_index] | (1 << offset))  ;
 			if(index % target_primes[filter_index] == 0)
 				break;
 		}
