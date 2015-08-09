@@ -162,7 +162,7 @@ int index = 0 ;
 unsigned long start, end;
 
 FILE *stream ;
-char buf[128]={0} , tmp_array[Type_size][Tmp_array_len] ;
+char buf[128]={0} ,*tmp_array[Type_size] ;
 
 stream = fopen("input_data.txt","r+");
 if (stream == NULL)
@@ -173,20 +173,23 @@ if (stream == NULL)
 while(index < Test_len)
 {
 	fgets(buf,128,stream);
-	char *tmp = buf ;
+	char *cur = buf ,*front =buf ;
 	int outer = 0;
-	while(*tmp != '\n' && *tmp != '\0' )
+	while(*cur != '\n' )
 	{
 		int inner = 0 ;
-		while(*tmp != ' ' && *tmp !='\n')
+		if(*cur = ' ')
 		{
-			tmp_array[outer][inner] = *tmp ; 
-			tmp++;
-			inner++;	
+			*cur = '\0';
+			tmp_array[outer] = front ;
+			cur++;
+			front = cur ;  
+			outer++; 	
 		}
-	outer++;
-	tmp++;	
+		else
+			cur++;
 	}
+	tmp_array[outer] = front;
 	data_array[index].date = atoi(tmp_array[0]);
 
 	sprintf(data_array[index].item,"%s",tmp_array[1]);
