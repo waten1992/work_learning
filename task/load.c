@@ -49,6 +49,21 @@ union key_bit_value
 
 void map_key(input_data data_array[] , u32_int len );
 u32_int *index_array[1<<26]; //index array 
+
+u32_int hash_key[512] = {0};
+u32_int calculate_middle_key(char *array )
+{
+    u32_int seed = 131; // 31 131 1313 13131 131313 etc..
+    u32_int hash = 0;
+
+    while (*array)
+    {
+        hash = hash * seed + (*array++);
+    }
+
+    return (hash & 0x1ff);
+}
+/* //use 20 bit store key  
 u32_int hash_key[1<<20] = {0};
 u32_int calculate_middle_key(char *array )
 {
@@ -75,6 +90,7 @@ u32_int calculate_middle_key(char *array )
 return middle_key ;
 
 }
+*/
 u32_int calculate_end_key(u32_int time , u32_int item , u32_int rank )
 {
 
@@ -214,7 +230,7 @@ map_key( data_array , History_len);
 
 #endif 
 
-#if 0
+#if 1
 /* test find   */
 printf("test find \n");
 u32_int test_time = 20140825 , test_rank = 4;
@@ -233,7 +249,7 @@ printf("\n the cost cycles are %lf ns\n", (end - start)/3.6);
 
 #endif
 
-#if 1
+#if 0
  
 printf("test find \n");
 u32_int test_time = 20120601 , test_rank = 1;
