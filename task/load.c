@@ -33,12 +33,19 @@ typedef struct
 	char 			address[2<<LEN];
 }input_data;
 
-/*
-struct key_t
+/**/
+union key_bit_value
 {
-	unsigned int key : 
+	struct end_key_bit
+	{
+		u32_int  rank :4 ;
+		u32_int  item :6 ;
+		u32_int  day  :5 ;
+		u32_int  month:4 ;
+		u32_int  year :7 ; 
+	}end_key_bit_area;
+	u32_int value ;
 };
-*/
 
 void map_key(input_data data_array[] , u32_int len );
 u32_int *index_array[1<<26]; //index array 
@@ -76,13 +83,23 @@ u32_int calculate_end_key(u32_int time , u32_int item , u32_int rank )
 		month 	 = (time %10000)/100  ;
 		year 	 = (time %1000000)/10000  ;
 	//	printf("%d,%d,%d \n ",year,month,day);
-		
+#if 0		
 		end_key 	|=	rank ;
 		end_key 	|=	(item << 4);
 		end_key 	|=	(day << 10);
 		end_key 	|= 	(month <<15);
 		end_key 	|=	(year <<19);
 //	printf("end_key : %d\n",end_key);
+#endif 
+	union key_bit_value end_key_value ;
+	memset(&end_key_value,0,sizeof(u32_int));
+	end_key_value.end_key_bit_area.rank = rank ;
+	end_key_value.end_key_bit_area.item = item ; 
+	end_key_value.end_key_bit_area.day = day;
+	end_key_value.end_key_bit_area.month = month;
+	end_key_value.end_key_bit_area.year = year;
+		
+end_key = end_key_value.value;
 return end_key ;
 }
 
@@ -100,7 +117,7 @@ void map_key(input_data data_array[] , u32_int len )
 		/*connect time , item , rank  key*/
 		end_key =  calculate_end_key(data_array[i].date ,item ,rank);
 //		index_array[end_key] =(int *)&data_array[i];		
-		index_array[end_key] = data_array + i;
+		index_array[end_key] =(int *) ( data_array + i);
 	}
 	
 	
@@ -109,10 +126,8 @@ void * find_history_quote(u32_int time ,char *item  ,u32_int rank)
 {
 	u32_int tmp_item = 0 , end_key = 0 ;
 	tmp_item = calculate_middle_key(item);
-//	printf("-------middle_key %d \n",tmp_item);
 	tmp_item = hash_key[tmp_item];
 	end_key =  calculate_end_key(time,tmp_item,rank);
-//	printf("---- end_key : %d\n",end_key);		
 //return &(*index_array[end_key]);
 return index_array[end_key];
 }
@@ -199,7 +214,7 @@ map_key( data_array , History_len);
 
 #endif 
 
-#if 1
+#if 0
 /* test find   */
 printf("test find \n");
 u32_int test_time = 20140825 , test_rank = 4;
@@ -218,6 +233,19 @@ printf("\n the cost cycles are %lf ns\n", (end - start)/3.6);
 
 #endif
 
+#if 1
+ 
+printf("test find \n");
+u32_int test_time = 20120601 , test_rank = 1;
+char *test_item ="dla";
+u32_int tmp_end_key = 0 , tmp_item = 0 ;
+
+tmp_item = calculate_middle_key(test_item);
+tmp_item = hash_key[tmp_item];
+
+tmp_end_key =  calculate_end_key(test_time , tmp_item ,test_rank);
+printf("%d\n",tmp_end_key);
+#endif 
 //printf ("1 <<26 ------%d \n",1<<26);
 return 0 ;
 
