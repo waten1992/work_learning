@@ -178,7 +178,7 @@ while(index < Test_len)
 	while(*cur != '\n' )
 	{
 		int inner = 0 ;
-		if(*cur = ' ')
+		if(*cur == ' ')
 		{
 			*cur = '\0';
 			tmp_array[outer] = front ;
