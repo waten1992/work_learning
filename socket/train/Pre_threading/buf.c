@@ -1,5 +1,6 @@
 #include "buf.h"
 
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 typedef struct 
 {
 	void 	*buf ;
