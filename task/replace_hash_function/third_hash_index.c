@@ -50,7 +50,7 @@ union key_bit_value
 };
 
 void map_key(input_data data_array[] , u32_int len );
-u32_int *index_array[days][86]; //index array 
+u32_int *index_array[days][86][12]; //index array 
 
 u32_int hash_key[512] = {0};
 u32_int calculate_item_key(char *array )
@@ -113,9 +113,10 @@ void map_key(input_data data_array[] , u32_int len )
 	{
 		year_key =  calculate_year_key(data_array[i].date );
 		item_key  = calculate_item_key(data_array[i].item );
-	    item_key	= hash_key[item_key] + data_array[i].rank;		
+	    item_key	= hash_key[item_key];		
+		rank_key = data_array[i].rank;
 
-		index_array[year_key][item_key]=(int *) ( data_array + i);
+		index_array[year_key][item_key][rank_key] =(int *) ( data_array + i);
 	}
 		
 }
@@ -124,9 +125,10 @@ void * find_history_quote(u32_int time ,char *item  ,u32_int rank)
 	u32_int tmp_item = 0  ,year_key = 0 ,item_key = 0 , rank_key = 0 ;
 	year_key = calculate_year_key(time);
 	tmp_item = calculate_item_key(item);
-	item_key = hash_key[tmp_item] + rank ;
+	item_key = hash_key[tmp_item] ;
+	rank_key = rank ;
 	
-return index_array[year_key][item_key];
+return index_array[year_key][item_key][rank_key];
 }
 
 
