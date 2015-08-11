@@ -143,7 +143,6 @@ void * find_history_quote(u32_int time ,char *item  ,u32_int rank)
 	u32_int tmp_item = 0 , end_key = 0 ;
 	tmp_item = calculate_middle_key(item);
 	tmp_item = hash_key[tmp_item];
-	printf("tmp_item = %d \n",tmp_item);
 	end_key =  calculate_end_key(time,tmp_item,rank);
 //return &(*index_array[end_key]);
 return index_array[end_key];
@@ -179,7 +178,7 @@ while(index < Test_len)
 	while(*cur != '\n' )
 	{
 		int inner = 0 ;
-		if( ' ' == *cur )
+		if(*cur = ' ')
 		{
 			*cur = '\0';
 			tmp_array[outer] = front ;
@@ -226,7 +225,7 @@ while(index < Item_num)
 	
     middle_key	= calculate_middle_key(tmp_buf);	
 	hash_key[middle_key]= index+1 ;
-//	printf("hash_key : %d , middle_key =%d\n",hash_key[middle_key],middle_key);
+//	printf("hash_key : %d \n",hash_key[middle_key]);
 	index++;
 }
 fclose(stream);
