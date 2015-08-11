@@ -179,7 +179,11 @@ while(index < Test_len)
 	while(*cur != '\n' )
 	{
 		int inner = 0 ;
+<<<<<<< HEAD
 		if( ' ' == *cur )
+=======
+		if(*cur == ' ')
+>>>>>>> dab94980af87689f9dd0742784b51cdc734c3691
 		{
 			*cur = '\0';
 			tmp_array[outer] = front ;

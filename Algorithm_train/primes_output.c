@@ -32,7 +32,7 @@ void ouput_primes(const int NUM)
 
 int main()
 { 
-	const int NUM = 99;
+	const int NUM = 65600;
  	ouput_primes(NUM);
 return 0 ;
 }
