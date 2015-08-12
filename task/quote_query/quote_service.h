@@ -40,7 +40,7 @@ typedef struct qsvr
 struct quote_map;
 
 struct quote_map*
-qsvr_init(const char *path );
+qsvr_init(const char *path);
 
 void
 qsvr_find(struct quote_map* qm, u32_int date , char *item , u32_int rank , struct qsvr *ret_val );

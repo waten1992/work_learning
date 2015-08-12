@@ -1,32 +1,30 @@
 #include "quote_service.h"
 
 
-extern	struct qsvr  *data_array ;
-extern	u32_int ***index_array; //index array[Days][86] 
 struct qsvr  *data_array ;
-u32_int ***index_array; //index array[Days][86] 
+uint32_t ***index_array; //index array[Days][86] 
 
 typedef struct qsvr  input_data ;
-/**/
+
 union key_bit_value
 {
 	struct end_key_bit
 	{
-		u32_int  rank :4 ;
-		u32_int  item :6 ;
-		u32_int  day  :5 ;
-		u32_int  month:4 ;
-		u32_int  year :7 ; 
+		uint32_t  rank :4 ;
+		uint32_t  item :6 ;
+		uint32_t  day  :5 ;
+		uint32_t  month:4 ;
+		uint32_t  year :7 ; 
 	}end_key_bit_area;
-	u32_int value ;
+	uint32_t value ;
 };
 
 
-u32_int hash_key[512] = {0};
-u32_int calculate_item_key(char *array )
+uint32_t hash_key[512] = {0};
+uint32_t calculate_item_key(char *array )
 {
-    u32_int seed = 131; // 31 131 1313 13131 131313 etc..
-    u32_int hash = 0 ;
+    uint32_t seed = 131; // 31 131 1313 13131 131313 etc..
+    uint32_t hash = 0 ;
 
     while (*array)
     {
@@ -46,7 +44,7 @@ unsigned int  Is_Leap_year(unsigned int year )
 return Leap ;
 }
 
-u32_int calculate_year_key( u32_int date )
+uint32_t calculate_year_key( uint32_t date )
 {
 	unsigned int Leap_array[] = {0 ,1 ,1 ,1 ,2 ,2 ,2 ,2 ,3 ,3 ,3 ,3 ,4 ,4 ,4 ,4 ,5 ,5 ,5 ,5 ,6 ,6 ,6 ,6 ,7 ,7 ,7 ,7 ,8 ,8 ,8 ,8 ,9 ,9 ,9 ,9 ,10 ,10 ,10 ,10 };
 
@@ -76,9 +74,9 @@ u32_int calculate_year_key( u32_int date )
 return all_day;
 }
 
-void map_key(u32_int ***index_array ,input_data data_array[] , u32_int len )
+void map_key(uint32_t ***index_array ,input_data data_array[] , uint32_t len )
 {
-	u32_int year=0 ,month=0 ,day=0,year_key = 0,item_key = 0 ,rank_key = 0 ;
+	uint32_t year=0 ,month=0 ,day=0,year_key = 0,item_key = 0 ,rank_key = 0 ;
 	for(int i =0 ;i < len ;i++)
 	{
 		year_key =  calculate_year_key(data_array[i].date );
@@ -89,9 +87,9 @@ void map_key(u32_int ***index_array ,input_data data_array[] , u32_int len )
 	}
 		
 }
-void * find_history_quote(u32_int ***index_array ,u32_int time ,char *item  ,u32_int rank)
+void * find_history_quote(uint32_t ***index_array ,uint32_t time ,char *item  ,uint32_t rank)
 {
-	u32_int tmp_item = 0  ,year_key = 0 ,item_key = 0 , rank_key = 0 ;
+	uint32_t tmp_item = 0  ,year_key = 0 ,item_key = 0 , rank_key = 0 ;
 	year_key = calculate_year_key(time);
 	tmp_item = calculate_item_key(item);
 	item_key = hash_key[tmp_item] + rank ;
@@ -100,10 +98,10 @@ return index_array[year_key][item_key];
 }
 
 void
-qsvr_find(u32_int date , char *item , u32_int rank , struct qsvr *ret_val )
+qsvr_find(uint32_t date , char *item , uint32_t rank , struct qsvr *ret_val )
 {
 	
-	u32_int tmp_item = 0  ,year_key = 0 ,item_key = 0 , rank_key = 0 ;
+	uint32_t tmp_item = 0  ,year_key = 0 ,item_key = 0 , rank_key = 0 ;
 	year_key = calculate_year_key(date);
 	tmp_item = calculate_item_key(item);
 	item_key = hash_key[tmp_item] + rank ;
@@ -142,7 +140,7 @@ split_str(char* src_buf, char delimiter, int* cnt, char* ele_ar[])
    ele_ar[array_num] = front ;
 }
 void
-qsvr_destroy(u32_int ***des_val)
+qsvr_destroy(uint32_t ***des_val)
 {
 	printf("arrived qsvr_destroy \n");
 	for(int i = 0 ; i < Days ; i++)
@@ -170,13 +168,13 @@ struct qsvr*	qsvr_init(const char *path )
 	
 	int index = 0 ;
 	unsigned long start, end;
-	u32_int input_data_len = sizeof(struct qsvr )*History_len;
-	u32_int malloc_sec_hash_len = Second_hash_index * sizeof(u32_int *);
+	uint32_t input_data_len = sizeof(struct qsvr )*History_len;
+	uint32_t malloc_sec_hash_len = Second_hash_index * sizeof(uint32_t *);
 	
 	data_array = (struct qsvr *) malloc(input_data_len);
-	index_array 	= (u32_int ***)malloc(sizeof(u32_int *));
+	index_array 	= (uint32_t ***)malloc(sizeof(uint32_t *));
 	for(int i = 0 ; i < Days  ; i++)
-		index_array[i] 	= (u32_int **)malloc(malloc_sec_hash_len);
+		index_array[i] 	= (uint32_t **)malloc(malloc_sec_hash_len);
 	
 FILE *stream ;
 char buf[128]={0} ,*tmp_array[Type_size] ;
@@ -230,7 +228,7 @@ while(fgets(buf,128,stream))
 	index = 0 ; //reuse  index 
 	while(fgets(buf,128,stream))
 	{
-		u32_int middle_key ;
+		uint32_t middle_key ;
     	char tmp_buf[5];
 		int i ;
 		for(i = 0 ;buf[i] != '\n' ; i++)
@@ -255,7 +253,7 @@ int main()
     test_val =	qsvr_init(path);
 
 	printf("test find \n");
-	u32_int test_time = 20140825 , test_rank = 4;
+	uint32_t test_time = 20140825 , test_rank = 4;
 	char *test_item ="shag";
 
 	qsvr_find( test_time , test_item ,test_rank , &(*test_val) );
