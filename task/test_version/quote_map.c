@@ -1,11 +1,10 @@
 #include "quote_service.h"
 
-
 struct quote_map
 {
 	uint32_t 	***index_array ; //index_array[Days][86] 
 	uint32_t 	*hash		   ;
-	qsvr_data   *origin_array  ;
+	struct qsvr *origin_array  ;
 	qsvr_data	qsvr_struct    ;
 };
 union key_bit_value
@@ -83,11 +82,29 @@ void map_key(struct quote_map *map_val , uint32_t len )
 	 uint32_t year=0 ,month=0 ,day=0,year_key = 0,item_key = 0 ,rank_key = 0 ;
      for(int i =0 ;i < len ;i++)
      {
-         year_key =  calculate_year_key(map_val->origin_array[i].date );
-         item_key  = calculate_item_key(map_val->origin_array[i].item );
-         item_key    = map_val->hash[item_key] + map_val->origin_array[i].rank;
-          
-       	map_val->index_array[year_key][item_key]=(int *) (map_val->origin_array + i);
+        year_key =  calculate_year_key(map_val->origin_array[i].date );
+        item_key  = calculate_item_key(map_val->origin_array[i].item );
+        item_key    = map_val->hash[item_key] + map_val->origin_array[i].rank;
+        
+		if(map_val->index_array[year_key][item_key] == NULL)
+     		map_val->index_array[year_key][item_key]=(int *) (map_val->origin_array + i);
+		else
+		{	
+			struct qsvr *tmp =(struct qsvr *)(map_val->index_array[year_key][item_key]);
+			while(tmp->next != NULL) //use the linklist of tail insert function 
+				tmp = tmp->next ;	
+			tmp->next =(struct qsvr *)(map_val->origin_array+i);
+
+#if 0	 //test the confilt BestAndDeepQuote , MarchPriceQty ,RealTimePrice ,TenEntrust 
+	
+			tmp = tmp->next ;
+			uint32_t test_hash = calculate_item_key(tmp->item);
+			
+			if( (tmp->date ==20150804) && (tmp->rank == 12) && (map_val->hash[test_hash] == 8) )
+				printf("%d ,%s---->%s,rank= %d ,%s\n",tmp->date,tmp->contract,tmp->quote_record,tmp->rank,tmp->item);
+#endif 
+
+		}
      }
    
 }
@@ -111,10 +128,13 @@ qsvr_init(const char *path)
 	uint32_t ***index_array ;
 	index_array     = (uint32_t ***)malloc(sizeof(uint32_t *) *Days);
     
-	for(int i = 0 ; i < Days  ; i++) {
-          index_array[i]  = (uint32_t **)malloc(malloc_sec_hash_len);
-	}
+	for(int i = 0 ; i < Days  ; i++) 
+        index_array[i]  = (uint32_t **)malloc(malloc_sec_hash_len);
 	
+	for(int i = 0 ; i < Days  ; i++) 
+		for(int j = 0 ; j < Second_hash_index ; j++)
+			index_array[i][j] = NULL;
+
 	init_val->hash 			= hash_key 		;
 	init_val->origin_array 	= origin_array  ;
 	init_val->index_array 	= index_array   ;
@@ -152,7 +172,9 @@ qsvr_init(const char *path)
       sprintf(origin_array[index].item,"%s",tmp_array[1]);
       sprintf(origin_array[index].contract,"%s",tmp_array[2]);
       origin_array[index].rank = atoi(tmp_array[3]);
-      sprintf(origin_array[index].address,"%s",tmp_array[4]);
+      sprintf(origin_array[index].quote_record,"%s",tmp_array[4]);
+      sprintf(origin_array[index].address,"%s",tmp_array[5]);
+	  origin_array[index].next = NULL ;
       index++;
    	};
 	fclose(stream);
@@ -220,6 +242,7 @@ qsvr_destroy(struct quote_map* qm)
 	printf("qm->index_array[0] 0x%x \n",qm->index_array[0]);
 	printf("qm->index_array[0][0] 0x%x \n",qm->index_array[0][0]);
 #endif	
+
 	printf("qsvr_destroy is clean \n");
 }
 
@@ -234,7 +257,8 @@ int main()
 
 	printf("start ! \n");
 	test_map =  qsvr_init(path);
-	
+
+// construct test case 
 	uint32_t test_time = 20140825 , test_rank = 4;
     char *test_item ="shag";
 	printf("test find \n");
@@ -253,7 +277,8 @@ int main()
           return -1 ;
       }
 	printf("\n the cost cycles are %lf ns\n", (end - start)/3.6);
+	free(test_val);
 	qsvr_destroy(test_map);	
-		
+	while(1);
 return 0 ;
 }
