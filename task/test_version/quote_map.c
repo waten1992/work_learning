@@ -102,7 +102,6 @@ qsvr_init(const char *path)
 	memset(init_val,0,sizeof(struct quote_map));
 	
 	int index = 0 ; 
-    unsigned long start, end;
     uint32_t input_data_len = sizeof(struct qsvr )*History_len;
     uint32_t malloc_sec_hash_len = Second_hash_index * sizeof(uint32_t *);
 	
@@ -187,15 +186,14 @@ return init_val ;
 void
 qsvr_find(struct quote_map* qm, u32_int date , char *item , u32_int rank , struct qsvr *ret_val )
 {
-	  uint32_t tmp_item = 0  ,year_key = 0 ,item_key = 0 , rank_key = 0 ; 
-      year_key = calculate_year_key(date);
-      tmp_item = calculate_item_key(item);
-      item_key = qm->hash[tmp_item] + rank ;
+	 uint32_t tmp_item = 0  ,year_key = 0 ,item_key = 0 , rank_key = 0 ; 
+     year_key = calculate_year_key(date);
+     tmp_item = calculate_item_key(item);
+     item_key = qm->hash[tmp_item] + rank ;
       
-      struct qsvr * val ;
-      val  =(struct qsvr *) qm->index_array[year_key][item_key];
-      memcpy(ret_val,val,sizeof(struct qsvr ));
-//      memcpy(ret_val,val,128);
+     struct qsvr * val ;
+     val  =(struct qsvr *) qm->index_array[year_key][item_key];
+     memcpy(ret_val,val,sizeof(struct qsvr ));
 }
 
 void
@@ -210,7 +208,8 @@ qsvr_destroy(struct quote_map* qm)
 		free(qm->index_array[i]);
 	
 	free(qm->index_array); //free head of the index  hash
-	// release mem of qm
+
+	free(qm);	
 	
 #if 0 // test  if free(qm->origin_array) , continue will segmentation fault
 	printf("qm->origin[0] 0x%d \n",qm->origin_array[0]);
@@ -226,7 +225,8 @@ qsvr_destroy(struct quote_map* qm)
 
 int main()
 {
-	const char *path = "../input_data.txt";
+	const char *path = "input_data.txt";
+    unsigned long start, end;
 	struct quote_map *test_map ;
 	struct qsvr *test_val ;
 	test_val = (struct qsvr *)malloc(sizeof(struct qsvr));
@@ -238,7 +238,11 @@ int main()
 	uint32_t test_time = 20140825 , test_rank = 4;
     char *test_item ="shag";
 	printf("test find \n");
+
+	HP_TIMING_NOW(start);
 	qsvr_find(test_map,test_time,test_item,test_rank,test_val);
+	HP_TIMING_NOW(end);
+
 	if(test_val != NULL)
       {
           printf("contract: %s , address : %s\n",test_val->contract,test_val->address  );
@@ -248,6 +252,7 @@ int main()
           printf("can't find \n");
           return -1 ;
       }
+	printf("\n the cost cycles are %lf ns\n", (end - start)/3.6);
 	qsvr_destroy(test_map);	
 		
 return 0 ;
