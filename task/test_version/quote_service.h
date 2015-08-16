@@ -18,7 +18,9 @@
 #define Days			7320
 #define Start_day 		153
 #define Item_num		43
-#define Second_hash_index	86
+#define Second_hash_index	98 //43*2+12
+#define Item_hash_index	43
+#define	Rank_hash_index	14
 # define HP_TIMING_NOW(Var) \
  ({ unsigned long long _hi, _lo; \
   asm volatile ("rdtsc" : "=a" (_lo), "=d" (_hi)); \

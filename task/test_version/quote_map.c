@@ -7,18 +7,6 @@ struct quote_map
 	struct qsvr *origin_array  ;
 	qsvr_data	qsvr_struct    ;
 };
-union key_bit_value
-{
-      struct end_key_bit
-      {
-          uint32_t  rank :4 ;
-          uint32_t  item :6 ;
-          uint32_t  day  :5 ;
-          uint32_t  month:4 ;
-          uint32_t  year :7 ;
-      }end_key_bit_area; 
-      uint32_t value ;
-};
  
 uint32_t calculate_item_key(char *array )				;
 uint32_t  Is_Leap_year(uint32_t year )					;
@@ -84,7 +72,7 @@ void map_key(struct quote_map *map_val , uint32_t len )
      {
         year_key =  calculate_year_key(map_val->origin_array[i].date );
         item_key  = calculate_item_key(map_val->origin_array[i].item );
-        item_key    = map_val->hash[item_key] + map_val->origin_array[i].rank;
+        item_key    = map_val->hash[item_key] + map_val->origin_array[i].rank +Item_hash_index;
         
 		if(map_val->index_array[year_key][item_key] == NULL)
      		map_val->index_array[year_key][item_key]=(int *) (map_val->origin_array + i);
@@ -95,12 +83,12 @@ void map_key(struct quote_map *map_val , uint32_t len )
 				tmp = tmp->next ;	
 			tmp->next =(struct qsvr *)(map_val->origin_array+i);
 
-#if 0	 //test the confilt BestAndDeepQuote , MarchPriceQty ,RealTimePrice ,TenEntrust 
+#if 1	 //test the confilt BestAndDeepQuote , MarchPriceQty ,RealTimePrice ,TenEntrust 
 	
 			tmp = tmp->next ;
 			uint32_t test_hash = calculate_item_key(tmp->item);
 			
-			if( (tmp->date ==20150804) && (tmp->rank == 12) && (map_val->hash[test_hash] == 8) )
+			if( (tmp->date ==20150804) && (tmp->rank == 12) && (map_val->hash[test_hash] == 7) )
 				printf("%d ,%s---->%s,rank= %d ,%s\n",tmp->date,tmp->contract,tmp->quote_record,tmp->rank,tmp->item);
 #endif 
 
@@ -155,7 +143,6 @@ qsvr_init(const char *path)
       int outer = 0;
       while(*cur != '\n' )
       {   
-        int inner = 0 ; 
         if( ' ' == *cur )
         {
               *cur = '\0';
@@ -196,7 +183,7 @@ qsvr_init(const char *path)
           tmp_buf[i] = '\0';
   
           middle_key  = calculate_item_key(tmp_buf);
-          hash_key[middle_key]= index+1 ;
+          hash_key[middle_key]= index ;
           index++;
      }
      fclose(stream);
@@ -208,10 +195,10 @@ return init_val ;
 void
 qsvr_find(struct quote_map* qm, u32_int date , char *item , u32_int rank , struct qsvr *ret_val )
 {
-	 uint32_t tmp_item = 0  ,year_key = 0 ,item_key = 0 , rank_key = 0 ; 
+	 uint32_t tmp_item = 0  ,year_key = 0 ,item_key = 0  ; 
      year_key = calculate_year_key(date);
      tmp_item = calculate_item_key(item);
-     item_key = qm->hash[tmp_item] + rank ;
+     item_key = qm->hash[tmp_item] + rank +Item_hash_index ;
       
      struct qsvr * val ;
      val  =(struct qsvr *) qm->index_array[year_key][item_key];
@@ -248,7 +235,7 @@ qsvr_destroy(struct quote_map* qm)
 
 int main()
 {
-	const char *path = "input_data.txt";
+	const char *path = "../input_data.txt";
     unsigned long start, end;
 	struct quote_map *test_map ;
 	struct qsvr *test_val ;
@@ -259,9 +246,11 @@ int main()
 	test_map =  qsvr_init(path);
 
 // construct test case 
-	uint32_t test_time = 20140825 , test_rank = 4;
-    char *test_item ="shag";
+	uint32_t test_time = 20150804 , test_rank = 10;
+    char *test_item ="dlj";
 	printf("test find \n");
+	
+	int ii = calculate_item_key(test_item);
 
 	HP_TIMING_NOW(start);
 	qsvr_find(test_map,test_time,test_item,test_rank,test_val);
@@ -269,7 +258,7 @@ int main()
 
 	if(test_val != NULL)
       {
-          printf("contract: %s , address : %s\n",test_val->contract,test_val->address  );
+          printf("date :%d,item :%s,contract: %s , address : %s\n",test_val->date,test_val->item,test_val->contract,test_val->address  );
       }
       else
       {
