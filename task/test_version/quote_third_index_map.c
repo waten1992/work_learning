@@ -161,17 +161,6 @@ qsvr_init(const char *path)
                 outer++;
 			
 		}
-/*
-        else if (('|' == *cur) &&( '|' ==  *(cur+1)))
-        {
-		     *cur = '\0';
-        	 if('|' == (*cur+1))  
-              tmp_array[outer] = front ;
-              cur++;
-              front = cur ;
-              outer++;
-          }
-*/  
         else
               cur++;
       }

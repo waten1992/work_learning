@@ -19,12 +19,14 @@ union key_bit_value
           uint32_t  year :7 ;
       }end_key_bit_area; 
       uint32_t value ;
-}; 
-uint32_t calculate_item_key(char *array )		;
-uint32_t  Is_Leap_year(uint32_t year )			;
-uint32_t calculate_year_key( uint32_t date )	;
-struct quote_map* qsvr_init(const char *path)	;
-void map_key(struct quote_map *map_val , uint32_t len );
+};
+ 
+uint32_t calculate_item_key(char *array )				;
+uint32_t  Is_Leap_year(uint32_t year )					;
+uint32_t calculate_year_key( uint32_t date )			;
+struct quote_map* qsvr_init(const char *path)			;
+void map_key(struct quote_map *map_val , uint32_t len )	;
+void qsvr_find(struct quote_map* qm, u32_int date , char *item , u32_int rank , struct qsvr *ret_val ) ;
 
 uint32_t calculate_item_key(char *array )
 {
@@ -108,18 +110,17 @@ qsvr_init(const char *path)
 	origin_array = (struct qsvr *) malloc(input_data_len); 
 	
 	uint32_t ***index_array ;
-	index_array     = (uint32_t ***)malloc(sizeof(uint32_t *));
-    for(int i = 0 ; i < Days  ; i++)
+	index_array     = (uint32_t ***)malloc(sizeof(uint32_t *) *Days);
+    
+	for(int i = 0 ; i < Days  ; i++) {
           index_array[i]  = (uint32_t **)malloc(malloc_sec_hash_len);
-#if 0	
-    for(int i = 0 ; i < Days  ; i++)
-		for(int j = 0 ;j < Second_hash_index ;j++)
-			index_array[i][j] = NULL ;
-#endif 
+	}
 	
 	init_val->hash 			= hash_key 		;
 	init_val->origin_array 	= origin_array  ;
 	init_val->index_array 	= index_array   ;
+
+
 
 	FILE *stream ;
   	char buf[128]={0} ,*tmp_array[Type_size] ;
@@ -193,19 +194,33 @@ qsvr_find(struct quote_map* qm, u32_int date , char *item , u32_int rank , struc
       
       struct qsvr * val ;
       val  =(struct qsvr *) qm->index_array[year_key][item_key];
-      printf("contract: %s , address : %s\n",val->contract,val->address);
-      memcpy(ret_val,val,8);
-      memcpy(ret_val,val,128);
+      memcpy(ret_val,val,sizeof(struct qsvr ));
+//      memcpy(ret_val,val,128);
 }
 
 void
 qsvr_destroy(struct quote_map* qm)
 {
 	free(qm->origin_array);
-//	for(int i = 0 ; i <Days ;i++)
-//		free(qm->index_array[i]);
-//	free(qm->index_array);	
+
+	for(int i = 0 ;i < Days  ; i++)  //free second index hash
+			free(qm->index_array[i][0]);
+
+	for(int i = 0 ; i <Days ;i++) // free first index hash 
+		free(qm->index_array[i]);
+	
+	free(qm->index_array); //free head of the index  hash
 	// release mem of qm
+	
+#if 0 // test  if free(qm->origin_array) , continue will segmentation fault
+	printf("qm->origin[0] 0x%d \n",qm->origin_array[0]);
+#endif
+
+#if 0 //test if free(qm->index_array[i][0]) ,and  free(qm->index_array[i]) , continue will segmentation fault
+	printf("qm->index_array 0x%x \n",qm->index_array);
+	printf("qm->index_array[0] 0x%x \n",qm->index_array[0]);
+	printf("qm->index_array[0][0] 0x%x \n",qm->index_array[0][0]);
+#endif	
 	printf("qsvr_destroy is clean \n");
 }
 

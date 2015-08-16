@@ -100,7 +100,7 @@ void map_key(input_data data_array[] , u32_int len )
 		/*connect time , item , rank  key*/
 		end_key =  calculate_end_key(data_array[i].date ,item ,rank);
 //		index_array[end_key] =(int *)&data_array[i];		
-		index_array[end_key] = data_array + i;
+		index_array[end_key] =(int *) data_array + i;
 	}
 	
 	

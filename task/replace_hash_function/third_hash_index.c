@@ -236,8 +236,8 @@ map_key( data_array , History_len);
 #if 1
 /* test find   */
 printf("test find \n");
-u32_int test_time = 20140825 , test_rank = 4;
-char *test_item ="shag";
+u32_int test_time = 20150804 , test_rank = 10;
+char *test_item ="dlj";
 input_data *test_point = NULL;
 
 HP_TIMING_NOW(start);
@@ -246,7 +246,7 @@ HP_TIMING_NOW(start);
 test_point = (input_data *) find_history_quote(test_time ,test_item,test_rank);
 HP_TIMING_NOW(end);
 if(test_point != NULL)
-	printf("contract: %s , address : %s\n",test_point->contract,test_point->address);
+	printf("date : %d,item: %s,contract: %s , address : %s\n",test_point->date,test_point->item,test_point->contract,test_point->address);
 else
 {
 	printf("can't find \n");

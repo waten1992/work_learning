@@ -22,40 +22,8 @@ unsigned int  Is_Leap_year(unsigned int year )
 return Leap ;
 }
 
-int Binary_search(int a[] , int n,int x )
-{
-    int low = 0 , high =n-1 , mid ;
-    while(low <= high)
-    {   mid = low + (high-low)/2; //防止溢出
-        if(a[mid] == x)
-            return mid;
-        else if (a[mid] < x)
-            low = mid + 1;
-        else
-            high = mid - 1;
-    }
-    return -1;
-}
 int main(int argc , char *argv[])
 {
-#if 0
-	union key test ;
-	memset(&test,0,8);
-	test.bit.a = 1;
-	test.bit.b = 1;
-	test.bit.c = 1;
-	test.bit.d = 1;
-	test.bit.e = 1;
-
-#endif
-#if 0
-	int a[2][3]={
-				 {1,2,3},
-				 {4,5,6}
-				};
-	printf("%d , 5/2 = %d \n",a[0][0],5/2);
-#endif 
-
 #if 1
 if (argc < 2 )
 {
