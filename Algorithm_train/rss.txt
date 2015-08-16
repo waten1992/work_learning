@@ -1,5 +1,0 @@
-1|A|2|20140909|shag|ag1409|3|0| |\\192.168.1.8\DataProject\TickData\SHFE\20140909\|/mnt/data/TickData/SHFE/20140909/|my_shfe_md_20140909_ag1409.dat|my_shfe_md_20140909_ag1409.csv|\n
-1|A|2|20140826|shag|ag1409|4|0| |\\192.168.1.8\DataProject\TickData\SHFE\20140826\|/mnt/data/TickData/SHFE/20140826/|my_shfe_md_20140826_ag1409.dat|my_shfe_md_20140826_ag1409.csv|\n
-1|A|2|20140912|shag|ag1409|4|0| |\\192.168.1.8\DataProject\TickData\SHFE\20140912\|/mnt/data/TickData/SHFE/20140912/|my_shfe_md_20140912_ag1409.dat|my_shfe_md_20140912_ag1409.csv|\n
-1|A|2|20140912|shag|au1409|5|0| |\\192.168.1.8\DataProject\TickData\SHFE\20140912\|/m    nt/data/TickData/SHFE/20140912/|my_shfe_md_20140912_ag1409.dat|my_shfe_md_20140912_ag    1409.csv|\n
-
