@@ -11,9 +11,9 @@ struct quote_map
 uint32_t calculate_item_key(char *array )				;
 uint32_t  Is_Leap_year(uint32_t year )					;
 uint32_t calculate_year_key( uint32_t date )			;
-struct quote_map* qsvr_init(const char *path)			;
+struct quote_map* qsvr_init(const char *origin_data_path,const char *item_path);
 void map_key(struct quote_map *map_val , uint32_t len )	;
-void qsvr_find(struct quote_map* qm, u32_int date , char *item , u32_int rank , struct qsvr *ret_val ) ;
+void qsvr_find(struct quote_map* qm, uint32_t date , char *item , uint32_t rank , struct qsvr *ret_val ) ;
 
 uint32_t calculate_item_key(char *array )
 {
@@ -101,7 +101,7 @@ void map_key(struct quote_map *map_val , uint32_t len )
 
 
 struct quote_map*
-qsvr_init(const char *path)
+qsvr_init(const char *origin_data_path ,const char *item_path)
 {
 	uint32_t hash_key[512] = {0};
 	struct quote_map* init_val;
@@ -140,7 +140,7 @@ qsvr_init(const char *path)
 
 	FILE *stream ;
   	char buf[128]={0} ,*tmp_array[Type_size] ;
-	stream = fopen(path,"r");
+	stream = fopen(origin_data_path,"r");
  	if (stream == NULL)
   	{
       printf("can't open input_data.txt \n,%s",strerror(errno));
@@ -176,7 +176,7 @@ qsvr_init(const char *path)
    	};
 	fclose(stream);
 //map item to dictionary
-	stream  = fopen("../uniq.txt","r+"); //reuse stream 
+	stream  = fopen(item_path,"r"); //reuse stream 
     if (stream == NULL)
     {
          printf("can't open uniq.txt \n,%s",strerror(errno));
@@ -203,7 +203,7 @@ return init_val ;
 }
 
 void
-qsvr_find(struct quote_map* qm, u32_int date , char *item , u32_int rank , struct qsvr *ret_val )
+qsvr_find(struct quote_map* qm, uint32_t date , char *item , uint32_t rank , struct qsvr *ret_val )
 {
 	uint32_t tmp_item = 0  ,year_key = 0 ,item_key = 0 , rank_key = 0 ; 
     year_key = calculate_year_key(date);
@@ -249,39 +249,3 @@ qsvr_destroy(struct quote_map* qm)
 	printf("qsvr_destroy is clean \n");
 }
 
-int main()
-{
-	const char *path = "input_data.txt";
-    unsigned long start, end;
-	struct quote_map *test_map ;
-	struct qsvr *test_val ;
-	test_val = (struct qsvr *)malloc(sizeof(struct qsvr));
-	memset(test_val,0,sizeof(struct qsvr));
-
-	printf("start ! \n");
-	test_map =  qsvr_init(path);
-
-// construct test case 
-	uint32_t test_time = 20150416 , test_rank = 11;
-    char *test_item ="dljm";
-	printf("test find \n");
-
-	HP_TIMING_NOW(start);
-	qsvr_find(test_map,test_time,test_item,test_rank,test_val);
-	HP_TIMING_NOW(end);
-
-	if(test_val != NULL)
-      {
-          printf("date : %d ,item : %s,contract: %s , address : %s\n",test_val->date,test_val->item,test_val->contract,test_val->address  );
-      }
-      else
-      {
-          printf("can't find \n");
-          return -1 ;
-      }
-	printf("\n the cost cycles are %lf ns\n", (end - start)/3.6);
-	free(test_val);
-	qsvr_destroy(test_map);	
-	//while(1);
-return 0 ;
-}
