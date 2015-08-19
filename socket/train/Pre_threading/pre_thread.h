@@ -8,4 +8,5 @@
 #include <arpa/inet.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <semaphore.h>
 #include <fcntl.h>
