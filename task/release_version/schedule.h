@@ -19,8 +19,9 @@
 #define 	MAX_TASK_NUM 	50 
 #define 	ITEM_LEN 		8
 #define  	Start_day		153 
-struct day_schedule_t {
+#define 	CONTRACT_LEN	8
 
+struct day_schedule_t {
 	uint32_t 	date_key	;
 	char 		item[8]		;
 	uint32_t 	rank 		;
@@ -28,7 +29,6 @@ struct day_schedule_t {
 };
 
 struct task_node_t {
-
 	uint32_t	begin_date		;
 	uint32_t 	end_date 		;
 	uint32_t 	deep 			;
@@ -39,10 +39,9 @@ struct task_node_t {
 };
 
 struct quote_input_info_t {
-	
 	uint32_t 	begin_date 	;
 	uint32_t	end_date 	;
-	char 		*item 		;
+	char 		item[8] 	;
 	uint32_t 	rank		;
 }; 
 
@@ -67,3 +66,7 @@ destory_quote_schedule(struct quote_schedule_t *qs);
 void 
 quote_schedule_func(struct quote_schedule_t *qs);
 
+extern int  handle_quote_query(struct day_schedule_t *input);
+extern uint32_t Is_Leap_year(uint32_t year );
+extern uint32_t calculate_year_key( uint32_t date );
+extern void init_history_quote();

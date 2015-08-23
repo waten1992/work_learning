@@ -96,11 +96,14 @@ map_key(struct quote_map *map_val , uint32_t len )
 struct quote_map*
 qsvr_init(const char *origin_data_path ,const char *item_path)
 {
-	uint32_t hash_key[512] = {0}									;
+	uint32_t *hash_key;
 	struct quote_map* init_val										;
 	init_val = (struct quote_map *)malloc(sizeof(struct quote_map))	;
 	memset(init_val,0,sizeof(struct quote_map))						;
 	
+	hash_key = (uint32_t *)malloc(512 *sizeof(uint32_t));	
+	memset(hash_key,0,512);
+
 	int index = 0 														; 
     uint32_t input_data_len = sizeof(struct qsvr )*History_len;
     uint32_t malloc_sec_hash_len = Item_hash_index * sizeof(uint32_t *)	;
@@ -240,7 +243,7 @@ qsvr_destroy(struct quote_map* qm)
 		free(qm->index_array[i]);
 
 	free(qm->index_array); //free head of the index  hash
-
+	free(qm->hash);
 	free(qm); //free  the wrapper  of struct  quote_map * 	
 	
 	printf("qsvr_destroy is clean \n");

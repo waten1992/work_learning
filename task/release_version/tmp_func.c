@@ -1,42 +1,40 @@
 #include "quote_service.h"
 #include "schedule.h"
-static int record_request  ;
+extern void quote_find_use_date_key(struct quote_map* qm,struct day_schedule_t *input );
+struct quote_map *test_map ;
 
-int 
-handle_quote_query(struct quote_input_info_t *input)
+void 
+init_history_quote()
 {
-	const char *origin_data_path = "../test_version/input_data.txt"	;
-	const char *item_path = "uniq.txt"								;
-    unsigned long start, end											;
-	
-	struct quote_map *test_map										;
-	struct qsvr *test_val 											;
-	
-	test_val = (struct qsvr *)malloc(sizeof(struct qsvr))				;
-	memset(test_val,0,sizeof(struct qsvr))							;
-  
+	const char *origin_data_path = "../test_version/input_data.txt" ; 
+	const char *item_path = "uniq.txt"                              ;
+
 	printf("start ! \n")												;
 	test_map =  qsvr_init(origin_data_path,item_path)					;
-
-	uint32_t test_time  , test_rank ;
-	char *test_item ;
-	test_rank = input->rank ;
-	test_item = input->item ;
-	test_time = input->begin_date ;
 	printf("test find \n")											;
 
+}
+int 
+handle_quote_query(struct day_schedule_t *input)
+{
+    unsigned long start, end											;
+	
+	struct quote_map *tmp_map ;
+	tmp_map = (struct quote_map *)malloc(sizeof(struct quote_map));
+	memcpy(tmp_map, test_map,sizeof(struct quote_map)) ;	
+	
 	HP_TIMING_NOW(start)												;
-	qsvr_find(test_map,test_time,test_item,test_rank,test_val)		;
+//	qsvr_find(test_map,test_time,test_item,test_rank,test_val)		;
+	quote_find_use_date_key(tmp_map,input);
 	HP_TIMING_NOW(end)												;
-
-	if (test_val != NULL) {       
-		printf("date : %d ,item : %s,contract: %s , address : %s\n",test_val->date,test_val->item,test_val->contract,test_val->address  );
-	  }else {   
-		printf("can't find \n")	;
-		return -1 				;
-      }
-	printf("\n the cost cycles are %lf ns\n", (end - start)/3.6)		;
-	free(test_val)													;
-	qsvr_destroy(test_map)											;
+#if 0
+	if (0 != (*input->contract) ) {	
+		printf("item : %s ,contract : %s",input->item,input->contract);
+	}else {
+		printf("****NO DATA !****\n");
+	}
+#endif
+		printf("\n the cost cycles are %lf ns\n", (end - start)/3.6)		;
+		free(tmp_map);
 return 0 ;
 }

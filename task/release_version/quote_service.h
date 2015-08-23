@@ -19,6 +19,7 @@
 #include <fcntl.h>
 #include <stdint.h>
 
+
 #define History_len		425212
 #define Type_size		6
 #define Tmp_array_len 	64
@@ -54,6 +55,11 @@ struct quote_map {
     qsvr_data   qsvr_struct         ;
 };
 
+struct input_info_t {
+	uint32_t 	date_key;
+	char 		item[8];
+	uint32_t 	rank;
+}; 
 
 struct quote_map*
 qsvr_init(const char *origin_data_path,const char *item_path);
@@ -63,3 +69,27 @@ qsvr_find(struct quote_map* qm, uint32_t date , char *item , uint32_t rank , str
 
 void
 qsvr_destroy(struct quote_map* qm);
+
+uint32_t 
+calculate_item_key(char *array );
+
+uint32_t 
+Is_Leap_year(uint32_t year );
+
+uint32_t 
+calculate_year_key( uint32_t date );
+
+void
+map_key(struct quote_map *map_val , uint32_t len );
+
+void 
+init_history_quote();
+
+
+
+
+
+
+
+
+
