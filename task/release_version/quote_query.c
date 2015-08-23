@@ -1,24 +1,5 @@
 #include "quote_service.h"
-
- 
-uint32_t
-calculate_item_key(char *array )								;
-
-uint32_t 
-Is_Leap_year(uint32_t year )									;
-
-uint32_t 
-calculate_year_key( uint32_t date )								;
-
-struct quote_map* 
-qsvr_init(const char *origin_data_path,const char *item_path)	;
-
-void 
-map_key(struct quote_map *map_val , uint32_t len )				;
-
-void 
-qsvr_find(struct quote_map* qm, uint32_t date , char *item , uint32_t rank , struct qsvr *ret_val ) 	;
-
+#include "schedule.h"
 uint32_t 
 calculate_item_key(char *array )
 {
@@ -44,7 +25,8 @@ Is_Leap_year(uint32_t year )
 return Leap ;
 }
 
-uint32_t calculate_year_key( uint32_t date )
+uint32_t 
+calculate_year_key( uint32_t date )
 {
 	uint32_t  Leap_array[] = {0 ,1 ,1 ,1 ,2 ,2 ,2 ,2 ,3 ,3 ,3 ,3 ,4 ,4 ,4 ,4 ,5   ,5 ,5 ,5 ,6 ,6 ,6 ,6 ,7 ,7 ,7 ,7 ,8 ,8 ,8 ,8 ,9 ,9 ,9 ,9 ,10 ,10 ,10 ,10 };
   
@@ -262,5 +244,23 @@ qsvr_destroy(struct quote_map* qm)
 	free(qm); //free  the wrapper  of struct  quote_map * 	
 	
 	printf("qsvr_destroy is clean \n");
+}
+
+void
+quote_find_use_date_key(struct quote_map* qm,struct day_schedule_t *input )
+{
+	uint32_t tmp_item = 0  ,year_key = 0 ,item_key = 0 , rank_key = 0 ; 
+	year_key = input->date_key;	
+    tmp_item = calculate_item_key(input->item);
+    item_key = qm->hash[tmp_item];
+	rank_key = input->rank;
+      
+    struct qsvr * val;
+	if (NULL == qm->index_array[year_key][item_key][rank_key]) {
+		; /*do nothing , or give response*/	
+	}else { 
+    	val  =(struct qsvr *) qm->index_array[year_key][item_key][rank_key]	;
+		memcpy(input->contract,val->contract,CONTRACT_LEN);
+	}
 }
 
