@@ -1,0 +1,9 @@
+统计某个目录下有多少文件
+	ls -F | grep -c "/"
+pwd006@Debain ~/work_learning/task/release_version (master *) $ ls -F | grep -c "/"2
+
+grep 
+	-r 递归查询
+	-x 只占用一整行
+	-w 匹配整个单词
+	
