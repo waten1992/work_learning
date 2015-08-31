@@ -10,6 +10,7 @@
 
 #include "quote_service.h"
 #include "schedule.h"
+#include "quote_schedule.h"
 
 uint32_t 
 calculate_item_key(char *array )
@@ -45,12 +46,12 @@ calculate_year_key( uint32_t date )
   
     if ((month -1) >= 2) {
     	year_day = (month-2)*31 -min_month_flag[month-2] + day  + 28 + Leap ;       
-        all_day = year_day + (year - 2012)*365 +Leap_array[year-2012] - Start_day  ;
+        all_day = year_day + (year - 2012)*365 +Leap_array[year-2012] - START_DAY  ;
     }else if (month == 2) {
        year_day = 31 + day ;
-       all_day = year_day + (year -2012)*365 +Leap_array[year-2012] - Start_day;
+       all_day = year_day + (year -2012)*365 +Leap_array[year-2012] - START_DAY;
     }else {
-       all_day = day + (year - 2012)*365 +Leap_array[year-2012] - Start_day;
+       all_day = day + (year - 2012)*365 +Leap_array[year-2012] - START_DAY;
     }
 return all_day;
 }
@@ -104,9 +105,9 @@ qsvr_init(const char *origin_data_path ,const char *item_path)
 	memset(hash_key,0,512);
 
 	int index = 0; 
-    uint32_t input_data_len = sizeof(struct qsvr )*History_len;
-    uint32_t malloc_sec_hash_len = Item_hash_index * sizeof(uint32_t *);
-	uint32_t malloc_thi_hash_len = Rank_hash_index * sizeof(uint32_t *);
+    uint32_t input_data_len = sizeof(struct qsvr )*HISTORY_LEN;
+    uint32_t malloc_sec_hash_len = ITEM_HASH_INDEX * sizeof(uint32_t *);
+	uint32_t malloc_thi_hash_len = RANK_HASH_INDEX * sizeof(uint32_t *);
 
 	struct qsvr * origin_array;
 	origin_array = (struct qsvr *) malloc(input_data_len); 
@@ -115,20 +116,20 @@ qsvr_init(const char *origin_data_path ,const char *item_path)
 	}
 	
 	uint32_t ****index_array;
-	index_array     = (uint32_t ****)malloc(sizeof(uint32_t *) *Days); /* Days Index hash slots */
+	index_array     = (uint32_t ****)malloc(sizeof(uint32_t *) *DAYS); /* DAYS Index hash slots */
 	if (NULL == index_array) {
 		 printf("index_array allocate is error , errno is : %s \n",strerror(errno));
 	}
     
-	for (int i = 0 ; i < Days  ; i++) { 
+	for (int i = 0 ; i < DAYS  ; i++) { 
         index_array[i]  = (uint32_t ***)malloc(malloc_sec_hash_len); /* Items Index hash slots */
 		if (NULL == index_array[i]) {
 			printf("index_array[%d] allocate is error , errno is : %s \n",i,strerror(errno));
 		}
 	}
 	
-	for (int i = 0; i < Days; i++) { 
-		for (int j = 0; j < Item_hash_index; j++) {
+	for (int i = 0; i < DAYS; i++) { 
+		for (int j = 0; j < ITEM_HASH_INDEX; j++) {
 	        index_array[i][j]  = (uint32_t **)malloc(malloc_thi_hash_len); /* Rank Index hash slots */
 			if (NULL == index_array[i][j]) {
 		 		printf("index_array[%d][%d] allocate is error , errno is : %s \n",i,j,strerror(errno));
@@ -136,9 +137,9 @@ qsvr_init(const char *origin_data_path ,const char *item_path)
 		}
 	}
 
-	for (int i = 0; i < Days; i++) {
-		for (int j = 0; j < Item_hash_index; j++) {
-			for (int k = 0; k < Rank_hash_index; k++) {
+	for (int i = 0; i < DAYS; i++) {
+		for (int j = 0; j < ITEM_HASH_INDEX; j++) {
+			for (int k = 0; k < RANK_HASH_INDEX; k++) {
 	        	index_array[i][j][k]  = NULL;  
 			}
 		}
@@ -149,7 +150,7 @@ qsvr_init(const char *origin_data_path ,const char *item_path)
 	init_val->index_array 	= index_array   ;
 
 	FILE *stream ;
-  	char buf[128]={0} ,*tmp_array[Type_size];
+  	char buf[1024]={0} ,*tmp_array[TYPE_SIZE];
 	stream = fopen(origin_data_path,"r");
 
  	if (stream == NULL) {
@@ -157,7 +158,7 @@ qsvr_init(const char *origin_data_path ,const char *item_path)
      return NULL ;
   	}
 
-	while(fgets(buf,128,stream)) {
+	while(fgets(buf,1024,stream)) {
       char *cur = buf ,*front =buf ;
       int outer = 0;
 
@@ -173,17 +174,17 @@ qsvr_init(const char *origin_data_path ,const char *item_path)
 		}
       }
 
-      tmp_array[outer] = front										;
+      tmp_array[outer] = front;
 
-      origin_array[index].date = atoi(tmp_array[0])					;
-      sprintf(origin_array[index].item,"%s",tmp_array[1])			;
-      sprintf(origin_array[index].contract,"%s",tmp_array[2])		;
-      origin_array[index].rank = atoi(tmp_array[3])					;
-      sprintf(origin_array[index].quote_record,"%s",tmp_array[4])	;
-      sprintf(origin_array[index].address,"%s",tmp_array[5])		;
+      origin_array[index].date = atoi(tmp_array[3]);
+      snprintf(origin_array[index].item,ITEM_LEN,"%s",tmp_array[4]);
+      snprintf(origin_array[index].contract,CONTRACT_LEN,"%s",tmp_array[5]);
+      origin_array[index].rank = atoi(tmp_array[6]);
+      snprintf(origin_array[index].quote_record,RECORD_LEN,"%s",tmp_array[8]);
+      snprintf(origin_array[index].address,ADDRESS_LEN,"%s",tmp_array[10]);
 	
-	  origin_array[index].next = NULL 								;
-      index++														;
+	  origin_array[index].next = NULL;
+      index++;
    	};
 
 	fclose(stream);
@@ -212,7 +213,7 @@ qsvr_init(const char *origin_data_path ,const char *item_path)
      }
 
      fclose(stream)									;
-     map_key(init_val , History_len)				;
+     map_key(init_val , HISTORY_LEN)				;
 
 return init_val ;
 }
@@ -240,21 +241,26 @@ void
 qsvr_destroy(struct quote_map* qm)
 {
 	free(qm->origin_array);
-	for(int i = 0 ;i < Days  ; i++)  /* free third index hash : rank_key */
-		for(int j = 0 ; j < Item_hash_index ; j++)
+	/* free third index hash : rank_key */
+	for(int i = 0; i < DAYS; i++) {
+		for(int j = 0; j < ITEM_HASH_INDEX; j++) {
 			free(qm->index_array[i][j][0]);
-
-	for(int i = 0 ; i <Days ;i++) 	/* free second index hash : item_key */
-		for(int j = 0 ; j < Item_hash_index ; j++)
+		}
+	}
+	/* free second index hash : item_key */
+	for(int i = 0; i <DAYS; i++) { 	
+		for(int j = 0; j < ITEM_HASH_INDEX; j++) {
 			free(qm->index_array[i][j]);
-	
-	for(int i = 0 ; i <Days ;i++) /* free first index hash : item_key */
+		}
+	}
+	/* free first index hash : item_key */
+	for(int i = 0 ; i <DAYS ;i++) {
 		free(qm->index_array[i]);
+	}
 
 	free(qm->index_array); 		/* free head of the index  hash */
 	free(qm->hash);				/* free hash dic */
 	free(qm); 					/* free  the wrapper  of struct  quote_map *  */	
-	
 	printf("qsvr_destroy is clean \n");
 }
 

@@ -18,22 +18,24 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdint.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <signal.h>
+#include <unistd.h>
 
-
-#define 	History_len 		425212
-#define 	Type_size 			6
-#define 	Tmp_array_len 		64
-#define 	Start_value			96
-#define 	Days 				7320
-#define 	Start_day 			153
-#define 	Item_num 			43
-#define 	Item_hash_index		43
-#define		Rank_hash_index 	14
+#define 	HISTORY_LEN 		425212
+#define 	TYPE_SIZE			14
+#define 	DAYS 				7320
+#define 	START_DAY 			153
+#define 	ITEM_HASH_INDEX		43
+#define		RANK_HASH_INDEX 	14
 #define 	MAX_TASK_NUM 		50 
 #define 	ITEM_LEN 			8
 #define 	CONTRACT_LEN 		8
+#define		RECORD_LEN			24
+#define 	ADDRESS_LEN			128
 #define 	TEST_NUM 			3
-
+#define 	PATH_LEN			128
 # define HP_TIMING_NOW(Var) \
  { unsigned long long _hi, _lo; \
   asm volatile ("rdtsc" : "=a" (_lo), "=d" (_hi)); \
@@ -51,32 +53,11 @@ typedef struct qsvr {
 }qsvr_data_t;
 
 typedef struct quote_map {
-
     uint32_t    ****index_array;   
     uint32_t    *hash;
     struct qsvr *origin_array;
     qsvr_data_t   qsvr_struct;
 }quote_map_t;
-
-struct day_schedule {
-    uint32_t    date_key;
-    char        item[8];
-    uint32_t    rank;
-    char        contract[8];
-} day_schedule_t;
-
-struct task_node {
-    uint32_t    deep;
-    uint32_t    cur_sub_index;
-    char        item[8];
-    uint32_t    rank;
-    struct day_schedule  *next_sub_task;
-}task_node_t;
-
-typedef struct task_sched { 
-    struct task_node    *task_array;  
-    struct quote_map    *query_index;
-} task_sched_t ; 
 
 
 struct quote_map*
@@ -100,6 +81,4 @@ calculate_year_key( uint32_t date );
 void
 map_key(struct quote_map *map_val , uint32_t len );
 
-void
-quote_find_use_date_key(struct task_sched * qm,struct day_schedule *input );
 

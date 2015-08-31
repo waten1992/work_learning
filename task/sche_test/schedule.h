@@ -54,10 +54,6 @@ task_sched_del(struct task_sched* ts, int task_id);
 void
 task_sched_destroy(struct task_sched* ts);
 
-void 
-task_quote_sched_func(struct task_sched *ts);
-
-
 #ifdef __cplusplus
 }
 #endif

@@ -1,0 +1,4 @@
+gcc -shared -fPIC -o libsche_task.so  quote_query.c  quote_schedule.c -std=gnu11 -lpthread
+
+gcc -o qq test_main.c -L. -lsche_task -std=gnu11 -g -lpthread
+
