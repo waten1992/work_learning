@@ -29,6 +29,7 @@ void
 task_sched_destroy(struct task_sched* ts);
 
 extern void quote_find_use_date_key(struct task_sched * ts,struct day_schedule *input);
+extern uint32_t rev_calculate_date( uint32_t date ); 
 
 void *
 task_handle_thread(void *message)
@@ -181,7 +182,7 @@ task_quote_sched_func(struct task_sched *ts)
             } else {
                 if(step == i){				
 					pthread_mutex_lock(&ts->lock[i]);
-					printf("Series- date_key: %d ,item : %s ,rank : %d , contract : %s \n",cur_tmp->date_key ,cur_tmp->item ,cur_tmp->rank,cur_tmp->contract);
+					printf("Series- date_key: %d ,item : %s ,rank : %d , contract : %s \n",rev_calculate_date(cur_tmp->date_key) ,cur_tmp->item ,cur_tmp->rank,cur_tmp->contract);
 					sleep(1);
 					printf("\n");
 					ts->task_array[i].cur_sub_index++;
@@ -201,18 +202,18 @@ task_quote_sched_func(struct task_sched *ts)
             if ((step_tmp->item != cur_tmp->item ) ||
                 (step_tmp->contract != cur_tmp->contract) ||
                 ((step_tmp->rank == cur_tmp->rank) && (step_tmp->date_key == cur_tmp->date_key))) {
-                printf("Parallel-date_key: %d ,item : %s ,rank : %d , contract : %s \n",cur_tmp->date_key ,cur_tmp->item ,cur_tmp->rank,cur_tmp->contract);
+                printf("Parallel-date_key: %d ,item : %s ,rank : %d , contract : %s \n",rev_calculate_date(cur_tmp->date_key) ,cur_tmp->item ,cur_tmp->rank,cur_tmp->contract);
 				sleep(1);
-                printf("Parallel-date_key: %d ,item : %s ,rank : %d , contract : %s \n",step_tmp->date_key ,step_tmp->item ,step_tmp->rank,step_tmp->contract);
+                printf("Parallel-date_key: %d ,item : %s ,rank : %d , contract : %s \n",rev_calculate_date(step_tmp->date_key) ,step_tmp->item ,step_tmp->rank,step_tmp->contract);
 				sleep(1);
 				printf("\n");
 
                 ts->task_array[i].cur_sub_index++       ;
                 ts->task_array[step].cur_sub_index++    ;
             }else {
-                printf("Series_first-date_key: %d ,item : %s ,rank : %d , contract : %s \n",cur_tmp->date_key ,cur_tmp->item ,cur_tmp->rank,cur_tmp->contract);
+                printf("Series_first-date_key: %d ,item : %s ,rank : %d , contract : %s \n",rev_calculate_date(cur_tmp->date_key) ,cur_tmp->item ,cur_tmp->rank,cur_tmp->contract);
                	sleep(1);
-				printf("Series_second-date_key: %d ,item : %s ,rank : %d , contract : %s \n",step_tmp->date_key ,step_tmp->item ,step_tmp->rank,step_tmp->contract);
+				printf("Series_second-date_key: %d ,item : %s ,rank : %d , contract : %s \n",rev_calculate_date(step_tmp->date_key) ,step_tmp->item ,step_tmp->rank,step_tmp->contract);
                 sleep(1);
 				printf("\n");
             }

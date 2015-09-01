@@ -18,7 +18,7 @@ typedef struct day_schedule {
     uint32_t    date_key;
     char        item[8];
     uint32_t    rank;
-    char        contract[8];
+    char        contract[16];
 } day_schedule_t;
 
 typedef struct task_node {

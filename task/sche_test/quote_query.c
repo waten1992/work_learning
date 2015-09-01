@@ -32,6 +32,63 @@ Is_Leap_year(uint32_t year )
 return Leap ;
 }
 
+ret_date_t * 
+calculate_the_month(uint32_t days , uint32_t year)
+{
+    uint32_t  sum = 0 , i = 0;
+    uint32_t tmp[12];
+    uint32_t month_array[] = {1,0,1,0,1,0,1,1,0,1,0,1};
+    ret_date_t *ret_date = (ret_date_t *)malloc(sizeof(ret_date_t));
+    for (i = 0;i < 12; i++) {
+        if (month_array[i]) {
+            sum += 31; 
+        } else {
+            sum += 30;  
+        }
+        tmp[i] = sum ;
+        if (i ==1) {
+            if (Is_Leap_year(year)) {
+                sum -= 1;
+                tmp[i] = sum;
+            } else {
+                sum -= 2;
+                tmp[i] = sum;   
+            }   
+        }   
+    }
+
+    for (i = 0; i < 12 ; i++) {
+        if ((i != 11)&& (days > tmp[i]) && (days < tmp[i+1])) {
+            ret_date->month = i + 2;
+            break;
+        }
+        if (11 == i) {
+            ret_date->month = 12 ;   
+        }   
+    }   
+    ret_date->day = days - tmp[i];
+        
+return ret_date ;
+}
+
+uint32_t
+rev_calculate_date( uint32_t date )
+{
+	uint32_t  Leap_array[] = {0 ,1 ,1 ,1 ,2 ,2 ,2 ,2 ,3 ,3 ,3 ,3 ,4 ,4 ,4 ,4 ,5 ,5 ,5 ,5 ,6 ,6 ,6 ,6 ,7 ,7 ,7 ,7 ,8 ,8 ,8 ,8 ,9 ,9 ,9 ,9 ,10 ,10 ,10 ,10 };
+    uint32_t  year ,tmp_year ,year_day ,change_date;
+  	struct ret_date *ret ;
+
+	tmp_year =  (date/365);
+	year = tmp_year + START_YEAR;
+    year_day = (date - (tmp_year)*365 - Leap_array[tmp_year] + START_DAY);
+	printf("tmp_year %d ,year_day :%d \n",tmp_year,year_day);
+	ret = calculate_the_month(year_day ,year );
+	printf("year = %d ,month =%d , day = %d\n",year,ret->month,ret->day);	
+	change_date = year*10000 + ret->month*100 + ret->day;
+return change_date;
+}
+
+
 uint32_t 
 calculate_year_key( uint32_t date )
 {
@@ -46,12 +103,12 @@ calculate_year_key( uint32_t date )
   
     if ((month -1) >= 2) {
     	year_day = (month-2)*31 -min_month_flag[month-2] + day  + 28 + Leap ;       
-        all_day = year_day + (year - 2012)*365 +Leap_array[year-2012] - START_DAY  ;
+        all_day = year_day + (year - START_YEAR)*365 +Leap_array[year-START_YEAR] - START_DAY  ;
     }else if (month == 2) {
        year_day = 31 + day ;
-       all_day = year_day + (year -2012)*365 +Leap_array[year-2012] - START_DAY;
+       all_day = year_day + (year -START_YEAR)*365 +Leap_array[year-START_YEAR] - START_DAY;
     }else {
-       all_day = day + (year - 2012)*365 +Leap_array[year-2012] - START_DAY;
+       all_day = day + (year - START_YEAR)*365 +Leap_array[year-START_YEAR] - START_DAY;
     }
 return all_day;
 }
@@ -149,7 +206,7 @@ qsvr_init(const char *origin_data_path ,const char *item_path)
 	init_val->origin_array 	= origin_array  ;
 	init_val->index_array 	= index_array   ;
 
-	FILE *stream ;
+	FILE *stream , *stream_item;
   	char buf[1024]={0} ,*tmp_array[TYPE_SIZE];
 	stream = fopen(origin_data_path,"r");
 
@@ -190,14 +247,14 @@ qsvr_init(const char *origin_data_path ,const char *item_path)
 	fclose(stream);
 
 	/* map item to dictionary */
-	stream  = fopen(item_path,"r"); 
-    if (stream == NULL) {
+	stream_item  = fopen(item_path,"r"); 
+    if (stream_item == NULL) {
          printf("can't open uniq.txt \n,%s",strerror(errno));
          return NULL;
     }
 
 	index = 0 ; 
-    while(fgets(buf,128,stream)) {
+    while(fgets(buf,128,stream_item)) {
     	uint32_t middle_key 	;
         char tmp_buf[5]			;
         int i 					;
@@ -212,8 +269,8 @@ qsvr_init(const char *origin_data_path ,const char *item_path)
         index++;
      }
 
-     fclose(stream)									;
-     map_key(init_val , HISTORY_LEN)				;
+     fclose(stream_item);
+     map_key(init_val , HISTORY_LEN);
 
 return init_val ;
 }

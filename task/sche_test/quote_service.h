@@ -36,6 +36,7 @@
 #define 	ADDRESS_LEN			128
 #define 	TEST_NUM 			3
 #define 	PATH_LEN			128
+#define		START_YEAR			2012
 # define HP_TIMING_NOW(Var) \
  { unsigned long long _hi, _lo; \
   asm volatile ("rdtsc" : "=a" (_lo), "=d" (_hi)); \
@@ -45,7 +46,7 @@
 typedef struct qsvr {
 	uint32_t 	date ;
 	char 		item[8];
-	char 		contract[8];
+	char 		contract[16];
 	uint32_t 	rank;
 	char 		quote_record[24];
 	char 		address[128];
@@ -59,6 +60,11 @@ typedef struct quote_map {
     qsvr_data_t   qsvr_struct;
 }quote_map_t;
 
+typedef struct ret_date {
+    uint32_t    month;
+    uint32_t    day;
+	uint32_t 	year;
+}ret_date_t;
 
 struct quote_map*
 qsvr_init(const char *origin_data_path,const char *item_path);

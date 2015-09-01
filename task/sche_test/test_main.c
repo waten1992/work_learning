@@ -52,9 +52,9 @@ main()
     task_info[2]->rank = 1;
     task_sched_add(ts,task_info[2]);
        
-	while (1) 
-		;
-    task_sched_destroy(ts);
 
+	sleep(360);
+    task_sched_destroy(ts);
+	printf("main function  finish \n");
 return 0;
 }
