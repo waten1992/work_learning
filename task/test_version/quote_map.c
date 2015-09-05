@@ -75,7 +75,7 @@ void map_key(struct quote_map *map_val , uint32_t len )
         item_key    = map_val->hash[item_key] + map_val->origin_array[i].rank +Item_hash_index;
         
 		if(map_val->index_array[year_key][item_key] == NULL)
-     		map_val->index_array[year_key][item_key]=(int *) (map_val->origin_array + i);
+     		map_val->index_array[year_key][item_key]=(uint32_t *) (map_val->origin_array + i);
 		else
 		{	
 			struct qsvr *tmp =(struct qsvr *)(map_val->index_array[year_key][item_key]);
@@ -114,7 +114,7 @@ qsvr_init(const char *path)
 	origin_array = (struct qsvr *) malloc(input_data_len); 
 	
 	uint32_t ***index_array ;
-	index_array     = (uint32_t ***)malloc(sizeof(uint32_t *) *Days);
+	index_array     = (uint32_t ***)malloc(sizeof(uint32_t *)*Days);
     
 	for(int i = 0 ; i < Days  ; i++) 
         index_array[i]  = (uint32_t **)malloc(malloc_sec_hash_len);
@@ -246,7 +246,7 @@ int main()
 	test_map =  qsvr_init(path);
 
 // construct test case 
-	uint32_t test_time = 20150804 , test_rank = 10;
+	uint32_t test_time = 20150804 , test_rank = 1;
     char *test_item ="dlj";
 	printf("test find \n");
 	

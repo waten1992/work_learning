@@ -1,8 +1,14 @@
 #include "quote_service.h"
 
+extern void qsvr_find(struct quote_map* qm, uint32_t date , char *item , uint32_t rank , struct qsvr *ret_val );
+
+extern void qsvr_destroy(struct quote_map* qm);
+
+extern struct quote_map* qsvr_init(const char *origin_data_path,const char *item_path);
+
 int main()
 {
-      const char *origin_data_path = "../test_version/input_data.txt"	;
+      const char *origin_data_path = "../rss_file_path.txt";
 	  const char *item_path = "uniq.txt"								;
       unsigned long start, end											;
 
@@ -15,8 +21,8 @@ int main()
       printf("start ! \n")												;
       test_map =  qsvr_init(origin_data_path,item_path)					;
   
-      uint32_t test_time = 20150804 , test_rank = 2						;
-      char *test_item ="T"												;
+      uint32_t test_time = 20150701 , test_rank = 1						;
+      char *test_item ="IF"												;
       printf("test find \n")											;
   
       HP_TIMING_NOW(start)												;

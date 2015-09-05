@@ -1,9 +1,9 @@
 #include "schedule.h"
 
 /*
- *declared function prototype
- * 
- * */
+ *  *declared function prototype
+ *   * 
+ *    * */
 
 int 
 add(struct quote_schedule_t *qs);
@@ -17,11 +17,11 @@ init_quote_schedule();
 void 
 destory_quote_schedule(struct quote_schedule_t *qs);
 
-
+extern  int handle_quote_query(struct quote_input_info_t *input);
 /*
- *start codeing 
- *
- * */
+ *  *start codeing 
+ *   *
+ *    * */
 
 uint32_t 
 Is_Leap_year(uint32_t year )
@@ -91,11 +91,6 @@ add(struct quote_schedule_t *qs)
 
 	qs->task_array[ret_id].next_sub_task = sub_task ;
 
-#if 0 //for test
-	for(int i = 0  ; i < deep ; i++) {
-		 printf("i = %d , date :%d , item : %s \n",i,sub_task[i].date_key,sub_task[i].item);
-	}
-#endif 
 
 return ret_id ;
 }
@@ -200,8 +195,9 @@ main()
 	qs->input_info = input_1 		;
 	ret_id  = add(qs)				;
 	printf ("ret_id : %d \n", ret_id);
-	quote_schedule_func(qs);
-printf("0701: %d ,0731=%d \n",calculate_year_key(20150701),calculate_year_key(20150731));	
+	//quote_schedule_func(qs);
+	handle_quote_query(input_1);
+	printf("0701: %d ,0731=%d \n",calculate_year_key(20150701),calculate_year_key(20150731));	
 	destory_quote_schedule(qs)		;
 return 0 ;
 }

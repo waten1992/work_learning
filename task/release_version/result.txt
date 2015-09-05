@@ -1,0 +1,100 @@
+start ! 
+test find 
+
+ ****the cost time  are 7737.500000 ns
+ret_id : 0 
+
+ ****the cost time  are 2400.833333 ns
+ret_id : 1 
+
+ ****the cost time  are 6398.333333 ns
+ret_id : 2 
+Parallel-date_key: 1125 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1125 ,item : IF ,rank : 1 , contract : IF1507 
+
+Parallel-date_key: 1126 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1095 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1096 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1126 ,item : IF ,rank : 1 , contract : IF1507 
+
+Parallel-date_key: 1127 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1127 ,item : IF ,rank : 1 , contract : IF1507 
+
+Parallel-date_key: 1128 ,item : IF ,rank : 1 , contract :  
+Parallel-date_key: 1097 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1098 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1128 ,item : IF ,rank : 1 , contract :  
+
+Parallel-date_key: 1129 ,item : IF ,rank : 1 , contract :  
+Parallel-date_key: 1129 ,item : IF ,rank : 1 , contract :  
+
+Parallel-date_key: 1130 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1099 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1100 ,item : shag ,rank : 1 , contract :  
+Parallel-date_key: 1130 ,item : IF ,rank : 1 , contract : IF1507 
+
+Parallel-date_key: 1131 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1131 ,item : IF ,rank : 1 , contract : IF1507 
+
+Parallel-date_key: 1132 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1101 ,item : shag ,rank : 1 , contract :  
+
+Parallel-date_key: 1102 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1132 ,item : IF ,rank : 1 , contract : IF1507 
+
+Parallel-date_key: 1133 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1133 ,item : IF ,rank : 1 , contract : IF1507 
+
+Parallel-date_key: 1134 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1103 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1104 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1134 ,item : IF ,rank : 1 , contract : IF1507 
+
+Parallel-date_key: 1135 ,item : IF ,rank : 1 , contract :  
+Parallel-date_key: 1135 ,item : IF ,rank : 1 , contract :  
+
+Parallel-date_key: 1136 ,item : IF ,rank : 1 , contract :  
+Parallel-date_key: 1105 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1106 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1136 ,item : IF ,rank : 1 , contract :  
+
+Parallel-date_key: 1137 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1137 ,item : IF ,rank : 1 , contract : IF1507 
+
+Parallel-date_key: 1138 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1107 ,item : shag ,rank : 1 , contract :  
+
+Parallel-date_key: 1108 ,item : shag ,rank : 1 , contract :  
+Parallel-date_key: 1138 ,item : IF ,rank : 1 , contract : IF1507 
+
+Parallel-date_key: 1139 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1139 ,item : IF ,rank : 1 , contract : IF1507 
+
+Parallel-date_key: 1140 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1109 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1110 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1140 ,item : IF ,rank : 1 , contract : IF1507 
+
+Parallel-date_key: 1141 ,item : IF ,rank : 1 , contract : IF1508 
+Parallel-date_key: 1141 ,item : IF ,rank : 1 , contract : IF1508 
+
+Parallel-date_key: 1142 ,item : IF ,rank : 1 , contract :  
+Parallel-date_key: 1111 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1112 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1142 ,item : IF ,rank : 1 , contract :  
+
+Parallel-date_key: 1143 ,item : IF ,rank : 1 , contract :  
+Parallel-date_key: 1143 ,item : IF ,rank : 1 , contract :  
+
+Parallel-date_key: 1144 ,item : IF ,rank : 1 , contract : IF1508 
+Parallel-date_key: 1113 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1114 ,item : shag ,rank : 1 , contract :  
+Parallel-date_key: 1144 ,item : IF ,rank : 1 , contract : I

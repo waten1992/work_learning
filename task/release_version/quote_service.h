@@ -21,7 +21,7 @@
 
 
 #define History_len		425212
-#define Type_size		6
+#define Type_size		16
 #define Tmp_array_len 	64
 #define Start_value		96
 #define Days			7320

@@ -1,32 +1,38 @@
 #include "quote_service.h"
 #include "schedule.h"
+
 extern void quote_find_use_date_key(struct quote_map* qm,struct day_schedule_t *input );
+
 struct quote_map *test_map ;
 
 void 
 init_history_quote()
 {
 	const char *origin_data_path = "../test_version/input_data.txt" ; 
-	const char *item_path = "uniq.txt"                              ;
+	const char *item_path = "uniq.txt";
 
-	printf("start ! \n")												;
-	test_map =  qsvr_init(origin_data_path,item_path)					;
-	printf("test find \n")											;
+	printf("start ! \n");
+	test_map =  qsvr_init(origin_data_path,item_path);
+	printf("test find \n");
 
 }
 int 
 handle_quote_query(struct day_schedule_t *input)
 {
-    unsigned long start, end											;
+    unsigned long start, end;
 	
 	struct quote_map *tmp_map ;
+#if 1
 	tmp_map = (struct quote_map *)malloc(sizeof(struct quote_map));
+	if (NULL == tmp_map) {
+		printf("tmp_map allocate is error , errno is : %s \n",strerror(errno));
+	}
 	memcpy(tmp_map, test_map,sizeof(struct quote_map)) ;	
-	
-	HP_TIMING_NOW(start)												;
-//	qsvr_find(test_map,test_time,test_item,test_rank,test_val)		;
+#endif 
+	HP_TIMING_NOW(start);
 	quote_find_use_date_key(tmp_map,input);
-	HP_TIMING_NOW(end)												;
+	HP_TIMING_NOW(end);
+
 #if 0
 	if (0 != (*input->contract) ) {	
 		printf("item : %s ,contract : %s",input->item,input->contract);
@@ -34,7 +40,8 @@ handle_quote_query(struct day_schedule_t *input)
 		printf("****NO DATA !****\n");
 	}
 #endif
-		printf("\n the cost cycles are %lf ns\n", (end - start)/3.6)		;
-		free(tmp_map);
+
+	//printf("\n the cost cycles are %lf ns\n", (end - start)/3.6)		;
+	free(tmp_map);
 return 0 ;
 }

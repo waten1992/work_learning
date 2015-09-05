@@ -145,7 +145,7 @@ int
 task_sched_del(struct task_sched* ts, int task_id)
 {
 	free(ts->task_array[task_id].next_sub_task);
-	ts->task_array[task_id].next_sub_task  = NULL;
+	ts->task_array[task_id].next_sub_task = NULL;
 return 0; 
 }
 

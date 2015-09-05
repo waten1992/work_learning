@@ -1,0 +1,486 @@
+start ! 
+test find 
+
+ the cost cycles are 904.166667 ns
+
+ the cost cycles are 85.000000 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 200.833333 ns
+
+ the cost cycles are 11.666667 ns
+
+ the cost cycles are 52.500000 ns
+
+ the cost cycles are 15.833333 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 194.166667 ns
+
+ the cost cycles are 13.333333 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 15.833333 ns
+
+ the cost cycles are 14.166667 ns
+
+ the cost cycles are 210.000000 ns
+
+ the cost cycles are 13.333333 ns
+
+ the cost cycles are 181.666667 ns
+
+ the cost cycles are 54.166667 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 15.833333 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 180.833333 ns
+
+ the cost cycles are 171.666667 ns
+
+ the cost cycles are 54.166667 ns
+
+ the cost cycles are 15.833333 ns
+
+ the cost cycles are 16.666667 ns
+
+ ****the cost time  are 34932.500000 ns
+ret_id : 0 
+
+ the cost cycles are 40.000000 ns
+
+ the cost cycles are 38.333333 ns
+
+ the cost cycles are 27.500000 ns
+
+ the cost cycles are 147.500000 ns
+
+ the cost cycles are 376.666667 ns
+
+ the cost cycles are 125.833333 ns
+
+ the cost cycles are 19.166667 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 19.166667 ns
+
+ the cost cycles are 19.166667 ns
+
+ the cost cycles are 135.000000 ns
+
+ the cost cycles are 131.666667 ns
+
+ the cost cycles are 18.333333 ns
+
+ the cost cycles are 19.166667 ns
+
+ the cost cycles are 20.000000 ns
+
+ the cost cycles are 18.333333 ns
+
+ the cost cycles are 20.000000 ns
+
+ the cost cycles are 184.166667 ns
+
+ the cost cycles are 222.500000 ns
+
+ the cost cycles are 19.166667 ns
+
+ the cost cycles are 19.166667 ns
+
+ the cost cycles are 19.166667 ns
+
+ the cost cycles are 19.166667 ns
+
+ the cost cycles are 19.166667 ns
+
+ the cost cycles are 140.833333 ns
+
+ the cost cycles are 141.666667 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 20.000000 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 19.166667 ns
+
+ ****the cost time  are 20559.166667 ns
+ret_id : 1 
+
+ the cost cycles are 22.500000 ns
+
+ the cost cycles are 27.500000 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 178.333333 ns
+
+ the cost cycles are 206.666667 ns
+
+ the cost cycles are 54.166667 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 15.833333 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 179.166667 ns
+
+ the cost cycles are 206.666667 ns
+
+ the cost cycles are 55.000000 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 239.166667 ns
+
+ the cost cycles are 186.666667 ns
+
+ the cost cycles are 66.666667 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 184.166667 ns
+
+ the cost cycles are 242.500000 ns
+
+ the cost cycles are 54.166667 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 15.833333 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 180.833333 ns
+
+ the cost cycles are 180.000000 ns
+
+ the cost cycles are 13.333333 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 188.333333 ns
+
+ the cost cycles are 11.666667 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 15.833333 ns
+
+ the cost cycles are 14.166667 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 202.500000 ns
+
+ the cost cycles are 11.666667 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 79.166667 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 135.000000 ns
+
+ the cost cycles are 11.666667 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 205.000000 ns
+
+ the cost cycles are 11.666667 ns
+
+ the cost cycles are 171.666667 ns
+
+ the cost cycles are 50.000000 ns
+
+ the cost cycles are 14.166667 ns
+
+ the cost cycles are 15.833333 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 180.833333 ns
+
+ the cost cycles are 13.333333 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 15.833333 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 15.833333 ns
+
+ the cost cycles are 190.833333 ns
+
+ the cost cycles are 11.666667 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 15.833333 ns
+
+ the cost cycles are 193.333333 ns
+
+ the cost cycles are 11.666667 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 17.500000 ns
+
+ the cost cycles are 16.666667 ns
+
+ the cost cycles are 15.000000 ns
+
+ the cost cycles are 257.500000 ns
+
+ the cost cycles are 11.666667 ns
+
+ the cost cycles are 16.666667 ns
+
+ ****the cost time  are 84747.500000 ns
+ret_id : 2 
+Parallel-date_key: 1095 ,item : IF ,rank : 1 , contract : IF1506 
+Parallel-date_key: 1125 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1126 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1003 ,item : IF ,rank : 1 , contract :  
+
+Series- date_key: 1004 ,item : IF ,rank : 1 , contract : IF1503 
+
+Parallel-date_key: 1096 ,item : IF ,rank : 1 , contract : IF1506 
+Parallel-date_key: 1127 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1128 ,item : shag ,rank : 1 , contract :  
+Parallel-date_key: 1005 ,item : IF ,rank : 1 , contract : IF1503 
+
+Series- date_key: 1006 ,item : IF ,rank : 1 , contract : IF1503 
+
+Parallel-date_key: 1097 ,item : IF ,rank : 1 , contract : IF1506 
+Parallel-date_key: 1129 ,item : shag ,rank : 1 , contract :  
+
+Parallel-date_key: 1130 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1007 ,item : IF ,rank : 1 , contract : IF1503 
+
+Series- date_key: 1008 ,item : IF ,rank : 1 , contract : IF1503 
+
+Parallel-date_key: 1098 ,item : IF ,rank : 1 , contract : IF1506 
+Parallel-date_key: 1131 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1132 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1009 ,item : IF ,rank : 1 , contract :  
+
+Series- date_key: 1010 ,item : IF ,rank : 1 , contract :  
+
+Parallel-date_key: 1099 ,item : IF ,rank : 1 , contract : IF1506 
+Parallel-date_key: 1133 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1134 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1011 ,item : IF ,rank : 1 , contract : IF1503 
+
+Series- date_key: 1012 ,item : IF ,rank : 1 , contract : IF1503 
+
+Parallel-date_key: 1100 ,item : IF ,rank : 1 , contract :  
+Parallel-date_key: 1135 ,item : shag ,rank : 1 , contract :  
+
+Parallel-date_key: 1136 ,item : shag ,rank : 1 , contract :  
+Parallel-date_key: 1013 ,item : IF ,rank : 1 , contract : IF1503 
+
+Series- date_key: 1014 ,item : IF ,rank : 1 , contract : IF1503 
+
+Parallel-date_key: 1101 ,item : IF ,rank : 1 , contract :  
+Parallel-date_key: 1137 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1138 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1015 ,item : IF ,rank : 1 , contract : IF1503 
+
+Series- date_key: 1016 ,item : IF ,rank : 1 , contract :  
+
+Parallel-date_key: 1102 ,item : IF ,rank : 1 , contract : IF1506 
+Parallel-date_key: 1139 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1140 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1017 ,item : IF ,rank : 1 , contract :  
+
+Series- date_key: 1018 ,item : IF ,rank : 1 , contract : IF1503 
+
+Parallel-date_key: 1103 ,item : IF ,rank : 1 , contract : IF1506 
+Parallel-date_key: 1141 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1142 ,item : shag ,rank : 1 , contract :  
+Parallel-date_key: 1019 ,item : IF ,rank : 1 , contract : IF1503 
+
+Series- date_key: 1020 ,item : IF ,rank : 1 , contract : IF1504 
+
+Parallel-date_key: 1104 ,item : IF ,rank : 1 , contract : IF1506 
+Parallel-date_key: 1143 ,item : shag ,rank : 1 , contract :  
+
+Parallel-date_key: 1144 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1021 ,item : IF ,rank : 1 , contract : IF1504 
+
+Series- date_key: 1022 ,item : IF ,rank : 1 , contract : IF1504 
+
+Parallel-date_key: 1105 ,item : IF ,rank : 1 , contract : IF1506 
+Parallel-date_key: 1145 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1146 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1023 ,item : IF ,rank : 1 , contract :  
+
+Series- date_key: 1024 ,item : IF ,rank : 1 , contract :  
+
+Parallel-date_key: 1106 ,item : IF ,rank : 1 , contract : IF1506 
+Parallel-date_key: 1147 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1148 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1025 ,item : IF ,rank : 1 , contract : IF1504 
+
+Series- date_key: 1026 ,item : IF ,rank : 1 , contract : IF1504 
+
+Parallel-date_key: 1107 ,item : IF ,rank : 1 , contract :  
+Parallel-date_key: 1149 ,item : shag ,rank : 1 , contract :  
+
+Parallel-date_key: 1150 ,item : shag ,rank : 1 , contract :  
+Parallel-date_key: 1027 ,item : IF ,rank : 1 , contract : IF1504 
+
+Series- date_key: 1028 ,item : IF ,rank : 1 , contract : IF1504 
+
+Parallel-date_key: 1108 ,item : IF ,rank : 1 , contract :  
+Parallel-date_key: 1151 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1152 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1029 ,item : IF ,rank : 1 , contract : IF1504 
+
+Series- date_key: 1030 ,item : IF ,rank : 1 , contract :  
+
+Parallel-date_key: 1109 ,item : IF ,rank : 1 , contract : IF1506 
+Parallel-date_key: 1153 ,item : shag ,rank : 1 , contract : ag1512 
+
+Parallel-date_key: 1154 ,item : shag ,rank : 1 , contract : ag1512 
+Parallel-date_key: 1031 ,item : IF ,rank : 1 , contract :  
+
+Series- date_key: 1032 ,item : IF ,rank : 1 , contract : IF1504 
+
+Parallel-date_key: 1110 ,item : IF ,rank : 1 , contract : IF1506 
+Parallel-date_key: 1155 ,item : shag ,rank : 1 , contract : ag1512 
+
+clear : 1 !
+Series- date_key: 1033 ,item : IF ,rank : 1 , contract : IF1504 
+
+Parallel-date_key: 1111 ,item : IF ,rank : 1 , contract : IF1506 
+Parallel-date_key: 1034 ,item : IF ,rank : 1 , contract : IF1504 
+
+Series- date_key: 1035 ,item : IF ,rank : 1 , contract : IF1504 
+
+Parallel-date_key: 1112 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1036 ,item : IF ,rank : 1 , contract : IF1504 
+
+Series- date_key: 1037 ,item : IF ,rank : 1 , contract :  
+
+Parallel-date_key: 1113 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1038 ,item : IF ,rank : 1 , contract :  
+
+Series- date_key: 1039 ,item : IF ,rank : 1 , contract :  
+
+Parallel-date_key: 1114 ,item : IF ,rank : 1 , contract :  
+Parallel-date_key: 1040 ,item : IF ,rank : 1 , contract : IF1504 
+
+Series- date_key: 1041 ,item : IF ,rank : 1 , contract : IF1504 
+
+Parallel-date_key: 1115 ,item : IF ,rank : 1 , contract :  
+Parallel-date_key: 1042 ,item : IF ,rank : 1 , contract : IF1504 
+
+Series- date_key: 1043 ,item : IF ,rank : 1 , contract : IF1504 
+
+Parallel-date_key: 1116 ,item : IF ,rank : 1 , contract :  
+Parallel-date_key: 1044 ,item : IF ,rank : 1 , contract :  
+
+Series- date_key: 1045 ,item : IF ,rank : 1 , contract :  
+
+Parallel-date_key: 1117 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1046 ,item : IF ,rank : 1 , contract : IF1504 
+
+Series- date_key: 1047 ,item : IF ,rank : 1 , contract : IF1504 
+
+Parallel-date_key: 1118 ,item : IF ,rank : 1 , contract : IF1507 
+Parallel-date_key: 1048 ,item : IF ,rank : 1 , contract : IF1504 
+
+Series- date_key: 1049 ,item : IF ,rank : 1 
