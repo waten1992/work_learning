@@ -6,4 +6,16 @@ grep
 	-r 递归查询
 	-x 只占用一整行
 	-w 匹配整个单词
+搜索一个完整的单词： grep '\<name\>' filename
 	
+tac 反转文本行
+rev 反转字符的顺序
+
+colrm 删除数据列
+
+统计某个目录下总共多少个字节
+
+pwd006@Debain ~/work_learning/task (master *) $ ls -a | du -a | awk '{print $1}' | sort -g | awk 'BEGIN {size = 0;} {size = size +$1;} END {print size} '
+160172
+
+ls -a | du -a | awk '{print $1}' | sort -g | awk 'BEGIN {size = 0;} {size = size +$1;} END {print size} '

@@ -101,3 +101,7 @@ bound 		绑定
 lousy 		讨厌的
 cohere		结合
 lint		棉纤维
+whence 		从那里
+speculate 	推测
+insufficient 不足
+heuristics  启发（法），探索法;
