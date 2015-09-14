@@ -105,3 +105,4 @@ whence 		从那里
 speculate 	推测
 insufficient 不足
 heuristics  启发（法），探索法;
+inclusive	包括

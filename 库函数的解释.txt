@@ -1,0 +1,26 @@
+ftok :
+ 	#include <sys/types.h>
+    #include <sys/ipc.h>
+    
+    key_t ftok(const char *pathname, int proj_id);
+    pathname 必须是已经存在的，可以访问的；
+    proj_id 是0～255的值；
+    key = ftok("/mnt/data/DataMap", 'a');
+
+shmget ：
+	#include <sys/ipc.h>
+    #include <sys/shm.h>
+
+    int shmget(key_t key, size_t size, int shmflg);
+    key 由ftok() 创建；
+    size 是系统页的整数倍；
+    shmflg 标志位；
+
+	shm_id = shmget(key, SHM_SIZE, IPC_CREAT | 0666);
+	0666 ： 表示XSI IPC 6种权限； 用户读写 ，组用户读写，其他的读写
+
+
+ftell:
+ 	#include <stdio.h>
+	long ftell(FILE *stream);
+	ftell() returns the current offset， 如果在前面是用了fseek(fp,offset,SEEK_SET),就是offset
