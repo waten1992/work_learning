@@ -1,0 +1,121 @@
+读《代码大全》变量章节
+
+变量初始化：
+	1-就近原则：声明变量后，在靠近变量的首次初始化；
+	2-在可能的情况下使用const 、final,防止变量被修改；
+	3-多次使用累加器，要记得不要清零；
+
+	4-在类中构造函数初始化该类数据成员，在析构函数中释放掉内存；
+	5-
+
+作用域：
+	1-使用变量引用局部化；
+	2-缩小变量的作用域；
+	3-使用变量名代替magic number
+
+变量的用途:
+	1-每个变量只用于单一的用途 ： 避免使用temp or x ....
+	2-避免代码具有隐含的含义；
+
+为状态变量命名：
+	1-不要使用flag，使用能够描述状态变量名；
+	2-bool 变量命名： done  error  found  success ok ;
+
+为枚举命名：
+	1-使用前缀来标识该类型成员属于同一个组，quote_  date_  ...
+
+基本数据类型:
+	1-避免使用 magic number; 
+	2-防止除零错误;
+	3-类型转换要变得明显 char *p = (char *)str + size;
+	4-避免混合型的比较；
+	5-注意编译器的警告；
+
+	整数：
+		1-除法检查 整数， 7 / 9 = 0 ； 10*(7/9) = 0;
+		2-检查整数溢出；
+		3-中间结果的溢出；比如两个大整数相乘会溢出；
+	浮点数：
+		1-避免数量级相差巨大数之间的加减运算；1000000.1 + 0.2 = ？我的计算机运算是正确的
+		2-避免等量判断；
+
+C语言字符串
+	1-字符串的长度声明 CONSTANT+1 ；
+	2-使用calloc(p,size),不要使用malloc 
+	3-用字符数组取代C中的指针；
+	4-使用strncpy() 取代 strcpy()；
+bool 变量：
+	1-用bool 集成一块，在去判断： 
+		finsh = ((element < 0) || (idx > 0));
+		repeat = (element == last_ele);
+		if (finsh || repeat) {
+			do something ....
+		}
+	2-在C 定义bool
+		enum Boolean {
+			True = 1,
+			False = (!True)
+		};
+数组：
+	1-确认所有的数组下标都没有超出数组的边界；
+	2-考虑使用stack /queue 来代替array
+	3-使用#define ARRAY_LEN (sizeof(a)/sizeof(a[0]));
+
+创建属于自己的数据类型：
+	1- 使用typedef 定义属于自己的类型，隐藏该类型的数据信息。 typedef float price ;
+
+使用指针的建议：
+	1-把指针操作限制在子程序或者类中；比如操作链表用:next_list() previous() insert_list() del_list()
+	2-同时声明和定义指针；
+	3-在指针分配相同的作用域中删除指针；使用malloc 和 free 要配对；
+	4-在使用指针前检查指针；
+	5-先检查指针引用的变量在使用；
+	6-在结构体内使用标记来检测内存；(dog tag)
+	7-用额外指针变量提高代码的清晰度：强烈推荐！！！！！
+	例如：插入指针的代码：
+	传统的代码：
+	void insert_list(node *current , node *insert) {
+
+		insert->next = current->next ;
+		insert->previous = current ; 
+		if(current->next != NULL) {
+			current->next->previous = insert ;
+		}
+		current->next = insert ; 
+	}
+	更具可读性的节点插入代码： 多增加一个节点；
+	void insert_list (node * start, node *insert )
+	{
+		node * follow = start->next ;
+		insert->next = follow;
+		insert->previous = start;
+		if (follow != NULL) {
+			follow->previous = insert;
+		} 
+		start->next = insert;
+	}
+	8-简化复杂的指针表达式；
+	9-按照正确的顺序删除链表中的指针， 在删除当前指针时，你需要用一个临时的指针指向当前的一个指针后一个节点，防止找不到后面节点；
+	10-预分配一块多余的内存，防止在用尽内存后；
+	11-在删除指针前检查指针是否为NULL，删除后要设置为NULL；
+	12-建立一个指针跟踪表
+
+C++ 指针：
+	1- 指针用于"按引用传递" 参数， const 用于 "按值传递" ；
+C指针：
+	1-使用显示指针的类型而不是默认的类型；
+	2-避免强制类型的转换；
+	3-使用sizeof() 增强可移植性
+
+全局数据：
+	1-尽量少用全局变量：代码重入问题；
+	2-用访问器子程序来取代全局数据； 
+	3-在访问器子程序构建一个抽象层， node = node.next ;  --> account = nextaccount(account);
+	4-使得对一项数据结构所有访问都发生在同一抽象层；
+
+使用全局变量注意事项：
+	1-创建命名规则突出全局变量；
+	2-为全局变量创建一份注释良好的清单；
+	3-不要用全局变量来存放中间结果；
+	4-不要把所有的数据都放在一个大对象中并到处传递，说明你没有使用全局变量；
+	
