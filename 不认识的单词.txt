@@ -107,3 +107,8 @@ insufficient 不足
 heuristics  启发（法），探索法;
 inclusive	包括
 coherence	相干性
+unmarshaled 恢复
+variation	变化、变量
+sinking 	下沉
+conform to 	 遵循
+peripherals  外设
