@@ -18,9 +18,25 @@ shmget ：
 
 	shm_id = shmget(key, SHM_SIZE, IPC_CREAT | 0666);
 	0666 ： 表示XSI IPC 6种权限； 用户读写 ，组用户读写，其他的读写
+shmat:
+	#include <sys/ipc.h>
+    #include <sys/shm.h>
+
+	void *shmat(int shmid, const void *shmaddr, int shmflg);
+	shmaddr :为0 内核选择第一个可用的地址上； 推荐使用
 
 
 ftell:
  	#include <stdio.h>
 	long ftell(FILE *stream);
 	ftell() returns the current offset， 如果在前面是用了fseek(fp,offset,SEEK_SET),就是offset
+
+setvbuf:
+
+	int setvbuf(FILE *stream, char *buf, int type, unsigned size);
+	type 类型：
+	_IOFBF(满缓冲）：当缓冲区为空时，从流读入数据。或者当缓冲区满时，向流写入数据。
+	_IOLBF(行缓冲）：每次从流中读入一行数据或向流中写入一行数据。
+	_IONBF(无缓冲）：直接从流中读入数据或直接向流中写入数据，而没有缓冲区。
+	size ： 缓冲区内字节的数量。
+

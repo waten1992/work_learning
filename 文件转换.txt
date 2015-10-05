@@ -1,0 +1,58 @@
+文件转换
+hwg@debian:~/work(0)$ hexdump -x -n 8 CFFE_Data/IF1509.dat
+0000000    522a    0000    000b    0170
+0000008
+hwg@debian:~/work(0)$ hexdump -x -n 8 SHFE_Data/my_shfe_md_20150910_ag1509.dat
+0000000    699e    0000    000c    0468
+0000008
+hwg@debian:~/work(0)$ hexdump -x -n 8 ZZFE_Data/CF509_czce_level2_20150910.dat
+0000000    005b    0000    0010    0150
+0000008
+hwg@debian:~/work(0)$ hexdump -x -n 8 DCE_Data/a1509_BestAndDeepQuote.dat
+0000000    39d0    0000    0002    0190
+0000008
+hwg@debian:~/work(0)$ hexdump -x -n 8 DCE_Data/a1509_OrderStatistic.dat
+0000000    0009    0000    0005    0078
+0000008
+hwg@debian:~/work(0)$ hexdump -x -n 8 DCE_Data/a1509_TenEntrust.dat
+0000000    39d0    0000    0004    00d0
+0000008
+hwg@debian:~/work(0)$ hexdump -x -n 8 DCE_Data/a1509_MarchPriceQty.dat
+0000000    0006    0000    0007    00d8
+0000008
+hwg@debian:~/work(0)$ hexdump -x -n 8 DCE_Data/a1509_RealTimePrice.dat
+0000000    0005    0000    0006    0068
+0000008
+
+/***************************************/
+CFFE 	000b 
+
+SHFE 	000c
+
+ZZFE 	0010
+
+BestAndDeepQuote 	0002
+OrderStatistic 		0005
+TenEntrust 			0004
+MarchPriceQty 		0007
+RealTimePrice 		0006
+
+/***************************/
+	/* CFEX, 'G' */
+	MI_CFEX_DEEP = 0,			// 0  cfex_deep_quote
+
+	/* DCE, 'B' */
+	MI_DCE_BEST_DEEP,			// 1  dce_my_best_deep_quote
+	MI_DCE_MARCH_PRICE,			// 2  dce_my_march_pri_quote
+	MI_DCE_ORDER_STATISTIC,		// 3  dce_my_ord_stat_quote
+	MI_DCE_REALTIME_PRICE,		// 4  dce_my_rt_pri_quote
+	MI_DCE_TEN_ENTRUST,			// 5  dce_my_ten_entr_quote
+
+	/* SHFE, 'A' */
+	MI_SHFE_MY,					// 6  shfe_my_quote
+
+	/* CZCE, 'C' */
+	MI_CZCE_DEEP_MY,			// 7  czce_my_deep_quote
+	MI_CZCE_SNAPSHOT_MY,		// 8  czce_my_snapshot_quote
+
+
