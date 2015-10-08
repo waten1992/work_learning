@@ -20,10 +20,10 @@ typedef enum
   MAX_EVENT,
 } CD_EVENT;
 
-char state_to_str[3][100] = {"STOP", "RUNNING", "PAUSE"};
+char state_to_str[3][24] = {"STOP", "RUNNING", "PAUSE"};
 
 
-struct CD_STATE_MECHINE 
+struct CD_STATE_MACHINE 
 {
   int state;
   int event;
@@ -34,7 +34,7 @@ void do_change_running(unsigned char * user_data);
 void do_change_stop(unsigned char * user_data);
 void do_change_pause(unsigned char * user_data);
 
-struct CD_STATE_MECHINE state_mechine[] = {
+struct CD_STATE_MACHINE state_machine[] = {
   {RUNNING, PRESS_RUNNING, NULL},
   {RUNNING, PRESS_STOP, do_change_stop},
   {RUNNING, PRESS_PAUSE, do_change_pause},
@@ -72,12 +72,12 @@ void do_change_pause(unsigned char * user_data)
 int dispather(current_state, event) 
 {
   int i = 0;
-  for(i = 0; state_mechine[i].state != -1; i++)
+  for(i = 0; state_machine[i].state != -1; i++)
   {
-    if (current_state == state_mechine[i].state && event == state_mechine[i].event)
+    if (current_state == state_machine[i].state && event == state_machine[i].event)
     {
       void (*func)(unsigned char *);
-      func = state_mechine[i].func;
+      func = state_machine[i].func;
       if (func != NULL)
       {
         func(NULL);
