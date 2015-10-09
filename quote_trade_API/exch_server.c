@@ -191,7 +191,7 @@ start_exchg_server(void)
 				ret = close_request_conn(fd);
 			}
 			else if (events[i].events & EPOLLIN) {
-				printf("this statement no function handle \n");
+				printf(" NO function to handle this statement !\n");
 			}
 			else if ((events[i].events & EPOLLERR) || (events[i].events & EPOLLHUP)) {
 				fprintf(stderr, "EPOLL ERROR!\n");
@@ -201,4 +201,17 @@ start_exchg_server(void)
 
 err_exit:
 	return -1;
+}
+
+int 
+main()
+{
+	printf("server  start  now ~~~ \n");
+	int ret = start_exchg_server(); 
+	if(-1 == ret) {
+		fprintf(stderr, " SERVER  start is failed\n");
+		return -1;
+	}
+
+	return 0;
 }
