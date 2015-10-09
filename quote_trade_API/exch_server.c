@@ -191,7 +191,7 @@ start_exchg_server(void)
 				ret = close_request_conn(fd);
 			}
 			else if (events[i].events & EPOLLIN) {
-				ret = process_msg(fd);
+				printf("this statement no function handle \n");
 			}
 			else if ((events[i].events & EPOLLERR) || (events[i].events & EPOLLHUP)) {
 				fprintf(stderr, "EPOLL ERROR!\n");
