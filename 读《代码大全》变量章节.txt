@@ -4,9 +4,7 @@
 	1-就近原则：声明变量后，在靠近变量的首次初始化；
 	2-在可能的情况下使用const 、final,防止变量被修改；
 	3-多次使用累加器，要记得不要清零；
-
 	4-在类中构造函数初始化该类数据成员，在析构函数中释放掉内存；
-	5-
 
 作用域：
 	1-使用变量引用局部化；
@@ -59,7 +57,7 @@ bool 变量：
 数组：
 	1-确认所有的数组下标都没有超出数组的边界；
 	2-考虑使用stack /queue 来代替array
-	3-使用#define ARRAY_LEN (sizeof(a)/sizeof(a[0]));
+	3-使用#define ARRAY_LEN(a) (sizeof(a)/sizeof(a[0]));
 
 创建属于自己的数据类型：
 	1- 使用typedef 定义属于自己的类型，隐藏该类型的数据信息。 typedef float price ;
