@@ -113,3 +113,6 @@ sinking 	下沉
 conform to 	 遵循
 peripherals  外设
 arithmetic   算数
+scenario	场景
+stalls 		摊位
+underlying  底层

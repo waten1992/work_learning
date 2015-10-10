@@ -1,0 +1,22 @@
+epoll 总结：
+
+#include <sys/epoll.h>
+
+创建句柄：
+epoll_create()
+
+注册事件：
+epoll_ctl()
+
+监听注册的事件
+epoll_wait()
+
+2种模式：
+	epoll ET(edge-triggered) 和 LT(level-triggered)
+	ET使用的场景：
+		i- 使用nonblocking fd
+		ii-在read() write() 后面等待事件 return EAGAIN
+	LT使用的场景：
+		与ET用的场景相反；
+
+	
