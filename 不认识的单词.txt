@@ -116,3 +116,5 @@ arithmetic   算数
 scenario	场景
 stalls 		摊位
 underlying  底层
+parentheses 圆括号
+discarded	抛弃

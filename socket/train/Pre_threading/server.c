@@ -93,23 +93,20 @@ void *my_thread(void *message)
 		int recv_len = 0;	
 		char buff[4096] ;
         memset(buff,0,4096);
-      while(1)
+    while(1)
 	  {
-		 if((recv_len = recv(fd, buff, sizeof(buff), 0)) > 0)
-		{
-			printf("recieve data from client : %s\n", buff);
-		}
-        else if(recv_len == -1)
-        {
+		  if((recv_len = recv(fd, buff, sizeof(buff), 0)) > 0) {
+		    printf("recieve data from client : %s\n", buff);
+		  }
+      else if(recv_len == -1) {
             if (errno == EWOULDBLOCK || errno == EAGAIN)
             	printf("under O_NONBLOCK mode data didn't prepare \n");
-        }
-        else
-        {
-               	printf("googbye client ~~~ \n");
+      }
+      else {
+        printf("googbye client ~~~ \n");
 				close(fd);
 				break;
-        }
+      }
 	 }
 
 	}	
