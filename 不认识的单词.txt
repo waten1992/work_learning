@@ -118,3 +118,27 @@ stalls 		摊位
 underlying  底层
 parentheses 圆括号
 discarded	抛弃
+dyad		对 双
+periodically 周期性的
+redundant 	多余的
+deploy  	部署
+bi-directional 双向流
+benchmark	参照，水平线
+proven 		检验
+synonyms 	同意
+succinct  	简洁的
+tackle		解决
+conflate 	合并
+instructive  指导
+Temporal 	暂时存储
+Triad 		三元组
+brevity		简短
+parentheses	括号
+seamlessly	无停顿的
+aggregation 聚集
+warehoused 	仓库
+tremendous	极大的
+visualize 	形象化
+immeasurably 无法预估的
+subtle 		精细的巧妙的
+explicitly	明确

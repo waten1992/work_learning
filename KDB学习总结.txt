@@ -1,0 +1,48 @@
+KDB学习总结：
+	The Basics：
+		1-从右向左计算
+
+	Datatypes：
+		所有的primitive datatypes 都在 正负1h - 19h， 负数表示atom , 正数表示 list
+		string 是一个char 的list 用""定义, symbol 是一个atomic 用`定义 
+		1-cast between datatypes 
+			（1）$   `int$3.14
+ 			（2）string 函数
+ 	lists:
+ 		1- 用空格符号分割 a: 1 2 3 4 3 2 1 1992  a拥有 8 位元素
+ 		2- -2#a 获取list a 后两位
+ 		3- 1_a  删除list a 的第一位
+ 		4- 索引 可以像数组一样访问 
+ 				a[0]  range : 0 ~ n-1
+ 				也支持切片 a [0 3 5 ]
+ 		5- 搜索和比较
+ 			搜索工具? =
+ 			a?3 搜索值第一次出现的下标
+ 			a=3 列出二进制数，出现为1的就是我们说要找的
+ 			可以用where 关键字 来获取完整的下标 
+ 			where a=3  list 中所有a = 3 的元素下标
+ 			a where a>3 list 中所有大于3的元素下标
+ 	function:
+ 		1- 限制显式声明3个变量；
+ 		2- 函数内部用 “;” 分割每个陈述语句；
+ 		3- 全局变量用 “::”
+ 		
+typedef struct k0{
+  signed char m,a,t; // m,a are for internal use.
+  C u;
+  I r;
+  union{
+  		G g;
+  		H h;
+  		I i;
+  		J j;
+  		E e;
+  		F f;
+  		S s;
+  		struct k0*k;
+  		struct { 
+  				J n;
+  				G G0[1];
+  				};
+  		};
+}*K;
