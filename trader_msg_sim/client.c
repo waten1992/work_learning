@@ -187,8 +187,6 @@ err_exit:
 }
 
 
-
-
 /* arguments : local_ip local_port remote_ip remote_port */
 int main(int argc, char *argv[])
 {
@@ -207,10 +205,16 @@ int main(int argc, char *argv[])
     send_msg = (command_t *)calloc(1, SEND_CFG_LEN);
     if (NULL == send_msg) {
         printf("send_msg calloc is failed \n");
-        return -1;
+        goto err_exit;
     }
     
-    response_t recv_msg;
+    response_t *recv_msg;
+    recv_msg = (response_t *)calloc(1, RECV_MSG_SIZE);
+    if (NULL == send_msg) {
+        printf("recv_msg calloc is failed \n");
+        goto err_exit;
+    }
+
     trad_sim_cfg_t  *cfg;
     cfg = (trad_sim_cfg_t *)send_msg->data;
     
@@ -218,44 +222,47 @@ int main(int argc, char *argv[])
     send_msg->cmd = M_CMD_S;
     send_msg->len = sizeof(trad_sim_cfg_t) + 1;
     
-    cfg->interval = 500;
-    cfg->tot_time = 1;
+    cfg->interval = 1000;
+    cfg->tot_time = 2;
     cfg->exchg_type = MI_CFEX_DEEP;
     
     if (send(fd, send_msg, SEND_CFG_LEN, 0) == -1 ) {
         printf("SEND O_NONBLOCK mode IS ERROR, errno number: %d\n",errno);
     }
     printf(" send success ! \n");
-
-    while (1) {
-        int ret = recv(fd, &recv_msg, RECV_MSG_SIZE, 0);
-        if (-1 == ret ) {
-                fprintf(stderr, "client recv data failed : %s\n", strerror(errno));
-                goto err_exit;
-        } 
-        else if ( recv_msg.type == 0 ) {
-                printf(" %d , %d , %d \n", 
-                        recv_msg.id,
-                        recv_msg.type,
-                        recv_msg.len);
-        } else {
-                int type = recv_msg.type ;
-                switch(type) {
-                    case M_RESP_S:
-                        extract_stra_msg(&recv_msg);
-                        break;
-                    case M_RESP_O:
-                        extract_ord_msg(&recv_msg);
-                        break;
-                    case M_RESP_P:
-                        extract_pos_msg(&recv_msg);
-                        break;
-                    case M_RESP_C:
-                        extract_contr_msg(&recv_msg);
-                        break;
-                    default:
-                        printf(" CMD type  is  error \n");
-                } 
+    
+    while(1) {
+        while (1) {
+            int ret = recv(fd, recv_msg, RECV_MSG_SIZE, 0);
+            if (-1 == ret ) {
+                    fprintf(stderr, "client recv data failed : %s\n", strerror(errno));
+                    goto err_exit;
+            } 
+            else if ( recv_msg.type == 0 ) {
+                    printf(" %d , %d , %d \n", 
+                            recv_msg->id,
+                            recv_msg->type,
+                            recv_msg->len);
+            } else {
+                    int type = recv_msg.type ;
+                    switch(type) {
+                        case M_RESP_S:
+                            extract_stra_msg(recv_msg);
+                            break;
+                        case M_RESP_O:
+                            extract_ord_msg(recv_msg);
+                            break;
+                        case M_RESP_P:
+                            extract_pos_msg(recv_msg);
+                            break;
+                        case M_RESP_C:
+                            extract_contr_msg(recv_msg);
+                            break;
+                        default:
+                            printf(" CMD type  is  error \n");
+                            break;
+                    } 
+            }
         }
     }
     
@@ -264,5 +271,7 @@ int main(int argc, char *argv[])
 
 err_exit:
     close(fd);
+    free(send_msg);
+    free(recv_msg);
     return -1;
 }
