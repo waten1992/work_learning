@@ -1,0 +1,17 @@
+查看CPU的主频信息：
+	通过cat /proc/cpuinfo 查看的每个核心的cpu主频并不相同
+	model name      : Intel(R) Core(TM) i5-3470 CPU @ 3.20GHz
+	stepping        : 9
+	microcode       : 0x12
+	cpu MHz         : 1601.375
+
+	表明显示有3.2GHZ
+		实际上这个核心的主频为1601.375 MHz
+		
+	1-通过 dmesg 查看
+		dmesg | grep  MHz
+	as follow:
+			hwg@debian:~/ql(0)$ dmesg | grep  MHz
+			[    0.000000] tsc: Detected 3192.566 MHz processor
+			[    0.175328] hpet0: 8 comparators, 64-bit 14.318180 MHz counter
+			[    1.418447] tsc: Refined TSC clocksource calibration: 3192.757 MHz

@@ -142,3 +142,27 @@ visualize 	形象化
 immeasurably 无法预估的
 subtle 		精细的巧妙的
 explicitly	明确
+concise     简明的
+tweaking 	调整
+declarative 陈述
+Interpolation 插值
+tedious	单调的
+contiguous 临近
+snippet 片段
+affinity  关系密切，类似
+spuriously 伪造的、欺骗的
+sinking  沉默
+speculator 投机者
+margin 边缘，利润
+rigged 作弊，操纵
+consecutive 连续的， 表示结果
+mangle 毁坏
+oriented 导向，定方向
+connection-oriented  面相连接
+underlying  潜在的 优先的
+forestall 领先
+predicate 断言，宣布
+bracket 支架、等级
+opaque  不透明的
+owership 说有权
+dimension 尺寸、维度

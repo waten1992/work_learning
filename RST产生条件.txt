@@ -1,0 +1,27 @@
+TCP UDP 
+
+以太网MTU 1500字节
+IPV4 最小的MTU 是68字节， 最小缓冲区大小 576 字节
+IPV6 最小的MTU 是1280字节， 最小缓冲区大小1500字节 
+
+TCP 发送
+
+client                      				 server 
+
+write()
+如果写的字节大于了缓冲区大小会挂起			
+											接收到数据会给client 一个ACK
+接受ACK然后就可以丢弃缓冲区的数据
+
+connect client没有接受SYN 返回ETIMEDOUT 
+
+SYN :
+
+
+RST 产生的条件：
+	1- server 端口接收SYN ,然而该端口并没有在监听；
+	2- TCP 想取消一个已有的连接；
+	3- TCP 接受一个根本不存在连接上；
+
+servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+INADDR_ANY 告知内核去选择一个IP

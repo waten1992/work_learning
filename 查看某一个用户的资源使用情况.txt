@@ -1,0 +1,50 @@
+查看某一个用户的资源使用情况
+1- top -u username
+
+example:
+		top - 11:03:02 up 6 days, 18:00, 12 users,  load average: 0.04, 0.04, 0.05
+		Tasks: 184 total,   1 running, 183 sleeping,   0 stopped,   0 zombie
+		%Cpu(s):  0.0 us,  0.1 sy,  0.0 ni, 99.8 id,  0.2 wa,  0.0 hi,  0.0 si,  0.0 st
+		KiB Mem:   8067132 total,  1225512 used,  6841620 free,   187140 buffers
+		KiB Swap:  8127484 total,        0 used,  8127484 free.   679036 cached Mem
+
+		  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+		  672 hwg       20   0   99460   4748   3776 S   0.0  0.1   0:00.32 sshd
+		  673 hwg       20   0   12696   1848   1696 S   0.0  0.0   0:00.00 sftp-server
+		 1129 hwg       20   0   99460   4656   3684 S   0.0  0.1   0:00.30 sshd
+		 1130 hwg       20   0   23604   5608   3352 S   0.0  0.1   0:00.15 bash
+		 1252 hwg       20   0   99460   4820   3832 S   0.0  0.1   0:00.13 sshd
+		 1253 hwg       20   0   23596   5664   3416 S   0.0  0.1   0:00.04 bash
+		 3038 hwg       20   0   23644   3072   2544 R   0.0  0.0   0:00.01 top
+		28341 hwg       20   0   35620   3964   3400 S   0.0  0.0   0:00.00 systemd
+		28342 hwg       20   0  199644   2228      0 S   0.0  0.0   0:00.00 (sd-pam)
+		32121 hwg       20   0   21944   3804   3216 S   0.0  0.0   0:00.05 bash
+
+	RES : Resident Memory Size (KiB)
+        	The non-swapped physical memory a task has used.
+
+查看某个进程内存的映射
+2- pmap -d PID
+ 		-p PID 查看映射的路径
+example:
+			hwg@debian:/var/log(0)$ pmap -d 3073
+			3073:   ./server 127.0.0.1 8888
+			Address           Kbytes Mode  Offset           Device    Mapping
+			0000000000400000      16 r-x-- 0000000000000000 008:00001 server  //.text 
+			0000000000603000       4 rw--- 0000000000003000 008:00001 server  // .data .bss 
+			00007f14aa1a8000    1660 r-x-- 0000000000000000 008:00001 libc-2.19.so
+			00007f14aa347000    2048 ----- 000000000019f000 008:00001 libc-2.19.so
+			00007f14aa547000      16 r---- 000000000019f000 008:00001 libc-2.19.so
+			00007f14aa54b000       8 rw--- 00000000001a3000 008:00001 libc-2.19.so
+			00007f14aa54d000      16 rw--- 0000000000000000 000:00000   [ anon ]
+			00007f14aa551000     128 r-x-- 0000000000000000 008:00001 ld-2.19.so
+			00007f14aa754000      12 rw--- 0000000000000000 000:00000   [ anon ]
+			00007f14aa76f000       8 rw--- 0000000000000000 000:00000   [ anon ]
+			00007f14aa771000       4 r---- 0000000000020000 008:00001 ld-2.19.so
+			00007f14aa772000       4 rw--- 0000000000021000 008:00001 ld-2.19.so
+			00007f14aa773000       4 rw--- 0000000000000000 000:00000   [ anon ]
+			00007fffde6c6000     132 rw--- 0000000000000000 000:00000   [ stack ]
+			00007fffde797000       8 r-x-- 0000000000000000 000:00000   [ anon ]
+			00007fffde799000       8 r---- 0000000000000000 000:00000   [ anon ]
+			ffffffffff600000       4 r-x-- 0000000000000000 000:00000   [ anon ]
+			mapped: 4080K    writeable/private: 188K    shared: 0K
